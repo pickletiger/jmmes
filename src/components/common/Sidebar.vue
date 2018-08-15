@@ -36,11 +36,6 @@
                         index: 'dashboard',
                         title: '系统首页'
                     },
-                    {
-                        icon: 'el-icon-tickets',
-                        index: 'table',
-                        title: '基础表格'
-                    },
                     {   
                         icon: 'el-icon-tickets',
                         index: 'project',
@@ -54,26 +49,7 @@
                     {
                         icon: 'el-icon-message',
                         index: 'tabs',
-                        title: 'tab选项卡'
-                    },
-                    {
-                        icon: 'el-icon-date',
-                        index: '3',
-                        title: '表单相关',
-                        subs: [
-                            {
-                                index: 'form',
-                                title: '基本表单'
-                            },
-                            {
-                                index: 'markdown',
-                                title: 'markdown编辑器'
-                            },
-                            {
-                                index: 'upload',
-                                title: '文件上传'
-                            }
-                        ]
+                        title: '消息通知'
                     },
                     {
                         icon: 'el-icon-star-on',

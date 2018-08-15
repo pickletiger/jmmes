@@ -46,8 +46,18 @@ export default {
         return data.label.indexOf(value) !== -1;
       },
       handleNodeClick(data) {
-        console.log(data.id)
-        this.$router.push('/projectMain')
+        // console.log(data.id)
+        const lx = data.id.substr(0,2)
+        console.log(lx)
+        switch(lx)
+        {
+          case 'xm':
+          this.$router.push('/projectMain')
+          break
+          case 'bj':
+          break
+        }
+        
       }
     },
     data() {

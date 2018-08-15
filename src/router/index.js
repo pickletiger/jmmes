@@ -53,6 +53,12 @@ export default new Router({
                     meta: { title: '拖拽列表' }
                 },
                 {
+                    // 消息通知组件
+                    path: '/tabs',
+                    component: resolve => require(['../components/page/Tabs.vue'], resolve),
+                    meta: { title: '消息通知' }
+                },
+                {
                     // 权限页面
                     path: '/permission',
                     component: resolve => require(['../components/page/Permission.vue'], resolve),
