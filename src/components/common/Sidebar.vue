@@ -1,5 +1,6 @@
 <template>
     <div class="sidebar">
+        <!-- el-menu 参数 router 为是否使用 vue-router 的模式，启用该模式会在激活导航时以 index 作为 path 进行路由跳转-->
         <el-menu class="sidebar-el-menu" :default-active="onRoutes" :collapse="collapse" background-color="#324157"
             text-color="#bfcbd9" active-text-color="#20a0ff" unique-opened router>
             <template v-for="item in items">
@@ -40,6 +41,16 @@
                         index: 'table',
                         title: '基础表格'
                     },
+                    {   
+                        icon: 'el-icon-tickets',
+                        index: 'project',
+                        title: '项目管理'
+                    },
+                    {   
+                        icon: 'el-icon-date',
+                        index: 'productionplan',
+                        title: '车间计划'
+                    },
                     {
                         icon: 'el-icon-message',
                         index: 'tabs',
@@ -53,10 +64,6 @@
                             {
                                 index: 'form',
                                 title: '基本表单'
-                            },
-                            {
-                                index: 'editor',
-                                title: '富文本编辑器'
                             },
                             {
                                 index: 'markdown',

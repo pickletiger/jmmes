@@ -25,9 +25,24 @@ export default new Router({
                     meta: { title: '基础表格' }
                 },
                 {
+                    path: '/project',
+                    component: resolve => require(['../components/page/project/Project.vue'], resolve),
+                    meta: { title: '项目管理' },
+                    children: [{
+                        path: '/project/projectmain',
+                        component: resolve => require(['../components/page/project/ProjectMain.vue'], resolve),
+                        meta: { title: '项目信息' }
+                    }]
+                },
+                {
+                    path: '/productionplan',
+                    component: resolve => require(['../components/page/ProductionPlan.vue'], resolve),
+                    meta: { title: '车间计划' }
+                },
+                {
                     path: '/tabs',
                     component: resolve => require(['../components/page/Tabs.vue'], resolve),
-                    meta: { title: 'tab选项卡' }
+                    meta: { title: '消息通知' }
                 },
                 {
                     path: '/form',
