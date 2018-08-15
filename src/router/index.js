@@ -31,7 +31,7 @@ export default new Router({
                 },
                 {
                     path: '/productionplan',
-                    component: resolve => require(['../components/page/ProductionPlan.vue'], resolve),
+                    component: resolve => require(['../components/page/productionPlan/ProductionPlan.vue'], resolve),
                     meta: { title: '车间计划' }
                 },
                 {
