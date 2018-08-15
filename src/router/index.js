@@ -29,7 +29,7 @@ export default new Router({
                     component: resolve => require(['../components/page/project/Project.vue'], resolve),
                     meta: { title: '项目管理' },
                     children: [{
-                        path: '/project/projectmain',
+                        path: '/projectmain',
                         component: resolve => require(['../components/page/project/ProjectMain.vue'], resolve),
                         meta: { title: '项目信息' }
                     }]

@@ -11,15 +11,14 @@
               </el-col>
             </el-form-item>
             <el-form-item label="截止时间">
-              <el-col :span="11">
+              <el-col :span="10">
                 <el-date-picker type="date" placeholder="选择日期" style="width: 100%;"></el-date-picker>
               </el-col>
             </el-form-item>
-            <el-form-item label="活动区域">
-              <el-select  placeholder="请选择活动区域" value="shanghai">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
-              </el-select>
+            <el-form-item label="安装场地">
+              <el-col :span="10">
+                <el-input ></el-input>
+              </el-col>
             </el-form-item>
             <el-form-item label="项目进度">
               <el-collapse accordion>
@@ -52,17 +51,13 @@
                 </el-collapse-item>
               </el-collapse>
             </el-form-item>
-            <el-form-item label="活动时间">
+            <el-form-item label="开始时间">
               <el-col :span="11">
                 <el-date-picker type="date" placeholder="选择日期"  style="width: 100%;"></el-date-picker>
               </el-col>
             </el-form-item>
             <el-form-item label="项目备注">
               <el-input type="textarea" ></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary">立即创建</el-button>
-              <el-button>取消</el-button>
             </el-form-item>
           </el-form>
         </div>

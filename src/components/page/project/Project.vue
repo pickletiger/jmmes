@@ -24,7 +24,6 @@
               </el-tree>
             </el-aside>
             <el-main>
-              <project-main></project-main>
               <router-view></router-view>
             </el-main>
           </el-container>
@@ -33,12 +32,8 @@
 </template>
 
 <script>
-import ProjectMain from './ProjectMain.vue'
 export default {
   name: "Project",
-  components: {
-    ProjectMain
-  },
   watch: {
       filterText(val) {
         this.$refs.tree.filter(val);
@@ -52,6 +47,7 @@ export default {
       },
       handleNodeClick(data) {
         console.log(data.id)
+        this.$router.push('/projectMain')
       }
     },
     data() {
