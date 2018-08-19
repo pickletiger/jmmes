@@ -52,9 +52,13 @@ export default {
         switch(lx)
         {
           case 'xm':
-          this.$router.push('/projectMain')
+          this.$router.push('/craftproject')
           break
           case 'bj':
+          this.$router.push('/craftpart')
+          break
+          case 'zj':
+          this.$router.push('/craftsonpart')
           break
         }
         

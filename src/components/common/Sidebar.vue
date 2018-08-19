@@ -36,40 +36,136 @@
                         index: 'dashboard',
                         title: '系统首页'
                     },
-                    {   
-                        icon: 'el-icon-tickets',
-                        index: 'project',
-                        title: '项目管理'
-                    },
-                    {   
-                        icon: 'el-icon-date',
-                        index: 'productionplan',
-                        title: '车间计划'
+                    {
+                        icon: 'el-icon-more',
+                        index: '2',
+                        title: '基础数据管理',
+                        subs: [
+                            {
+                                index: 'staff',
+                                title: '员工信息管理'
+                            },
+                            {
+                                index: 'equipment',
+                                title: '设备管理'
+                            },
+                            {
+                                index: 'document',
+                                title: '文档管理'
+                            },
+                            {
+                                index: 'material',
+                                title: '原材料管理'
+                            }
+                        ]
                     },
                     {
                         icon: 'el-icon-message',
                         index: 'tabs',
                         title: '消息通知'
                     },
+                    {   
+                        icon: 'el-icon-tickets',
+                        index: '4',
+                        title: '销售部',
+                        subs: [
+                            {
+                                index: 'marketunreview',
+                                title: '未审核项目'
+                            },
+                            {
+                                index: 'market',
+                                title: '在建项目'
+                            },
+                            {
+                                index: 'marketfinished',
+                                title: '已完成项目'
+                            }
+                        ]
+                    },
+                    {   
+                        icon: 'el-icon-tickets',
+                        index: '5',
+                        title: '计划部',
+                        subs: [
+                            {
+                                index: 'planunreview',
+                                title: '未审核项目'
+                            },
+                            {
+                                index: 'plan',
+                                title: '在建项目'
+                            },
+                            {
+                                index: 'planfinished',
+                                title: '已完成项目'
+                            }
+                        ]
+                    },
+                    {   
+                        icon: 'el-icon-tickets',
+                        index: '6',
+                        title: '工艺部',
+                        subs: [
+                            {
+                                index: 'craftunreview',
+                                title: '未审核项目'
+                            },
+                            {
+                                index: 'craft',
+                                title: '在建项目'
+                            },
+                            {
+                                index: 'craftfinished',
+                                title: '已完成项目'
+                            }
+                        ]
+                    },
+                    {   
+                        icon: 'el-icon-date',
+                        index: '7',
+                        title: '车间',
+                        subs: [
+                            {
+                                index: 'electronic',
+                                title: '电子看板'
+                            },
+                            {
+                                index: 'productionplan',
+                                title: '车间计划'
+                            }
+                        ]
+                    },
                     {
                         icon: 'el-icon-star-on',
                         index: 'charts',
-                        title: 'schart图表'
+                        title: '统计分析'
                     },
                     {
-                        icon: 'el-icon-rank',
-                        index: 'drag',
-                        title: '拖拽列表'
-                    },
-                    {
-                        icon: 'el-icon-warning',
-                        index: 'permission',
-                        title: '权限测试'
-                    },
-                    {
-                        icon: 'el-icon-error',
-                        index: '404',
-                        title: '404页面'
+                        icon: 'el-icon-setting',
+                        index: '9',
+                        title: '系统设置',
+                        subs: [
+                            {
+                                index: 'operationlog',
+                                title: '操作日志'
+                            },
+                            {
+                                index: 'data',
+                                title: '数据备份与还原'
+                            },{
+                                index: 'workshop',
+                                title: '车间管理'
+                            },
+                            {
+                                index: 'authority',
+                                title: '权限管理'
+                            },
+                            {
+                                index: 'cloudinteraction',
+                                title: '云平台交互'
+                            }
+                        ]
                     }
                 ]
             }
