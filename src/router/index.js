@@ -69,11 +69,6 @@ export default new Router({
                     meta: { title: '未审核项目' }
                 },
                 {
-<<<<<<< HEAD
-                    path: '/productionplan',
-                    component: resolve => require(['../components/page/productionPlan/ProductionPlan.vue'], resolve),
-                    meta: { title: '车间计划' }
-=======
                     path: '/market',
                     component: resolve => require(['../components/page/market/Market.vue'], resolve),
                     meta: { title: '在建项目' },
@@ -102,7 +97,6 @@ export default new Router({
                     component: resolve => require(['../components/page/plan/PlanFinished.vue'], resolve),
                     meta: { title: '已完成项目' },
                     children: planchildren
->>>>>>> init
                 },
                 // 工艺部
                 {
