@@ -6,14 +6,18 @@
             </el-breadcrumb>
         </div>
         <div class="container">
-          
+          <table-list></table-list>
         </div>
     </div>
 </template>
 
 <script>
+import TableList from "./components/TableList.vue";
 export default {
-  name: 'Staff'
+  name: 'Staff',
+  components: {
+    TableList
+  }
 }
 </script>
 <style scoped>
