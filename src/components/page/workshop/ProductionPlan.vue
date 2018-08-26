@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import TableList from "./components/TableList.vue";
+import TableList from "./components/ProductionList.vue";
 export default {
   name: "ProductionPlan",
   components: {

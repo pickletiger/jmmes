@@ -3,11 +3,19 @@
     <vue-good-table 
       :columns="columns" 
       :rows="rows" 
-      @on-cell-click="openDialog"
+      
       @on-column-filter="selectionChanged"
     >
+      <template slot="table-row" slot-scope="props">
+        <span v-if="props.column.field == '操作'">
+          <el-button type="primary" icon="el-icon-edit" circle @click="dialogFormVisible = true"></el-button>
+        </span>
+        <span v-else>
+          {{props.formattedRow[props.column.field]}}
+        </span>
+      </template>
       <div slot="table-actions">
-        <el-button type="primary" @click="open3">导入</el-button>
+        <el-button type="primary">导入</el-button>
         <el-button type="primary">导出</el-button>
         <el-button type="primary">打印</el-button>
         <el-button type="primary" @click="dialogVisible = true">排产日期</el-button>
@@ -57,7 +65,7 @@ export default {
     return {
       dialogFormVisible: false,
       form: {
-        name: "xxx",
+        name: "",
         region: "",
         date1: "",
         date2: "",
@@ -119,6 +127,10 @@ export default {
             filterValue: "",
             filterDropdownItems: ["4月28日"]
           }
+        },
+        {
+          label: "操作",
+          field: "操作"
         }
       ],
       rows: [
@@ -127,7 +139,8 @@ export default {
           specification: "焊管DN125X4.5",
           size: "4620",
           place: "锯床",
-          date: "4月28日"
+          date: "4月28日",
+          btn: `<button onclick="xx()">点击</button>`
         },
         {
           id: 2,
@@ -171,31 +184,6 @@ export default {
     VueGoodTable
   },
   methods: {
-    open3() {
-      this.$prompt("请输入邮箱", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
-        inputErrorMessage: "邮箱格式不正确"
-      })
-        .then(({ value }) => {
-          this.$message({
-            type: "success",
-            message: "你的邮箱是: " + value
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "取消输入"
-          });
-        });
-    },
-    openDialog(params) {
-      // console.log(this.columns[0])
-      this.dialogFormVisible = true;
-      // console.log(this.dialogFormVisible);
-    },
     selectionChanged(params) {
       console.log(params.columnFilters);
     },
@@ -208,6 +196,8 @@ export default {
     }
   }
 };
+
+
 </script>
 
 <style>
