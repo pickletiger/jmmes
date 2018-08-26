@@ -55,7 +55,7 @@
                 {name:'羽绒服',value:2314}
             ],
             options1: {
-                title: '某商店近年营业总额',
+                title: '某车间工时统计',
                 autoWidth: true,   // 设置宽高自适应
                 showValue: false,
                 bgColor: '#F9EFCC',
@@ -64,7 +64,7 @@
                 yEqual: 7
             },
             options2: {
-                title: '某商店近年营业总额',
+                title: '某车间工时统计',
                 bgColor: '#D5E4EB',
                 titleColor: '#00887C',
                 fillColor: 'red',
