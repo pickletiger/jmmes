@@ -3,11 +3,20 @@
     <vue-good-table 
       :columns="columns" 
       :rows="rows" 
-      @on-cell-click="openDialog"
       @on-column-filter="selectionChanged"
+      :search-options="{enabled: true}"
     >
+      <template slot="table-row" slot-scope="props">
+        <span v-if="props.column.field == 'operate'">
+          <el-button type="primary" icon="el-icon-edit" circle @click="dialogFormVisible = true"></el-button>
+          <el-button type="danger" icon="el-icon-delete" circle @click="deleteStaff" ></el-button>
+        </span>
+        <span v-else>
+          {{props.formattedRow[props.column.field]}}
+        </span>
+      </template>
       <div slot="table-actions">
-        <el-button type="primary">新建</el-button>
+        <el-button type="primary" @click="dialogFormVisible = true">新建</el-button>
         <el-button type="primary">导入</el-button>
       </div>
     </vue-good-table>
@@ -72,6 +81,10 @@ export default {
         {
           label: "职位",
           field: "date"
+        },
+        {
+          label: "操作",
+          field: "operate"
         }
       ],
       rows: [
@@ -103,11 +116,6 @@ export default {
     VueGoodTable
   },
   methods: {
-    openDialog(params) {
-      // console.log(this.columns[0])
-      this.dialogFormVisible = true;
-      // console.log(this.dialogFormVisible);
-    },
     selectionChanged(params) {
       console.log(params.columnFilters);
     },
@@ -117,7 +125,25 @@ export default {
           done();
         })
         .catch(_ => {});
-    }
+    },
+    // 删除员工
+    deleteStaff() {
+        this.$confirm('将删除该员工, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
+      }
   }
 };
 </script>
