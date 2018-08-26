@@ -6,14 +6,18 @@
             </el-breadcrumb>
         </div>
         <div class="container">
-          
+          <table-list></table-list>
         </div>
     </div>
 </template>
 
 <script>
+import TableList from './components/ElectronicList'
 export default {
-  name: 'Electronic'
+  name: 'Electronic',
+  components: {
+    TableList
+  }
 }
 </script>
 <style scoped>
