@@ -16,6 +16,18 @@ const marketchildren = [{
     path: '/marketsonpart',
     component: resolve => require(['../components/page/market/components/MarketSonpart.vue'], resolve),
     meta: { title: '子部件信息' }
+}, {
+    path: '/marketrouting',
+    component: resolve => require(['../components/page/market/components/MarketRouting.vue'], resolve),
+    meta: { title: '工艺路线' }
+}, {
+    path: '/marketworkshop',
+    component: resolve => require(['../components/page/market/components/MarketWorkshop.vue'], resolve),
+    meta: { title: '车间信息' }
+}, {
+    path: '/marketprocess',
+    component: resolve => require(['../components/page/market/components/MarketProcess.vue'], resolve),
+    meta: { title: '工序信息' }
 }]
 // 定义计划部子路径
 const planchildren = [{

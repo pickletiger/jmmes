@@ -60,6 +60,15 @@ export default {
           case 'zj':
           this.$router.push('/marketsonpart')
           break
+          case 'gy':
+          this.$router.push('/marketrouting')
+          break
+          case 'cj':
+          this.$router.push('/marketworkshop')
+          break
+          case 'gx':
+          this.$router.push('/marketprocess')
+          break
         }
         
       }
@@ -88,7 +97,25 @@ export default {
               children: [{
                 id:'gy2',
                 isfinish : '完成',
-                label: '工艺路线 1-1-2-1'
+                label: '工艺路线 1-1-2-1',
+                children: [{
+                  id:'cj1',
+                  isfinish : '完成',
+                  label: '车间1'
+                }, {
+                  id:'cj2',
+                  isfinish : '完成',
+                  label: '车间2',
+                  children: [{
+                    id:'gx1',
+                    isfinish : '完成',
+                    label: '工序1'
+                   }, {
+                    id:'gx2',
+                    isfinish : '完成',
+                    label: '工序2'
+                  }]
+                }]
               }, {
                 id:'gy3',
                 isfinish : '建设中',
