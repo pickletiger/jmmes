@@ -92,6 +92,11 @@ export default new Router({
                     meta: { title: '已完成项目' },
                     children: marketchildren
                 },
+                {
+                    path: '/marketcheck',
+                    component: resolve => require(['../components/page/market/MarketCheck.vue'], resolve),
+                    meta: { title: '销售部审核' }
+                },
                 // 计划部
                 {
                     path: '/planunreview',
