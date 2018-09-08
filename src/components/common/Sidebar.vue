@@ -103,6 +103,10 @@
                             {
                                 index: 'planfinished',
                                 title: '已完成项目'
+                            },
+                            {
+                                index: 'plancheck',
+                                title: '审核'
                             }
                         ]
                     },
