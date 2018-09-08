@@ -12,9 +12,9 @@
 </template>
 
 <script>
-import TableList from './components/PlanList'
+import TableList from '../components/MarketList'
 export default {
-  name: 'PlanCheck',
+  name: 'MarketCheck',
   components: {
     TableList
   }
