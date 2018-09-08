@@ -57,6 +57,11 @@ export default new Router({
                     component: resolve => require(['../components/page/project/plan/PlanFinished.vue'], resolve),
                     meta: { title: '已完成项目' }
                 },
+                {
+                    path: '/plancheck',
+                    component: resolve => require(['../components/page/plan/PlanCheck.vue'], resolve),
+                    meta: { title: '计划部审核' }
+                },
                 // 工艺部
                 {
                     path: '/craftunreview',
