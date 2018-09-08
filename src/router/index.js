@@ -36,6 +36,11 @@ export default new Router({
                     component: resolve => require(['../components/page/project/market/MarketFinished.vue'], resolve),
                     meta: { title: '已完成项目' }
                 },
+                {
+                    path: '/marketcheck',
+                    component: resolve => require(['../components/page/market/MarketCheck.vue'], resolve),
+                    meta: { title: '销售部审核' }
+                },
                 // 计划部
                 {
                     path: '/planunreview',

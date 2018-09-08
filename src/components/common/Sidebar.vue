@@ -80,6 +80,10 @@
                             {
                                 index: 'marketfinished',
                                 title: '已完成项目'
+                            },
+                            {
+                                index: 'marketcheck',
+                                title: '审核'
                             }
                         ]
                     },
