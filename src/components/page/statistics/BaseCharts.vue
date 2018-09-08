@@ -40,24 +40,19 @@
         },
         data: () => ({
             data1:[
-                {name:'2012',value:1141},
-                {name:'2013',value:1499},
-                {name:'2014',value:2260},
-                {name:'2015',value:1170},
-                {name:'2016',value:970},
-                {name:'2017',value:1450}
+                {name:'电流安全上限',value:220},
+                {name:'电流实际最大值',value:200},
+                {name:'电流实际最小值',value:120},
+                {name:'电流安全下限',value:100}
             ],
             data2 : [
-                {name:'短袖',value:1200},
-                {name:'休闲裤',value:1222},
-                {name:'连衣裙',value:1283},
-                {name:'外套',value:1314},
-                {name:'羽绒服',value:2314}
+                {name:'合格',value:1900},
+                {name:'不合格',value:100}
             ],
             options1: {
-                title: '某商店近年营业总额',
+                title: '某零件电流品控参数',
                 autoWidth: true,   // 设置宽高自适应
-                showValue: false,
+                showValue: true,
                 bgColor: '#F9EFCC',
                 fillColor: '#00887C',
                 contentColor: 'rgba(46,199,201,0.3)',
@@ -71,8 +66,8 @@
                 contentColor: 'rgba(46,199,201,0.3)'
             },
             options3: {
-                title: '某商店各商品年度销量',
-                bgColor: '#829dca',
+                title: '某部件年度统计',
+                bgColor: '#eeeeee',
                 titleColor: '#ffffff',
                 legendColor: '#ffffff',
                 radius: 120

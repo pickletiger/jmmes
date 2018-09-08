@@ -79,7 +79,7 @@ export default {
     line-height: 60px;
     background: #fff;
     border-bottom: #eee 1px solid;
-    margin-top: -20px;
+    margin-top: -10px;
   }
   .main {
     position: relative;

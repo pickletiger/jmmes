@@ -3,60 +3,6 @@ import Router from 'vue-router';
 
 Vue.use(Router);
 
-// 定义销售部子路径
-const marketchildren = [{
-    path: '/marketproject',
-    component: resolve => require(['../components/page/market/components/MarketProject.vue'], resolve),
-    meta: { title: '项目信息' }
-}, {
-    path: '/marketpart',
-    component: resolve => require(['../components/page/market/components/MarketPart.vue'], resolve),
-    meta: { title: '部件信息' }
-}, {
-    path: '/marketsonpart',
-    component: resolve => require(['../components/page/market/components/MarketSonpart.vue'], resolve),
-    meta: { title: '子部件信息' }
-}, {
-    path: '/marketrouting',
-    component: resolve => require(['../components/page/market/components/MarketRouting.vue'], resolve),
-    meta: { title: '工艺路线' }
-}, {
-    path: '/marketworkshop',
-    component: resolve => require(['../components/page/market/components/MarketWorkshop.vue'], resolve),
-    meta: { title: '车间信息' }
-}, {
-    path: '/marketprocess',
-    component: resolve => require(['../components/page/market/components/MarketProcess.vue'], resolve),
-    meta: { title: '工序信息' }
-}]
-// 定义计划部子路径
-const planchildren = [{
-    path: '/planproject',
-    component: resolve => require(['../components/page/plan/components/PlanProject.vue'], resolve),
-    meta: { title: '项目信息' }
-}, {
-    path: '/planpart',
-    component: resolve => require(['../components/page/plan/components/PlanPart.vue'], resolve),
-    meta: { title: '部件信息' }
-}, {
-    path: '/plansonpart',
-    component: resolve => require(['../components/page/plan/components/PlanSonpart.vue'], resolve),
-    meta: { title: '子部件信息' }
-}]
-// 定义工艺部子路径
-const craftchildren = [{
-            path: '/craftproject',
-            component: resolve => require(['../components/page/craft/components/CraftProject.vue'], resolve),
-            meta: { title: '项目信息' }
-        }, {
-            path: '/craftpart',
-            component: resolve => require(['../components/page/craft/components/CraftPart.vue'], resolve),
-            meta: { title: '部件信息' }
-        }, {
-            path: '/craftsonpart',
-            component: resolve => require(['../components/page/craft/components/CraftSonpart.vue'], resolve),
-            meta: { title: '子部件信息' }
-}]
 
 export default new Router({
     routes: [
@@ -77,56 +23,50 @@ export default new Router({
                 //  销售部
                 {
                     path: '/marketunreview',
-                    component: resolve => require(['../components/page/market/MarketUnreview.vue'], resolve),
+                    component: resolve => require(['../components/page/project/market/MarketUnreview.vue'], resolve),
                     meta: { title: '未审核项目' }
                 },
                 {
                     path: '/market',
-                    component: resolve => require(['../components/page/market/Market.vue'], resolve),
-                    meta: { title: '在建项目' },
-                    children: marketchildren
+                    component: resolve => require(['../components/page/project/market/Market.vue'], resolve),
+                    meta: { title: '在建项目' }
                 },
                 {
                     path: '/marketfinished',
-                    component: resolve => require(['../components/page/market/MarketFinished.vue'], resolve),
-                    meta: { title: '已完成项目' },
-                    children: marketchildren
+                    component: resolve => require(['../components/page/project/market/MarketFinished.vue'], resolve),
+                    meta: { title: '已完成项目' }
                 },
                 // 计划部
                 {
                     path: '/planunreview',
-                    component: resolve => require(['../components/page/plan/PlanUnreview.vue'], resolve),
+                    component: resolve => require(['../components/page/project/plan/PlanUnreview.vue'], resolve),
                     meta: { title: '未审核项目' }
                 },
                 {
                     path: '/plan',
-                    component: resolve => require(['../components/page/plan/Plan.vue'], resolve),
-                    meta: { title: '在建项目' },
-                    children: planchildren
+                    component: resolve => require(['../components/page/project/plan/Plan.vue'], resolve),
+                    meta: { title: '在建项目' }
                 },
                 {
                     path: '/planfinished',
-                    component: resolve => require(['../components/page/plan/PlanFinished.vue'], resolve),
-                    meta: { title: '已完成项目' },
-                    children: planchildren
+                    component: resolve => require(['../components/page/project/plan/PlanFinished.vue'], resolve),
+                    meta: { title: '已完成项目' }
                 },
                 // 工艺部
                 {
                     path: '/craftunreview',
-                    component: resolve => require(['../components/page/craft/CraftUnreview.vue'], resolve),
+                    component: resolve => require(['../components/page/project/craft/CraftUnreview.vue'], resolve),
                     meta: { title: '未审核项目' }
                 },
                 {
                     path: '/craft',
-                    component: resolve => require(['../components/page/craft/Craft.vue'], resolve),
-                    meta: { title: '在建项目' },
-                    children: craftchildren
+                    component: resolve => require(['../components/page/project/craft/Craft.vue'], resolve),
+                    meta: { title: '在建项目' }
                 },
                 {
                     path: '/craftfinished',
-                    component: resolve => require(['../components/page/craft/CraftFinished.vue'], resolve),
-                    meta: { title: '已完成项目' },
-                    children: craftchildren
+                    component: resolve => require(['../components/page/project/craft/CraftFinished.vue'], resolve),
+                    meta: { title: '已完成项目' }
                 },
                 {
                     // vue-schart组件
