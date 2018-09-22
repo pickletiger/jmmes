@@ -6,14 +6,18 @@
             </el-breadcrumb>
         </div>
         <div class="container">
-          
+          <document-list></document-list>
         </div>
     </div>
 </template>
 
 <script>
+import DocumentList from "./components/DocumentList"
 export default {
-  name: 'Document'
+  name: 'Document',
+  components: {
+      DocumentList
+  }
 }
 </script>
 <style scoped>

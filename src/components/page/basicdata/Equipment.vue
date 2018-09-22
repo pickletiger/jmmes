@@ -6,14 +6,18 @@
             </el-breadcrumb>
         </div>
         <div class="container">
-          
+          <equipment-list></equipment-list>
         </div>
     </div>
 </template>
 
 <script>
+import EquipmentList from './components/EquipmentList'
 export default {
-  name: 'Equipment'
+  name: 'Equipment',
+  components :{
+      EquipmentList
+  }
 }
 </script>
 <style scoped>

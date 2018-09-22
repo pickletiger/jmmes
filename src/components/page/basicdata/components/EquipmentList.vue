@@ -22,16 +22,25 @@
     </vue-good-table>
     <el-dialog title="信息详情" :visible.sync="dialogFormVisible">
         <el-form :model="form">
-          <el-form-item label="工号" :label-width="formLabelWidth">
+          <el-form-item label="设备编号" :label-width="formLabelWidth">
             <el-input  auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="姓名" :label-width="formLabelWidth">
+          <el-form-item label="设备名称" :label-width="formLabelWidth">
             <el-input  auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="手机"  :label-width="formLabelWidth">
+          <el-form-item label="设备状态"  :label-width="formLabelWidth">
             <el-input  auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="职位" :label-width="formLabelWidth">
+          <el-form-item label="工作中心名称" :label-width="formLabelWidth">
+            <el-input  auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="点检要求" :label-width="formLabelWidth">
+            <el-input  auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="点检位置描述" :label-width="formLabelWidth">
+            <el-input  auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="点检周期" :label-width="formLabelWidth">
             <el-input  auto-complete="off"></el-input>
           </el-form-item>
         </el-form>
@@ -47,7 +56,7 @@
 <script>
 import { VueGoodTable } from "vue-good-table";
 export default {
-  name: "TableList",
+  name: "EquipmentList",
   data() {
     return {
       dialogFormVisible: false,
@@ -66,21 +75,31 @@ export default {
       value1:'',
       columns: [
         {
-          label: "工号",
-          field: "specification",
+          label: "设备编号",
+          field: "number",
           
         },
         {
-          label: "姓名",
-          field: "size"
+          label: "设备名称",
+          field: "name"
         },
         {
-          label: "手机",
-          field: "place"
+          label: "设备状态",
+          field: "state"
         },
         {
-          label: "职位",
-          field: "date"
+          label: "工作中心名称",
+          field: "workcenter"
+        },
+        {
+          label: "点检要求",
+          field: "checkrequest"
+        },{
+          label: "点检位置描述",
+          field: "tallyposition"
+        },{
+          label: "点检周期",
+          field: "tallycycle"
         },
         {
           label: "操作",
@@ -90,24 +109,33 @@ export default {
       rows: [
         {
           id: 1,
-          specification: "1",
-          size: "张三",
-          place: "13854215475",
-          date: "车间主任"
+          number: "001",
+          name: "1#CNC",
+          state: "使用",
+          workcenter: "机加工车间",
+          checkrequest: "性能保持正常",
+          tallyposition: "XXX",
+          tallycycle: "60"
         },
         {
           id: 2,
-          specification: "2",
-          size: "李四",
-          place: "13555215485",
-          date: "工人"
+          number: "002",
+          name: "2#CNC",
+          state: "停机",
+          workcenter: "机加工车间",
+          checkrequest: "符合标准",
+          tallyposition: "XXX",
+          tallycycle: "60"
         },
         {
           id: 3,
-          specification: "3",
-          size: "某某",
-          place: "13545215785",
-          date: "经理"
+          number: "003",
+          name: "粒体焊接",
+          state: "使用",
+          workcenter: "生产部",
+          checkrequest: "性能保持正常",
+          tallyposition: "XXX",
+          tallycycle: "30"
         }
       ]
     };

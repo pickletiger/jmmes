@@ -22,16 +22,16 @@
     </vue-good-table>
     <el-dialog title="信息详情" :visible.sync="dialogFormVisible">
         <el-form :model="form">
-          <el-form-item label="工号" :label-width="formLabelWidth">
+          <el-form-item label="物料编码" :label-width="formLabelWidth">
             <el-input  auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="姓名" :label-width="formLabelWidth">
+          <el-form-item label="物料名称" :label-width="formLabelWidth">
             <el-input  auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="手机"  :label-width="formLabelWidth">
+          <el-form-item label="规格"  :label-width="formLabelWidth">
             <el-input  auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="职位" :label-width="formLabelWidth">
+          <el-form-item label="数量" :label-width="formLabelWidth">
             <el-input  auto-complete="off"></el-input>
           </el-form-item>
         </el-form>
@@ -47,7 +47,7 @@
 <script>
 import { VueGoodTable } from "vue-good-table";
 export default {
-  name: "TableList",
+  name: "MaterialList",
   data() {
     return {
       dialogFormVisible: false,
@@ -66,20 +66,20 @@ export default {
       value1:'',
       columns: [
         {
-          label: "工号",
+          label: "物料编码",
           field: "specification",
           
         },
         {
-          label: "姓名",
+          label: "物料名称",
           field: "size"
         },
         {
-          label: "手机",
+          label: "规格",
           field: "place"
         },
         {
-          label: "职位",
+          label: "数量",
           field: "date"
         },
         {
@@ -90,24 +90,24 @@ export default {
       rows: [
         {
           id: 1,
-          specification: "1",
-          size: "张三",
-          place: "13854215475",
-          date: "车间主任"
+          specification: "Q235-B",
+          size: "钢管",
+          place: "焊管DN125X4.5",
+          date: "1"
         },
         {
           id: 2,
-          specification: "2",
-          size: "李四",
-          place: "13555215485",
-          date: "工人"
+          specification: "Q234-A",
+          size: "槽钢",
+          place: "槽钢20ad=7",
+          date: "3"
         },
         {
           id: 3,
-          specification: "3",
-          size: "某某",
-          place: "13545215785",
-          date: "经理"
+          specification: "Q234-B",
+          size: "H钢",
+          place: "H型钢200X200",
+          date: "2"
         }
       ]
     };

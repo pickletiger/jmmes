@@ -12,7 +12,7 @@
             </el-form-item>
             <el-form-item label="交付时间">
               <el-col :span="10">
-                <el-date-picker type="date" placeholder="选择日期" style="width: 100%;"></el-date-picker>
+                <el-date-picker type="date" v-model="date1" placeholder="选择日期" style="width: 100%;"></el-date-picker>
               </el-col>
             </el-form-item>
             <el-form-item label="安装场地">
@@ -53,7 +53,7 @@
             </el-form-item>
             <el-form-item label="开始时间">
               <el-col :span="11">
-                <el-date-picker type="date" placeholder="选择日期"  style="width: 100%;"></el-date-picker>
+                <el-date-picker type="date" v-model="date2" placeholder="选择日期"  style="width: 100%;"></el-date-picker>
               </el-col>
             </el-form-item>
             <el-form-item label="项目备注">
@@ -71,7 +71,8 @@ export default {
   name: 'ProjectMain',
   data () {
     return {
-      date: ''
+      date1: '',
+      date2: ''
     }
   }
 }

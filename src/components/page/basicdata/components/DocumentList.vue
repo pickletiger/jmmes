@@ -22,16 +22,16 @@
     </vue-good-table>
     <el-dialog title="信息详情" :visible.sync="dialogFormVisible">
         <el-form :model="form">
-          <el-form-item label="工号" :label-width="formLabelWidth">
+          <el-form-item label="文档编号" :label-width="formLabelWidth">
             <el-input  auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="姓名" :label-width="formLabelWidth">
+          <el-form-item label="文档名" :label-width="formLabelWidth">
             <el-input  auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="手机"  :label-width="formLabelWidth">
+          <el-form-item label="文档类型"  :label-width="formLabelWidth">
             <el-input  auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="职位" :label-width="formLabelWidth">
+          <el-form-item label="最新更新日期" :label-width="formLabelWidth">
             <el-input  auto-complete="off"></el-input>
           </el-form-item>
         </el-form>
@@ -47,7 +47,7 @@
 <script>
 import { VueGoodTable } from "vue-good-table";
 export default {
-  name: "TableList",
+  name: "DocimentList",
   data() {
     return {
       dialogFormVisible: false,
@@ -66,20 +66,20 @@ export default {
       value1:'',
       columns: [
         {
-          label: "工号",
+          label: "文档编号",
           field: "specification",
           
         },
         {
-          label: "姓名",
+          label: "文档名",
           field: "size"
         },
         {
-          label: "手机",
+          label: "文档类型",
           field: "place"
         },
         {
-          label: "职位",
+          label: "最新更新日期",
           field: "date"
         },
         {
@@ -91,23 +91,23 @@ export default {
         {
           id: 1,
           specification: "1",
-          size: "张三",
-          place: "13854215475",
-          date: "车间主任"
+          size: "XX表单",
+          place: "某某类型",
+          date: "XXXX-XX-XX"
         },
         {
           id: 2,
           specification: "2",
-          size: "李四",
-          place: "13555215485",
-          date: "工人"
+          size: "XX表单",
+          place: "某某类型",
+          date: "XXXX-XX-XX"
         },
         {
           id: 3,
           specification: "3",
-          size: "某某",
-          place: "13545215785",
-          date: "经理"
+          size: "XX表单",
+          place: "某某类型",
+          date: "XXXX-XX-XX"
         }
       ]
     };

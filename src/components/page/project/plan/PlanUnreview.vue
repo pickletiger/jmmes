@@ -1,47 +1,57 @@
 <template>
   <div class="table">
-        <div class="crumbs">
-            <el-breadcrumb separator="/">
-                <el-breadcrumb-item><i class="el-icon-tickets"></i> 项目管理</el-breadcrumb-item>
-            </el-breadcrumb>
-        </div>
-        <div class="container">
-          <el-container>
-            <el-header>
-              <el-col :offset="20">
-               <el-button type="primary">修改时间</el-button>
-               <el-button type="primary">审核</el-button>
-              </el-col>
-            </el-header>
-            <el-container>
-              <el-aside width="200px">
-                <el-input
-                  placeholder="输入关键字进行过滤"
-                  v-model="filterText">
-                </el-input>
-
-                <el-tree
-                  class="filter-tree"
-                  :data="data"
-                  :props="defaultProps"
-                  :default-expand-all="false"
-                  @node-click="handleNodeClick"
-                  :filter-node-method="filterNode"
-                  ref="tree">
-                </el-tree>
-              </el-aside>
-              <el-main>
-                <project v-if="lx=='xm'||lx==''" :id="lxid"></project>
-                <part v-if="lx=='bj'" :id="lxid"></part>
-                <son-part v-if="lx=='zj'" :id="lxid"></son-part>
-                <routing v-if="lx=='gy'" :id="lxid"></routing>
-                <work-shop v-if="lx=='cj'"  :id="lxid"></work-shop>
-                <process v-if="lx=='gx'" :id="lxid"></process>
-              </el-main>
-            </el-container>
-          </el-container>
-        </div>
+    <div class="crumbs">
+        <el-breadcrumb separator="/">
+            <el-breadcrumb-item><i class="el-icon-tickets"></i> 项目管理</el-breadcrumb-item>
+        </el-breadcrumb>
     </div>
+    <div class="container">
+      <el-container>
+        <el-header>
+          <el-col :offset="20">
+            <el-button type="primary" @click="dialogFormVisible = true">修改时间</el-button>
+            <el-button type="primary">审核</el-button>
+          </el-col>
+        </el-header>
+        <el-container>
+          <el-aside width="200px">
+            <el-input
+              placeholder="输入关键字进行过滤"
+              v-model="filterText">
+            </el-input>
+            <el-dialog title="修改交付时间" :visible.sync="dialogFormVisible">
+              <el-form :model="form">
+                <el-form-item label="交付时间" :label-width="formLabelWidth">
+                  <el-date-picker type="date" v-model="date"  style="width: 200px;"></el-date-picker>
+                </el-form-item>
+              </el-form>
+              <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+              </div>
+          </el-dialog>
+            <el-tree
+              class="filter-tree"
+              :data="data"
+              :props="defaultProps"
+              :default-expand-all="false"
+              @node-click="handleNodeClick"
+              :filter-node-method="filterNode"
+              ref="tree">
+            </el-tree>
+          </el-aside>
+          <el-main>
+            <project v-if="lx=='xm'||lx==''" :id="lxid"></project>
+            <part v-if="lx=='bj'" :id="lxid"></part>
+            <son-part v-if="lx=='zj'" :id="lxid"></son-part>
+            <routing v-if="lx=='gy'" :id="lxid"></routing>
+            <work-shop v-if="lx=='cj'"  :id="lxid"></work-shop>
+            <process v-if="lx=='gx'" :id="lxid"></process>
+          </el-main>
+        </el-container>
+      </el-container>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -63,22 +73,24 @@ export default {
   },
   data() {
       return {
+        dialogFormVisible :false,
         lx:'',
         lxid:'',
+        date:'',
         filterText: '',
         data: [{
           id:'xm1',
-          label: '断轨过山车体',
+          label: 'QWT-12B',
           children: [{
             id:'bj1',
-            label: '轮架',
+            label: 'QWT-12A.01',
             children: [{
               id:'zj1',
-              label: '子部件 1-1-1',
+              label: 'QWT-12A.01.02',
               children: [{
                 id:'gy1',
                 isfinish : '2',
-                label: '工艺路线 1-1-1-1',
+                label: 'QWT-12A.01.02-00',
                 children: [{
                   id:'cj1',
                   isfinish : '2',

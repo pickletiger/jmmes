@@ -6,14 +6,18 @@
             </el-breadcrumb>
         </div>
         <div class="container">
-          
+          <material-list></material-list>
         </div>
     </div>
 </template>
 
 <script>
+import MaterialList from './components/MaterialList'
 export default {
-  name: 'Material'
+  name: 'Material',
+  components: {
+      MaterialList
+  }
 }
 </script>
 <style scoped>
