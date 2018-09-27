@@ -25,6 +25,8 @@
 
 <script>
 import { VueGoodTable } from "vue-good-table";
+import axios from 'axios';
+
 export default {
   name: "PlanList",
   components: {
@@ -55,22 +57,34 @@ export default {
         }
       ],
       rows: [
-        {
-          id:1,
-          orderName: "订单1",
-          importPerson: "小高",
-          importTime: "2018-09-08",
-          checkPerson: ''
-        },
-        {
-          id:2,
-          orderName: "订单2",
-          importPerson: "小周",
-          importTime: "2018-09-08",
-          checkPerson: '小周'
-        }
+        // {
+        //   id:1,
+        //   orderName: "订单1",
+        //   importPerson: "小高",
+        //   importTime: "2018-09-08",
+        //   checkPerson: ''
+        // },
+        // {
+        //   id:2,
+        //   orderName: "订单2",
+        //   importPerson: "小周",
+        //   importTime: "2018-09-08",
+        //   checkPerson: '小周'
+        // }
       ]
     };
+  },
+  mounted() {
+    this.getData();
+  },
+  methods: {
+    getData() {
+      axios.post('').then(this.getDataSucc)
+    },
+    getDataSucc(res) {
+      res = res.data;
+      console.log(res);
+    }
   }
 };
 </script>
