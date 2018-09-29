@@ -9,17 +9,19 @@
     >
     <template slot="table-row" slot-scope="props">
       <span v-if="props.column.field == 'operate'">
-        <el-button type="primary" v-if="props.row.checkPerson == '' ">审核</el-button>
-        <el-button type="info" disabled v-else>审核</el-button>
+        <el-button type="primary" @click="showpdf()" >查看</el-button>
+        <!-- <el-button type="primary" v-if="props.row.checkPerson == '' ">审核</el-button>
+        <el-button type="info" disabled v-else>审核</el-button> -->
       </span>
       <span v-else>
         {{props.formattedRow[props.column.field]}}
       </span>
     </template>
-    <div slot="table-actions">
+    <!-- <div slot="table-actions">
       <el-button type="primary">导入</el-button>
-    </div>
+    </div> -->
     </vue-good-table>
+    
   </div>
 </template>
 
@@ -34,6 +36,7 @@ export default {
   },
   data() {
     return {
+      dialogFormVisible: false,
       columns: [
         {
           label: "订单名称",
@@ -57,20 +60,20 @@ export default {
         }
       ],
       rows: [
-        // {
-        //   id:1,
-        //   orderName: "订单1",
-        //   importPerson: "小高",
-        //   importTime: "2018-09-08",
-        //   checkPerson: ''
-        // },
-        // {
-        //   id:2,
-        //   orderName: "订单2",
-        //   importPerson: "小周",
-        //   importTime: "2018-09-08",
-        //   checkPerson: '小周'
-        // }
+        {
+          id:1,
+          orderName: "订单1",
+          importPerson: "小高",
+          importTime: "2018-09-08",
+          checkPerson: ''
+        },
+        {
+          id:2,
+          orderName: "订单2",
+          importPerson: "小周",
+          importTime: "2018-09-08",
+          checkPerson: '小周'
+        }
       ]
     };
   },
@@ -79,11 +82,16 @@ export default {
   },
   methods: {
     getData() {
-      axios.post('').then(this.getDataSucc)
+      axios.post('https://www.easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/MarketCheck').then(this.getDataSucc)
     },
     getDataSucc(res) {
       res = res.data;
-      console.log(res);
+      if(res.success && res.rows){
+        this.rows = res.rows;
+      }
+    },
+    showpdf() {
+      window.open("static/upload/MarketCheck/testPDF.pdf")
     }
   }
 };

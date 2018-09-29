@@ -39,7 +39,7 @@ export default new Router({
                 {
                     path: '/marketcheck',
                     component: resolve => require(['../components/page/project/market/MarketCheck.vue'], resolve),
-                    meta: { title: '销售部审核' }
+                    meta: { title: '订单管理' }
                 },
                 // 计划部
                 {
@@ -60,7 +60,7 @@ export default new Router({
                 {
                     path: '/plancheck',
                     component: resolve => require(['../components/page/project/plan/PlanCheck.vue'], resolve),
-                    meta: { title: '计划部审核' }
+                    meta: { title: '订单查看' }
                 },
                 // 工艺部
                 {

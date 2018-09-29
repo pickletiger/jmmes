@@ -83,7 +83,7 @@
                             },
                             {
                                 index: 'marketcheck',
-                                title: '审核'
+                                title: '订单管理'
                             }
                         ]
                     },
@@ -106,7 +106,7 @@
                             },
                             {
                                 index: 'plancheck',
-                                title: '审核'
+                                title: '订单查看'
                             }
                         ]
                     },
