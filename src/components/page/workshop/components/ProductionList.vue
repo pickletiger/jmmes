@@ -3,8 +3,8 @@
     <vue-good-table 
       :columns="columns" 
       :rows="rows" 
-      
-      @on-column-filter="selectionChanged"
+      :lineNumbers="true"
+      @on-column-filter="onColumnFilter"
     >
       <template slot="table-row" slot-scope="props">
         <span v-if="props.column.field == '操作'">
@@ -15,7 +15,7 @@
         </span>
       </template>
       <div slot="table-actions">
-        <el-button type="primary">导出</el-button>
+        <el-button type="primary" @click="xxx()">导出</el-button>
         <el-button type="primary" @click="print()">打印</el-button>
         <el-button type="primary" @click="dialogVisible = true">排产日期</el-button>
       </div>
@@ -180,9 +180,6 @@ export default {
         }
       }
     },
-    selectionChanged(params) {
-      // console.log(params.columnFilters);
-    },
     handleTableData(e) {
       this.form = e.row;
       this.hasInfoDialog = true;
@@ -199,6 +196,9 @@ export default {
     },
     importExcel() {
       this.canImport = true;
+    },
+    onColumnFilter(params) {
+      console.log(params);
     }
   }
 };

@@ -1,11 +1,14 @@
 <template>
   <div>
     <vue-good-table
+      @on-selected-rows-change="selectionChanged"
       :columns="columns" 
       :rows="rows" 
-      :search-options="{
-        enabled: true
+      :select-options="{ 
+        enabled: true,
+        selectOnCheckboxOnly: true
       }"
+      ref="my-table"
     >
     <template slot="table-row" slot-scope="props">
       <span v-if="props.column.field == 'operate'">
@@ -18,11 +21,12 @@
       </span>
     </template>
     <div slot="table-actions">
-      <el-button type="primary">导入</el-button>
+      <el-button type="primary" @click="canupload = true">导入</el-button>
+      <el-button type="primary" @click="batchCheckComfirm()">审核</el-button>
     </div>
     </vue-good-table>
     <el-dialog title="信息详情" :visible.sync="dialogFormVisible">
-        <el-form :model="form">
+        <el-form >
           <el-form-item label="订单名称" :label-width="formLabelWidth">
             <el-input v-model="formData.orderName"  auto-complete="off"></el-input>
           </el-form-item>
@@ -41,6 +45,17 @@
           <el-button type="primary" @click="checkComfirm()" >确 定</el-button>
         </div>
     </el-dialog>
+    <el-dialog title="导入" :visible.sync="canupload">
+      <el-upload
+        class="upload-demo"
+        drag
+        action="https://jsonplaceholder.typicode.com/posts/"
+        multiple>
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <div class="el-upload__tip" slot="tip">只能上传pdf文件，且不超过500kb</div>
+      </el-upload>
+    </el-dialog>
   </div>
 </template>
 
@@ -57,8 +72,11 @@ export default {
   data() {
     return {
       formData:{},
+      canupload: false,
       dialogFormVisible: false,
       formLabelWidth: "80px",
+      multipleSelection: [],
+      notCheckSelection: [], 
       columns: [
         {
           label: "订单名称",
@@ -105,12 +123,46 @@ export default {
       this.dialogFormVisible = false;
       this.formData.checkPerson = "管理员";
       this.$message({
-        message: '审核成功',
+        message: '审核成功！',
         type: 'success'
       });
     },
     showpdf() {
+      // 查看pdf
       window.open("static/upload/MarketCheck/testPDF.pdf")
+    },
+    selectionChanged(val) {
+      // 存入选择项的值(数组)
+      this.multipleSelection = val;
+    },
+    batchCheckComfirm() {
+      let multipleSelection = this.multipleSelection;
+      // 判断是否有选中未审核订单
+      if(multipleSelection.selectedRows.length == 0){
+        this.$message({
+          message: '请先选择未审核的订单~',
+          type: 'warning'
+        });
+      }else{
+        let selectedOptions = multipleSelection.selectedRows.length;
+
+        for(let i=0;i < selectedOptions; i++) {
+          if(multipleSelection.selectedRows[i].checkPerson == '') {
+            this.notCheckSelection.push(multipleSelection.selectedRows[i]);
+          }
+        }
+
+        let checkNums = this.notCheckSelection.length;
+        for(let i=0;i < checkNums; i++) {
+          this.notCheckSelection[i].checkPerson = '管理员';
+        }
+        this.$message({
+          message: '成功审核'+ this.notCheckSelection.length +'项订单！',
+          type: 'success'
+        });
+        multipleSelection.selectedRows = [];
+        this.notCheckSelection = [];
+      }
     }
   }
 };
