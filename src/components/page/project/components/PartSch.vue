@@ -16,7 +16,7 @@
                   <el-step  v-for="(unfinished,u,index) in item.unfinished" :key="index" :title="unfinished.routel" @click.native="handleStep(0)"></el-step>
                 </slot>
               </el-steps>
-              <el-button type="primary"  class="btn">查看</el-button>
+              <el-button type="primary"  class="btn" @click.native="handleChange(201855566)">查看</el-button>
           </el-form>
           </el-collapse-item>
       </el-collapse>
@@ -35,6 +35,7 @@
           <span v-if="props.column.field == 'operate'">
             <el-button type="primary">查看</el-button>
             <el-button type="primary">向下增加工序</el-button>
+            <el-button type="danger">删除</el-button>
           </span>
           <span v-else>
             {{props.formattedRow[props.column.field]}}
@@ -101,6 +102,9 @@ export default {
     }
   },
   methods: {
+    handleChange(lxid){
+      this.$emit("change",lxid)
+    },
     selectionChanged(params) {
       console.log(params.columnFilters);
     },
