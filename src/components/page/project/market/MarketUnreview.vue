@@ -144,7 +144,6 @@ export default {
       handleNodeClick(data) {
         // console.log(data.id)
         this.lx = data.id.substr(0,2)
-        console.log(lx)
       }
     }
 };

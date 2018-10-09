@@ -67,7 +67,7 @@
                     {   
                         icon: 'el-icon-tickets',
                         index: '4',
-                        title: '销售部',
+                        title: '销售模块',
                         subs: [
                             {
                                 index: 'marketunreview',
@@ -90,7 +90,7 @@
                     {   
                         icon: 'el-icon-tickets',
                         index: '5',
-                        title: '计划部',
+                        title: '计划模块',
                         subs: [
                             {
                                 index: 'planunreview',
@@ -113,7 +113,7 @@
                     {   
                         icon: 'el-icon-tickets',
                         index: '6',
-                        title: '工艺部',
+                        title: '工艺模块',
                         subs: [
                             {
                                 index: 'craftunreview',

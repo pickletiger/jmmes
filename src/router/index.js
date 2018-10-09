@@ -159,6 +159,11 @@ export default new Router({
             ]
         },
         {
+            path: '/qrcode',
+            component: resolve => require(['../components/page/Qrcode.vue'], resolve),
+            meta: { title: '二维码demo' }
+        },
+        {
             path: '/login',
             component: resolve => require(['../components/page/Login.vue'], resolve)
         },

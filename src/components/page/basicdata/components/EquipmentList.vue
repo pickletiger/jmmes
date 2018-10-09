@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import { VueGoodTable } from "vue-good-table";
+import { VueGoodTable } from "vue-good-table"
 import axios from 'axios'
 export default {
   name: "EquipmentList",
@@ -207,6 +207,7 @@ export default {
       this.dialogFormdata = this.rows[id-1]
       this.dialogFormVisible = true
     },
+    // 点检记录异步数据获取
     handleTabledata(id) {
       axios.post('https://easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/check',{
         number: this.rows[id-1].number,

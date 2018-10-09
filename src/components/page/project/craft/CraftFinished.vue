@@ -109,7 +109,7 @@ export default {
           label: '项目2',
           children: [{
             id:'bj2',
-            label: '部件2-1',
+            label: '部件2-1'
           }, {
             id:'bj3',
             label: '部件2-2'
