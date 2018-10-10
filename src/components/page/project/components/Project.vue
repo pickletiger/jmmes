@@ -1,78 +1,57 @@
 <template>
   <div>
-    <el-container class="project-main">
-      <el-header class="header">项目信息</el-header>
-      <el-main>
-        <div class="main">
-          <el-form ref="form"  label-width="80px">
-            <el-form-item label="项目名称">
-              <el-col :span="10">
-                <el-input ></el-input>
-              </el-col>
-            </el-form-item>
-            <el-form-item label="交付时间">
-              <el-col :span="10">
-                <el-date-picker type="date" v-model="date1" placeholder="选择日期" style="width: 100%;"></el-date-picker>
-              </el-col>
-            </el-form-item>
-            <el-form-item label="安装场地">
-              <el-col :span="10">
-                <el-input ></el-input>
-              </el-col>
-            </el-form-item>
-            <el-form-item label="项目进度">
-              <el-collapse accordion>
-                <el-collapse-item title="部件1">
-                 <el-form>
-                  <el-form-item label="子部件1"></el-form-item>
-                    <el-steps :space="100" :active="1" finish-status="success">
-                      <el-step title="完成"></el-step>
-                      <el-step title="建设中"></el-step>
-                      <el-step title="未完成"></el-step>
-                    </el-steps>
-                  <el-form-item label="子部件2"></el-form-item>
-                    <el-steps :space="100" :active="0" finish-status="success">
-                      <el-step title="建设中"></el-step>
-                      <el-step title="未完成"></el-step>
-                      <el-step title="未完成"></el-step>
-                    </el-steps>
-                </el-form>
-                </el-collapse-item>
-                <el-collapse-item title="部件2">
-                 <el-form>
-                  <el-form-item label="子部件1"></el-form-item>
-                    <el-steps :space="100" :active="1" finish-status="success">
-                      <el-step title="完成"></el-step>
-                      <el-step title="建设中"></el-step>
-                      <el-step title="未完成"></el-step>
-                      <el-step title="未完成"></el-step>
-                    </el-steps>
-                </el-form>
-                </el-collapse-item>
-              </el-collapse>
-            </el-form-item>
-            <el-form-item label="开始时间">
-              <el-col :span="11">
-                <el-date-picker type="date" v-model="date2" placeholder="选择日期"  style="width: 100%;"></el-date-picker>
-              </el-col>
-            </el-form-item>
-            <el-form-item label="项目备注">
-              <el-input type="textarea" ></el-input>
-            </el-form-item>
-          </el-form>
-        </div>
-      </el-main>
-    </el-container>
-  </div>
+  <el-tabs type="border-card">
+    <el-tab-pane label="项目信息">
+      <project-main :prodata="this.prodata"></project-main>
+    </el-tab-pane>
+    <el-tab-pane label="项目进度">
+      <project-sch :proschdata="this.proschdata"></project-sch>
+    </el-tab-pane>
+  </el-tabs>
+</div>
 </template>
 
 <script>
+import axios from 'axios'
+import ProjectMain from '../components/ProjectMain'
+import ProjectSch from '../components/ProjectSch'
 export default {
-  name: 'ProjectMain',
+  name: 'Project',
+  components: {
+    ProjectMain,
+    ProjectSch
+  },
+  props: {
+    lxid: String
+  },
   data () {
     return {
-      date1: '',
-      date2: ''
+      prodata:{},
+      proschdata:[]
+    }
+  },
+  // 监听数据的变化
+  watch: {
+    lxid : {
+      immediate: true,   //如果不加这个属性，父组件第一次传进来的值监听不到
+      handler(val) {
+        axios.post('https://easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/projectmain',{
+          id: val
+        }).then(this.getProdataSucc)
+        axios.post('https://easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/routersch',{
+          id: val
+        }).then(this.getProschdataSucc)
+      }  
+    }
+  },
+  methods: {
+    getProdataSucc(res) {
+      this.prodata = res.data.data
+      // console.log(this.prodata)
+    },
+    getProschdataSucc(res) {
+      this.proschdata = res.data.data.route
+      // console.log(this.proschdata)
     }
   }
 }
