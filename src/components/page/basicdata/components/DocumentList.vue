@@ -4,11 +4,18 @@
       :columns="columns" 
       :rows="rows" 
       @on-column-filter="selectionChanged"
-      :search-options="{enabled: true}"
+      :search-options="{
+        enabled: true,
+        placeholder: '搜索此表格'
+      }"
+      :pagination-options="{
+        enabled: true,
+        mode: 'records'
+      }"
     >
       <template slot="table-row" slot-scope="props">
         <span v-if="props.column.field == 'operate'">
-          <el-button type="primary" icon="el-icon-edit" circle @click="dialogFormVisible = true"></el-button>
+          <el-button type="primary" icon="el-icon-edit" circle @click="Handlealter(props.row.contact_id)"></el-button>
           <el-button type="danger" icon="el-icon-delete" circle @click="deleteStaff" ></el-button>
         </span>
         <span v-else>
@@ -17,27 +24,27 @@
       </template>
       <div slot="table-actions">
         <el-button type="primary" @click="dialogFormVisible = true">新建</el-button>
-        <el-button type="primary">导入</el-button>
       </div>
     </vue-good-table>
     <el-dialog title="信息详情" :visible.sync="dialogFormVisible">
-        <el-form :model="form">
-          <el-form-item label="文档编号" :label-width="formLabelWidth">
-            <el-input  auto-complete="off"></el-input>
+        <el-form :model="forminfodata">
+          <el-form-item label="工艺部门" :label-width="formLabelWidth">
+            <el-input  auto-complete="off" v-model="forminfodata.department"></el-input>
           </el-form-item>
-          <el-form-item label="文档名" :label-width="formLabelWidth">
-            <el-input  auto-complete="off"></el-input>
+          <el-form-item label="目录" :label-width="formLabelWidth">
+            <el-input  auto-complete="off" v-model="forminfodata.directory"></el-input>
           </el-form-item>
-          <el-form-item label="文档类型"  :label-width="formLabelWidth">
-            <el-input  auto-complete="off"></el-input>
+          <el-form-item label="部件"  :label-width="formLabelWidth">
+            <el-input  auto-complete="off" v-model="forminfodata.part"></el-input>
           </el-form-item>
-          <el-form-item label="最新更新日期" :label-width="formLabelWidth">
-            <el-input  auto-complete="off"></el-input>
+          <el-form-item label="文档" :label-width="formLabelWidth">
+            <!-- <el-input type="file" ref="inputfile"  auto-complete="off"></el-input> -->
+            <input type="file" ref="inputfile" />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+          <el-button type="primary" @click="SumitData">确 定</el-button>
         </div>
     </el-dialog>
   </div>
@@ -46,76 +53,71 @@
 
 <script>
 import { VueGoodTable } from "vue-good-table";
+import axios from "axios";
 export default {
   name: "DocimentList",
   data() {
     return {
       dialogFormVisible: false,
-      form: {
-        name: "",
-        region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
-        type: [],
-        resource: "",
-        desc: ""
+      forminfodata: {
+        contact_id:"",
+        department: "",
+        directory: "",
+        part: "",
+        filename: "",
+        update:""
       },
+      fileinfo:"",
       formLabelWidth: "120px",
       searchItem: "",
       value1:'',
       columns: [
         {
-          label: "文档编号",
+          label: "序号",
           field: "specification",
           
         },
         {
-          label: "文档名",
-          field: "size"
+          label: "工艺部门",
+          field: "department"
         },
         {
-          label: "文档类型",
-          field: "place"
+          label: "目录",
+          field: "directory"
         },
         {
-          label: "最新更新日期",
-          field: "date"
+          label: "部件",
+          field: "part"
+        },
+        {
+          label: "文件名",
+          field: "filename"
+        },
+        {
+          label: "上传日期",
+          field: "update"
         },
         {
           label: "操作",
           field: "operate"
         }
       ],
-      rows: [
-        {
-          id: 1,
-          specification: "1",
-          size: "XX表单",
-          place: "某某类型",
-          date: "XXXX-XX-XX"
-        },
-        {
-          id: 2,
-          specification: "2",
-          size: "XX表单",
-          place: "某某类型",
-          date: "XXXX-XX-XX"
-        },
-        {
-          id: 3,
-          specification: "3",
-          size: "XX表单",
-          place: "某某类型",
-          date: "XXXX-XX-XX"
-        }
-      ]
+      rows: []
     };
   },
   components: {
     VueGoodTable
   },
+  created () {
+    this.GetListData();
+  },
   methods: {
+    //异步获取后台数据
+    GetListData () {
+      axios.post('https://www.easy-mock.com/mock/5baa2fcdafd56b7fe77cc98b/example/document').then((response) => {
+        this.rows = response.data.data.item;
+      })
+    },
     selectionChanged(params) {
       console.log(params.columnFilters);
     },
@@ -128,22 +130,47 @@ export default {
     },
     // 删除员工
     deleteStaff() {
-        this.$confirm('将删除该员工, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });          
+      this.$confirm('将删除该记录, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
         });
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });          
+      });
+    },
+    //提交信息
+    SumitData() {
+      let fileDOM = this.$refs.inputfile
+      var fd = new FormData();
+      fd.append("department",this.forminfodata.department);
+      fd.append("directory",this.forminfodata.directory);
+      fd.append("part",this.forminfodata.part);
+      fd.append("myfile",fileDOM.files[0]);
+      axios.post('http://127.0.0.1:8081/HelloHBuilder/img/document.php',fd)
+      .then(function (response) {
+        console.log(response.data.data)
+      })
+      
+    },
+    //编辑信息
+    Handlealter(id){
+      let ky;
+      this.forminfodata = {};
+      for(ky in this.rows){
+        if(this.rows[ky]["contact_id"] == id){
+            this.forminfodata = this.rows[ky];
+        }
       }
+      this.dialogFormVisible = true;
+    }
   }
 };
 </script>

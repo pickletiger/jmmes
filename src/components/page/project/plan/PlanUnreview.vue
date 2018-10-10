@@ -1,170 +1,152 @@
 <template>
   <div class="table">
-    <div class="crumbs">
-        <el-breadcrumb separator="/">
-            <el-breadcrumb-item><i class="el-icon-tickets"></i> 项目管理</el-breadcrumb-item>
-        </el-breadcrumb>
-    </div>
-    <div class="container">
-      <el-container>
-        <el-header>
-          <el-col :offset="20">
-            <el-button type="primary" @click="dialogFormVisible = true">修改时间</el-button>
-            <el-button type="primary">审核</el-button>
-          </el-col>
-        </el-header>
-        <el-container>
-          <el-aside width="200px">
-            <el-input
-              placeholder="输入关键字进行过滤"
-              v-model="filterText">
-            </el-input>
-            <el-dialog title="修改交付时间" :visible.sync="dialogFormVisible">
-              <el-form :model="form">
-                <el-form-item label="交付时间" :label-width="formLabelWidth">
-                  <el-date-picker type="date" v-model="date"  style="width: 200px;"></el-date-picker>
-                </el-form-item>
+        <div class="crumbs">
+            <el-breadcrumb separator="/">
+                <el-breadcrumb-item><i class="el-icon-tickets"></i> 未审核项目</el-breadcrumb-item>
+            </el-breadcrumb>
+        </div>
+        <div class="container">
+          <el-container>
+            <el-aside width="200px">
+              <el-form :inline="true">
+                <el-form-item>
+                  <el-input 
+                    placeholder="输入关键字"
+                    v-model="filterText"
+                    style="width:120px">
+                  </el-input>
+                  <el-button type="primary">查询</el-button>
+                  </el-form-item>
               </el-form>
-              <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-              </div>
-          </el-dialog>
-            <el-tree
-              class="filter-tree"
-              :data="data"
-              :props="defaultProps"
-              :default-expand-all="false"
-              @node-click="handleNodeClick"
-              :filter-node-method="filterNode"
-              ref="tree">
-            </el-tree>
-          </el-aside>
-          <el-main>
-            <project v-if="lx=='xm'||lx==''" :id="lxid"></project>
-            <part v-if="lx=='bj'" :id="lxid"></part>
-            <son-part v-if="lx=='zj'" :id="lxid"></son-part>
-            <routing v-if="lx=='gy'" :id="lxid"></routing>
-            <work-shop v-if="lx=='cj'"  :id="lxid"></work-shop>
-            <process v-if="lx=='gx'" :id="lxid"></process>
-          </el-main>
-        </el-container>
-      </el-container>
+              <!-- tree控件 -->
+              <el-tree
+                class="filter-tree"
+                lazy
+                :load="loadNode"
+                :props="defaultProps"
+                @node-click="handleNodeClick"
+                :accordion="true"
+                :auto-expand-parent="false"
+                ref="tree">
+              </el-tree>
+            </el-aside>
+            <!-- 内容 -->
+            <el-main>
+              <project v-if="this.lx=='xm'" :lxid="lxid"></project>
+              <part v-if="this.lx=='bj'" :lxid="lxid"></part>
+            </el-main>
+          </el-container>
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
+import axios from 'axios'
 import Project from '../components/Project'
 import Part from '../components/Part'
-import SonPart from '../components/SonPart'
-import Routing from '../components/Routing'
-import WorkShop from '../components/WorkShop'
-import Process from '../components/Process'
+
 export default {
   name: "PlanUnreview",
   components:{
     Project,
-    Part,
-    Routing,
-    Process,
-    SonPart,
-    WorkShop
+    Part
   },
   data() {
       return {
-        dialogFormVisible :false,
         lx:'',
         lxid:'',
-        date:'',
         filterText: '',
-        data: [{
-          id:'xm1',
-          label: 'QWT-12B',
-          children: [{
-            id:'bj1',
-            label: 'QWT-12A.01',
-            children: [{
-              id:'zj1',
-              label: 'QWT-12A.01.02',
-              children: [{
-                id:'gy1',
-                isfinish : '2',
-                label: 'QWT-12A.01.02-00',
-                children: [{
-                  id:'cj1',
-                  isfinish : '2',
-                  label: '车间1',
-                  children:[{
-                    id:'gx1',
-                    isfinish : '2',
-                    label: '工序1'
-                  }, {
-                    id:'gx2',
-                    isfinish : '2',
-                    label: '工序2'
-                  }]
-                }, {
-                  id:'cj1',
-                  isfinish : '2',
-                  label: '车间1'
-                }]
-              }]
-            }, {
-              id:'zj2',
-              label: '子部件 1-1-2',
-              children: [{
-                id:'gy2',
-                isfinish : '完成',
-                label: '工艺路线 1-1-2-1'
-              }, {
-                id:'gy3',
-                isfinish : '建设中',
-                label: '工艺路线 1-1-2-2'
-              }]
-            }]
-          }]
-        }, {
-          id:'xm2',
-          label: '项目2',
-          children: [{
-            id:'bj2',
-            label: '部件2-1',
-          }, {
-            id:'bj3',
-            label: '部件2-2'
-          }]
-        }, {
-          id:'xm3',
-          label: '项目3',
-          children: [{
-            id:'bj4',
-            label: '部件3-1'
-          }, {
-            id:'bj5',
-            label: '部件3-2'
-          }]
-        }],
+        data:[],
         defaultProps: {
           children: 'children',
-          label: 'label'
+          label: 'name',
+          isLeaf:'leaf'
         }
       };
     },
-  watch: {
-      filterText(val) {
-        this.$refs.tree.filter(val);
-      }
-    },
     methods: {
-      filterNode(value, data) {
-        if (!value) return true;
-        return data.label.indexOf(value) !== -1;
-      },
+      // Tree点击事件
       handleNodeClick(data) {
         // console.log(data.id)
-        this.lx = data.id.substr(0,2)
-        console.log(lx)
+        // console.log(data.lx)
+        this.lx = data.lx
+        this.lxid = data.id 
+        // console.log(this.$refs.tree.$children)
+      },
+      // Tree 控件显示
+      loadNode(node, resolve){
+        // 定义0级菜单
+        if(node.level === 0) {
+          return resolve([{name:'大类1',id:0,lx:'dl'},{name:'大类2',id:1,lx:'dl'},{name:'大类3',id:2,lx:'dl'}])
+        }
+        // 定义大类1菜单
+        if(node.level === 1&node.data.id === 0 ){
+          // console.log(node.data.id)
+          axios.post('https://easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/project',{
+            fid:node.data.id,
+            lx: node.data.lx,
+            level:node.level
+          }).then(function (res){
+            // console.log(res)
+            if(res.data.success){
+              return resolve (res.data.data.pdata)
+            }
+          })  
+        }
+        // 定义大类2菜单
+        if(node.level === 1&node.data.id === 1 ){
+          // console.log(node.data.id)
+          axios.post('https://easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/project',{
+            fid:node.data.id,
+            lx: node.data.lx,
+            level:node.level
+          }).then(function (res){
+            // console.log(res)
+            if(res.data.success){
+              return resolve (res.data.data.pdata)
+            }
+          })
+        }
+        // 定义大类3菜单
+        if(node.level === 1&node.data.id === 2 ){
+          // console.log(node.data.id)
+          axios.post('https://easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/project',{
+            fid:node.data.id,
+            lx: node.data.lx,
+            level:node.level
+          }).then(function (res){
+            // console.log(res)
+            if(res.data.success){
+              return resolve (res.data.data.pdata)
+            }
+          })
+        }
+        if(node.level > 1 && node.level<4)　{
+          // console.log(node.data.id)
+          axios.post('https://easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/project',{
+            fid:node.data.id,
+            lx: node.data.lx,
+            level:node.level
+          }).then(function (res){
+            // console.log(res)
+            if(res.data.success){
+              return resolve (res.data.data.pdata)
+            }
+          })
+        }
+        if(node.level === 4)　{
+          // console.log(node.data)
+          axios.post('https://easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/project',{
+            fid:node.data.id,
+            lx: node.data.lx,
+            level:node.level
+          }).then(function (res){
+            // console.log(res)
+            if(res.data.success){
+              return resolve (res.data.data.pdata)
+            }
+          })
+        }
       }
     }
 };

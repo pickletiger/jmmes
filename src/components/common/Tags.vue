@@ -98,7 +98,6 @@
         background: #fff;
         padding-right: 120px;
     }
-
     .tags ul {
         box-sizing: border-box;
         width: 100%;
