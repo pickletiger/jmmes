@@ -67,7 +67,7 @@
                     {   
                         icon: 'el-icon-tickets',
                         index: '4',
-                        title: '销售部',
+                        title: '销售模块',
                         subs: [
                             {
                                 index: 'marketunreview',
@@ -83,14 +83,14 @@
                             },
                             {
                                 index: 'marketcheck',
-                                title: '审核'
+                                title: '订单管理'
                             }
                         ]
                     },
                     {   
                         icon: 'el-icon-tickets',
                         index: '5',
-                        title: '计划部',
+                        title: '计划模块',
                         subs: [
                             {
                                 index: 'planunreview',
@@ -106,14 +106,14 @@
                             },
                             {
                                 index: 'plancheck',
-                                title: '审核'
+                                title: '订单查看'
                             }
                         ]
                     },
                     {   
                         icon: 'el-icon-tickets',
                         index: '6',
-                        title: '工艺部',
+                        title: '工艺模块',
                         subs: [
                             {
                                 index: 'craftunreview',
@@ -143,6 +143,11 @@
                                 title: '车间计划'
                             }
                         ]
+                    },
+                    {
+                        icon: 'el-icon-search',
+                        index: 'examine',
+                        title: '检验模块'
                     },
                     {
                         icon: 'el-icon-star-on',

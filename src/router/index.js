@@ -39,7 +39,7 @@ export default new Router({
                 {
                     path: '/marketcheck',
                     component: resolve => require(['../components/page/project/market/MarketCheck.vue'], resolve),
-                    meta: { title: '销售部审核' }
+                    meta: { title: '订单管理' }
                 },
                 // 计划部
                 {
@@ -60,7 +60,7 @@ export default new Router({
                 {
                     path: '/plancheck',
                     component: resolve => require(['../components/page/project/plan/PlanCheck.vue'], resolve),
-                    meta: { title: '计划部审核' }
+                    meta: { title: '订单查看' }
                 },
                 // 工艺部
                 {
@@ -127,6 +127,12 @@ export default new Router({
                     meta: { title: '车间计划' }
                 },
                 {
+                    // 检验模块
+                    path: '/examine',
+                    component: resolve => require(['../components/page/examine/examine.vue'],resolve),
+                    meta: {title: '检验模块'}
+                },
+                {
                     // 系统设置模块/操作日志
                     path: '/operationlog',
                     component: resolve => require(['../components/page/system/OperationLog.vue'], resolve),
@@ -157,6 +163,11 @@ export default new Router({
                     meta: { title: '云平台交互' }
                 }
             ]
+        },
+        {
+            path: '/qrcode',
+            component: resolve => require(['../components/page/Qrcode.vue'], resolve),
+            meta: { title: '二维码demo' }
         },
         {
             path: '/login',

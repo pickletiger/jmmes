@@ -10,6 +10,7 @@
     "build:dll": "webpack --config build/webpack.dll.conf.js"
   },
   "dependencies": {
+    "@xkeshi/vue-qrcode": "xkeshi/vue-qrcode",
     "axios": "^0.15.3",
     "babel-polyfill": "^6.23.0",
     "element-ui": "2.3.3",
@@ -20,7 +21,8 @@
     "vue-quill-editor": "3.0.6",
     "vue-router": "^3.0.1",
     "vue-schart": "^1.0.0",
-    "vuedraggable": "^2.16.0"
+    "vuedraggable": "^2.16.0",
+    "vueshowpdf": "^1.1.2"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

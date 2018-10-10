@@ -9,22 +9,26 @@
     >
     <template slot="table-row" slot-scope="props">
       <span v-if="props.column.field == 'operate'">
-        <el-button type="primary" v-if="props.row.checkPerson == '' ">审核</el-button>
-        <el-button type="info" disabled v-else>审核</el-button>
+        <el-button type="primary" @click="showpdf()" >查看</el-button>
+        <!-- <el-button type="primary" v-if="props.row.checkPerson == '' ">审核</el-button>
+        <el-button type="info" disabled v-else>审核</el-button> -->
       </span>
       <span v-else>
         {{props.formattedRow[props.column.field]}}
       </span>
     </template>
-    <div slot="table-actions">
+    <!-- <div slot="table-actions">
       <el-button type="primary">导入</el-button>
-    </div>
+    </div> -->
     </vue-good-table>
+    
   </div>
 </template>
 
 <script>
 import { VueGoodTable } from "vue-good-table";
+import axios from 'axios';
+
 export default {
   name: "PlanList",
   components: {
@@ -32,6 +36,7 @@ export default {
   },
   data() {
     return {
+      dialogFormVisible: false,
       columns: [
         {
           label: "订单名称",
@@ -71,6 +76,23 @@ export default {
         }
       ]
     };
+  },
+  mounted() {
+    this.getData();
+  },
+  methods: {
+    getData() {
+      axios.post('https://www.easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/MarketCheck').then(this.getDataSucc)
+    },
+    getDataSucc(res) {
+      res = res.data;
+      if(res.success && res.rows){
+        this.rows = res.rows;
+      }
+    },
+    showpdf() {
+      window.open("static/upload/MarketCheck/testPDF.pdf")
+    }
   }
 };
 </script>
