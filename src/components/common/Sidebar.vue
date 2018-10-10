@@ -145,6 +145,11 @@
                         ]
                     },
                     {
+                        icon: 'el-icon-search',
+                        index: 'examine',
+                        title: '检验模块'
+                    },
+                    {
                         icon: 'el-icon-star-on',
                         index: 'charts',
                         title: '统计分析'
