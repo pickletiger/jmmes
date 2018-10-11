@@ -163,6 +163,10 @@ export default new Router({
                     meta: { title: '云平台交互' }
                 }
             ]
+        },{
+            path: '/tprint',
+            component: resolve => require(['../components/page/Tprint.vue'], resolve),
+            meta: { title: '打印表格demo' }
         },
         {
             path: '/qrcode',
@@ -180,6 +184,11 @@ export default new Router({
         {
             path: '/403',
             component: resolve => require(['../components/page/403.vue'], resolve)
+        },
+        {
+            path:'/personal_settings',
+            component: resolve => require(['../components/page/Personal_settings.vue'], resolve),
+            meta: { title: '个人设置' }
         }
         // ,
         // {
