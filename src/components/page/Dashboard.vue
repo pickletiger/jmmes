@@ -17,79 +17,111 @@
                         </el-card>
                         <el-card shadow="hover">
                             <div slot="header" class="clearfix">
-                                <span>语言详情</span>
+                                <span>个人信息</span>
                             </div>
-                            Vue
-                            <el-progress :percentage="57.2" color="#42b983"></el-progress>
-                            JavaScript
-                            <el-progress :percentage="29.8" color="#f1e05a"></el-progress>
-                            CSS
-                            <el-progress :percentage="11.9"></el-progress>
-                            HTML
-                            <el-progress :percentage="1.1" color="#f56c6c"></el-progress>
+                            <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign">
+                                <el-form-item label="姓名">
+                                    <el-input v-model="formLabelAlign.name"></el-input>
+                                </el-form-item>
+                                <el-form-item label="账号">
+                                    <el-input v-model="formLabelAlign.region" readonly="readonly"></el-input>
+                                </el-form-item>
+                                <el-form-item label="密码">
+                                    <el-input v-model="formLabelAlign.type"></el-input>
+                                </el-form-item>
+                            </el-form>
+                            <el-button type="danger">保存</el-button>
                         </el-card>
                     </el-col>
                 </el-row>
             </el-col>
             <el-col :span="16">
-                <el-row :gutter="20" class="mgb20">
-                    <el-col :span="8">
-                        <el-card shadow="hover" :body-style="{padding: '0px'}">
-                            <div class="grid-content grid-con-1">
-                                <i class="el-icon-view grid-con-icon"></i>
-                                <div class="grid-cont-right">
-                                    <div class="grid-num">1234</div>
-                                    <div>用户访问量</div>
-                                </div>
-                            </div>
-                        </el-card>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-card shadow="hover" :body-style="{padding: '0px'}">
-                            <div class="grid-content grid-con-2">
-                                <i class="el-icon-message grid-con-icon"></i>
-                                <div class="grid-cont-right">
-                                    <div class="grid-num">321</div>
-                                    <div>系统消息</div>
-                                </div>
-                            </div>
-                        </el-card>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-card shadow="hover" :body-style="{padding: '0px'}">
-                            <div class="grid-content grid-con-3">
-                                <i class="el-icon-goods grid-con-icon"></i>
-                                <div class="grid-cont-right">
-                                    <div class="grid-num">5000</div>
-                                    <div>数量</div>
-                                </div>
-                            </div>
-                        </el-card>
-                    </el-col>
-                </el-row>
                 <el-card shadow="hover" :body-style="{ height: '304px'}">
                     <div slot="header" class="clearfix">
-                        <span>待办事项</span>
-                        <el-button style="float: right; padding: 3px 0" type="text">添加</el-button>
+                        <span>消息通知</span>
                     </div>
-                    <el-table :data="todoList" :show-header="false" height="304" style="width: 100%;font-size:14px;">
-                        <el-table-column width="40">
-                            <template slot-scope="scope">
-                                <el-checkbox v-model="scope.row.status"></el-checkbox>
-                            </template>
-                        </el-table-column>
-                        <el-table-column>
-                            <template slot-scope="scope">
-                                <div class="todo-item" :class="{'todo-item-del': scope.row.status}">{{scope.row.title}}</div>
-                            </template>
-                        </el-table-column>
-                        <el-table-column width="60">
-                            <template slot-scope="scope">
-                                <i class="el-icon-edit"></i>
-                                <i class="el-icon-delete"></i>
-                            </template>
-                        </el-table-column>
-                    </el-table>
+                    <div class="container">
+                        <el-header style="text-align: right; font-size: 12px; height: 20px">
+                            <el-button type="primary" @click="canupload = true" icon="el-icon-edit" circle></el-button>
+                        </el-header>
+                        <el-tabs v-model="message">
+                            <el-tab-pane :label="`未读消息(${unread.length})`" name="first">
+                                <el-table :data="unread" :show-header="false" style="width: 100%">
+                                    <el-table-column>
+                                        <template slot-scope="scope">
+                                            <span class="message-title">{{scope.row.title}}</span>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column prop="date" width="180"></el-table-column>
+                                    <el-table-column width="120">
+                                        <template slot-scope="scope">
+                                            <el-button size="small" @click="handleRead(scope.$index)">标为已读</el-button>
+                                        </template>
+                                    </el-table-column>
+                                </el-table>
+                                <div class="handle-row">
+                                    <el-button type="danger" @click="allRead($index)">全部标为已读</el-button>
+                                </div>
+                            </el-tab-pane>
+                            <el-tab-pane :label="`已读消息(${read.length})`" name="second">
+                                <template v-if="message === 'second'">
+                                    <el-table :data="read" :show-header="false" style="width: 100%">
+                                        <el-table-column>
+                                            <template slot-scope="scope">
+                                                <span class="message-title">{{scope.row.title}}</span>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column prop="date" width="150"></el-table-column>
+                                        <el-table-column width="120">
+                                            <template slot-scope="scope">
+                                                <el-button type="danger" @click="handleDel(scope.$index)">删除</el-button>
+                                            </template>
+                                        </el-table-column>
+                                    </el-table>
+                                    <div class="handle-row">
+                                        <el-button type="danger" @click="allDel($index)">删除全部</el-button>
+                                    </div>
+                                </template>
+                            </el-tab-pane>
+                            <el-tab-pane :label="`回收站(${recycle.length})`" name="third">
+                                <template v-if="message === 'third'">
+                                    <el-table :data="recycle" :show-header="false" style="width: 100%">
+                                        <el-table-column>
+                                            <template slot-scope="scope">
+                                                <span class="message-title">{{scope.row.title}}</span>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column prop="date" width="150"></el-table-column>
+                                        <el-table-column width="120">
+                                            <template slot-scope="scope">
+                                                <el-button @click="handleRestore(scope.$index)">还原</el-button>
+                                            </template>
+                                        </el-table-column>
+                                    </el-table>
+                                    <div class="handle-row">
+                                        <el-button type="danger" @click="emptyTrash($index)">清空回收站</el-button>
+                                    </div>
+                                </template>
+                            </el-tab-pane>
+                        </el-tabs>
+                        <el-dialog title="消息编辑" :visible.sync="canupload">
+                            <h4>消息编辑人：admin</h4>
+                        <el-input
+                            type="textarea"
+                            :rows="5"
+                            placeholder="请输入内容"
+                            v-model="textarea">
+                            </el-input>
+                            <el-checkbox-group v-model="checkList">
+                                <el-checkbox label="全部"></el-checkbox>
+                                <el-checkbox label="车间"></el-checkbox>
+                                <el-checkbox label="质保部"></el-checkbox>
+                                <el-checkbox label="工艺部"></el-checkbox>
+                                <el-checkbox label="计划部"></el-checkbox>
+                                <el-checkbox label="销售部"></el-checkbox>
+                            </el-checkbox-group>
+                        </el-dialog>
+                    </div>
                 </el-card>
 
             </el-col>
@@ -103,31 +135,79 @@
         data() {
             return {
                 name: localStorage.getItem('ms_username'),
-                todoList: [
-                    {
-                        title: '今天要修复100个bug',
-                        status: false,
-                    },
-                    {
-                        title: '今天要修复100个bug',
-                        status: false,
-                    },
-                    {
-                        title: '今天要写100行代码加几个bug吧',
-                        status: false,
-                    }, {
-                        title: '今天要修复100个bug',
-                        status: false,
-                    },
-                    {
-                        title: '今天要修复100个bug',
-                        status: true,
-                    },
-                    {
-                        title: '今天要写100行代码加几个bug吧',
-                        status: true,
-                    }
-                ]
+                canupload: false,
+                message: 'first',
+                showHeader: false,
+                labelPosition: 'right',
+                checkList: ['全部','车间'],
+                unread: [{
+                    date: '2018-04-19 20:00:00',
+                    title: 'XX项目出现新的节点变更',
+                },{
+                    date: '2018-04-19 21:00:00',
+                    title: 'XX车间焊机温度过高',
+                },{
+                    date: '2018-04-19 20:00:00',
+                    title: 'XX项目即将到达截止日期',
+                }],
+                read: [
+
+                ],
+                recycle: [
+                    
+                ],
+                formLabelAlign: {
+                    name: '',
+                    region: 'admin',
+                    type: ''
+                }
+            }
+        },
+        created () {
+            this.getDataInfo()
+        },
+         methods: {
+             // 获取设备list
+            getDataInfo () {
+            axios.post('https://www.easy-mock.com/mock/5bb09b6d0478cd27d90001e8/example/mock').then(this.getDataInfoSucc)
+            },
+            getDataInfoSucc (res){
+            // console.log(res.data.rows)
+            res = res.data
+            if(res.success && res.rows){
+                this.rows = res.rows
+                // console.log(this.rows)
+            }
+            },
+            handleRead(index) {
+                const item = this.unread.splice(index, 1);
+                console.log(item);
+                this.read = item.concat(this.read);
+            },
+            allRead: function(index){
+                const item = this.unread.splice(index);
+                console.log(item);
+                this.read = item.concat(this.read);
+            },
+            handleDel(index) {
+                const item = this.read.splice(index, 1);
+                this.recycle = item.concat(this.recycle);
+            },
+            allDel(index) {
+                const item = this.read.splice(index);
+                this.recycle = item.concat(this.recycle);
+            },
+            handleRestore(index) {
+                const item = this.recycle.splice(index, 1);
+                this.read = item.concat(this.read);
+            },
+            emptyTrash(index) {
+                this.recycle.splice(index);
+            }
+        },
+        computed: {
+            unreadNum(){
+                return this.unread.length;
             }
         },
         computed: {
