@@ -22,7 +22,7 @@
                         </el-table-column>
                     </el-table>
                     <div class="handle-row">
-                        <el-button type="primary">全部标为已读</el-button>
+                        <el-button type="danger" @click="allRead($index)">全部标为已读</el-button>
                     </div>
                 </el-tab-pane>
                 <el-tab-pane :label="`已读消息(${read.length})`" name="second">
@@ -41,7 +41,7 @@
                             </el-table-column>
                         </el-table>
                         <div class="handle-row">
-                            <el-button type="danger">删除全部</el-button>
+                            <el-button type="danger" @click="allDel($index)">删除全部</el-button>
                         </div>
                     </template>
                 </el-tab-pane>
@@ -61,7 +61,7 @@
                             </el-table-column>
                         </el-table>
                         <div class="handle-row">
-                            <el-button type="danger">清空回收站</el-button>
+                            <el-button type="danger" @click="emptyTrash($index)">清空回收站</el-button>
                         </div>
                     </template>
                 </el-tab-pane>
@@ -71,6 +71,7 @@
 </template>
 
 <script>
+import axios from 'axios'
     export default {
         name: 'tabs',
         data() {
@@ -79,24 +80,45 @@
                 showHeader: false,
                 unread: [{
                     date: '2018-04-19 20:00:00',
-                    title: '【系统通知】该系统将于今晚凌晨2点到5点进行升级维护',
+                    title: 'XX项目出现新的节点变更',
                 },{
                     date: '2018-04-19 21:00:00',
-                    title: 'XX项目出现新的节点变更',
-                }],
-                read: [{
+                    title: 'XX车间焊机温度过高',
+                },{
                     date: '2018-04-19 20:00:00',
-                    title: '【系统通知】该系统将于今晚凌晨2点到5点进行升级维护'
+                    title: 'XX项目即将到达截止日期',
                 }],
-                recycle: [{
-                    date: '2018-04-19 20:00:00',
-                    title: '【系统通知】该系统将于今晚凌晨2点到5点进行升级维护'
-                }]
-            }
+                read: [
+
+                ],
+                recycle: [
+                    
+                ]
+                }
+        },
+         created () {
+            this.getDataInfo()
         },
         methods: {
+             // 获取设备list
+            getDataInfo () {
+            axios.post('https://www.easy-mock.com/mock/5bb09b6d0478cd27d90001e8/example/mock').then(this.getDataInfoSucc)
+            },
+            getDataInfoSucc (res){
+            // console.log(res.data.rows)
+            res = res.data
+            if(res.success && res.rows){
+                this.rows = res.rows
+                // console.log(this.rows)
+            }
+            },
             handleRead(index) {
                 const item = this.unread.splice(index, 1);
+                console.log(item);
+                this.read = item.concat(this.read);
+            },
+            allRead: function(index){
+                const item = this.unread.splice(index);
                 console.log(item);
                 this.read = item.concat(this.read);
             },
@@ -104,9 +126,16 @@
                 const item = this.read.splice(index, 1);
                 this.recycle = item.concat(this.recycle);
             },
+            allDel(index) {
+                const item = this.read.splice(index);
+                this.recycle = item.concat(this.recycle);
+            },
             handleRestore(index) {
                 const item = this.recycle.splice(index, 1);
                 this.read = item.concat(this.read);
+            },
+            emptyTrash(index) {
+                this.recycle.splice(index);
             }
         },
         computed: {

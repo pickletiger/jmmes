@@ -6,14 +6,18 @@
             </el-breadcrumb>
         </div>
         <div class="container">
-          
+          <operationloglist></operationloglist>
         </div>
     </div>
 </template>
 
 <script>
+import operationloglist from "./components/operationloglist"
 export default {
-  name: 'OperationLog'
+  name: 'OperationLog',
+  components:{
+  	operationloglist
+  }
 }
 </script>
 <style scoped>

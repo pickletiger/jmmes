@@ -6,14 +6,18 @@
             </el-breadcrumb>
         </div>
         <div class="container">
-          
+            <authority-list></authority-list>
         </div>
     </div>
 </template>
 
 <script>
+import AuthorityList from './components/AuthorityList'
 export default {
-  name: 'Authority'
+    name: 'Authority',
+    components: {
+        AuthorityList
+  }
 }
 </script>
 <style scoped>
