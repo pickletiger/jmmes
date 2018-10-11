@@ -6,15 +6,17 @@
       :rows="rows"
       :pagination-options="{enabled: true,mode: 'records'}"
       :search-options="{enabled: true}"
+      @on-page-change="onPageChange"
+      @on-per-page-change="onPageChange"
     >
       <template slot="table-row" slot-scope="props">
         <span v-if="props.column.field == 'check'">
-          <div 
-            @click="check"
-            :key="props.index"
-            style="text-align: center;"
-          >
-            <el-button type="primary">
+          <div style="text-align: center;">
+            <el-button 
+              type="primary"
+              @click.native="check"
+              :name="props.row.number"
+            >
               检验
             </el-button>
           </div>
@@ -91,6 +93,7 @@ export default {
         number: ''
       },
       loadingInstance: '',
+      number: ''
     }
   },
   computed: {
@@ -167,10 +170,13 @@ export default {
       return res; 
     },
 
+    // 加载框配置项
     options () {
       let obj = {
         target: this.$refs.table,
-        background: "rgba(f,f,f,0.5)"
+        background: "rgba(f,f,f,0.5)",
+        text: '加载中',
+        spinner: 'el-icon-loading',
       };
       return obj;
     }
@@ -180,15 +186,47 @@ export default {
     check (e) {
       this.form.result = 'qualified';
       this.centerDialogVisible = true;
-      console.log(e.target.getAttribute('key'))
+      this.number = e.currentTarget.getAttribute('name');// 部件编码
+
+      console.log(this.number);
+    },
+
+    onPageChange (params) {
+      // 若分页显示页数大于当前缓存行数，则加载
+      const num = params.currentPage*params.currentPerPage;
+      if(num > this.rows.length) {
+        // 表格加载框
+        this.loadingInstance = Loading.service(this.options);
+
+        axios.post('https://www.easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/checkmodule')
+        .then(this.pageSuccess)
+        .catch(this.error)
+      }
+      
+    },
+
+    // 分页成功回调
+    pageSuccess (ret) {
+      // 关闭加载框
+      this.$nextTick(() => { 
+        this.loadingInstance.close();
+      });
+
+      if(ret.data.res == 'success'){
+        this.item == '未检验'?
+        this.rows.push(...ret.data.data.rowUntested) : 
+        this.rows.push(...ret.data.data.row)
+      }else {
+
+      }
     },
 
     // 成功回调
     success (ret) {
-      // 关闭加载框
-      // this.$nextTick(() => { 
-      //   this.loadingInstance.close();
-      // });
+
+      this.$nextTick(() => { 
+        this.loadingInstance.close();
+      });
 
       if(ret.data.res == 'success'){
         this.item == '未检验'?
@@ -201,10 +239,10 @@ export default {
 
     // 失败回调
     error (e) {
-      // 关闭加载框
-      // this.$nextTick(() => { 
-      //   this.loadingInstance.close();
-      // });
+
+      this.$nextTick(() => { 
+        this.loadingInstance.close();
+      });
 
       console.log(e);
     },
@@ -218,8 +256,8 @@ export default {
 
     // 切换页面加载数据
     item: function() {
-        // 表格加载框
-        // this.loadingInstance = Loading.service(this.options);
+
+        this.loadingInstance = Loading.service(this.options);
 
         axios.post('https://www.easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/checkmodule')
         .then(this.success)
@@ -228,6 +266,9 @@ export default {
   },
 
   mounted () {
+
+    this.loadingInstance = Loading.service(this.options);
+
     axios.post('https://www.easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/checkmodule')
     .then(this.success)
     .catch(this.error)

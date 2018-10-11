@@ -10,9 +10,18 @@
         v-model="activeName"
         @tab-click="handleClick"
       >
-        <el-tab-pane label="未检验" name="first"></el-tab-pane>
-        <el-tab-pane label="合格" name="second"></el-tab-pane>
-        <el-tab-pane label="不合格" name="third"></el-tab-pane>
+        <el-tab-pane 
+          label="未检验" 
+          name="first"
+        ></el-tab-pane>
+        <el-tab-pane 
+          label="合格" 
+          name="second"
+        ></el-tab-pane>
+        <el-tab-pane 
+          label="不合格" 
+          name="third"
+        ></el-tab-pane>
         <examine-table :item="item"></examine-table>
       </el-tabs>
     </div>
@@ -30,13 +39,13 @@ export default {
   data () {
     return {
       activeName: 'first',
-      item: '未检验'
+      item: '未检验',
     }
   },
   methods: {
     handleClick (e) {
       this.item = e.label
-    }
+    },
   }
 }
 </script>
