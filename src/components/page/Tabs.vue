@@ -6,6 +6,9 @@
             </el-breadcrumb>
         </div>
         <div class="container">
+            <el-header style="text-align: right; font-size: 12px; height: 20px">
+                <el-button type="primary" @click="canupload = true" icon="el-icon-edit" circle></el-button>
+            </el-header>
             <el-tabs v-model="message">
                 <el-tab-pane :label="`未读消息(${unread.length})`" name="first">
                     <el-table :data="unread" :show-header="false" style="width: 100%">
@@ -66,6 +69,23 @@
                     </template>
                 </el-tab-pane>
             </el-tabs>
+            <el-dialog title="消息编辑" :visible.sync="canupload">
+                <h4>消息编辑人：admin</h4>
+            <el-input
+                type="textarea"
+                :rows="5"
+                placeholder="请输入内容"
+                v-model="textarea">
+                </el-input>
+                <el-checkbox-group v-model="checkList">
+                    <el-checkbox label="全部"></el-checkbox>
+                    <el-checkbox label="车间"></el-checkbox>
+                    <el-checkbox label="质保部"></el-checkbox>
+                    <el-checkbox label="工艺部"></el-checkbox>
+                    <el-checkbox label="计划部"></el-checkbox>
+                    <el-checkbox label="销售部"></el-checkbox>
+                </el-checkbox-group>
+            </el-dialog>
         </div>
     </div>
 </template>
@@ -75,9 +95,11 @@ import axios from 'axios'
     export default {
         name: 'tabs',
         data() {
-            return {
+            return {    
+                canupload: false,
                 message: 'first',
                 showHeader: false,
+                checkList: ['全部','车间'],
                 unread: [{
                     date: '2018-04-19 20:00:00',
                     title: 'XX项目出现新的节点变更',
