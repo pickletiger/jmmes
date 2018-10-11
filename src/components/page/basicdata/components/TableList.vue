@@ -1,10 +1,14 @@
 <template>
   <div>
-    <vue-good-table 
-      :columns="columns" 
-      :rows="rows" 
+    <vue-good-table
+      :columns="columns"
+      :rows="rows"
       @on-column-filter="selectionChanged"
       :search-options="{enabled: true}"
+      :pagination-options="{
+        enabled: true,
+        mode: 'records'
+      }"
     >
       <template slot="table-row" slot-scope="props">
         <span v-if="props.column.field == 'operate'">
@@ -41,11 +45,12 @@
         </div>
     </el-dialog>
   </div>
-  
+
 </template>
 
 <script>
 import { VueGoodTable } from "vue-good-table";
+import axios from 'axios'
 export default {
   name: "TableList",
   data() {
@@ -68,7 +73,7 @@ export default {
         {
           label: "工号",
           field: "specification",
-          
+
         },
         {
           label: "姓名",
@@ -88,7 +93,7 @@ export default {
         }
       ],
       rows: [
-        {
+/*        {
           id: 1,
           specification: "1",
           size: "张三",
@@ -108,13 +113,16 @@ export default {
           size: "某某",
           place: "13545215785",
           date: "经理"
-        }
+        }*/
       ]
     };
   },
   components: {
     VueGoodTable
   },
+    created () {
+        this.getStuffInfoData()
+    },
   methods: {
     selectionChanged(params) {
       console.log(params.columnFilters);
@@ -126,6 +134,25 @@ export default {
         })
         .catch(_ => {});
     },
+
+
+      //获取后台数据
+      getStuffInfoData () {
+          axios.post('https://www.easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/StuffInfo').then((response) => {
+              this.rows = response.data.rows;
+              console.log(response.data.rows)
+          })
+      },
+      selectionChanged(params) {
+          console.log(params.columnFilters);
+      },
+      handleClose(done) {
+          this.$confirm("确认关闭？")
+              .then(_ => {
+                  done();
+              })
+              .catch(_ => {});
+      },
     // 删除员工
     deleteStaff() {
         this.$confirm('将删除该员工, 是否继续?', '提示', {
@@ -141,7 +168,7 @@ export default {
           this.$message({
             type: 'info',
             message: '已取消删除'
-          });          
+          });
         });
       }
   }
