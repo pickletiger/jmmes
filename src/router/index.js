@@ -157,6 +157,10 @@ export default new Router({
                     meta: { title: '云平台交互' }
                 }
             ]
+        },{
+            path: '/tprint',
+            component: resolve => require(['../components/page/Tprint.vue'], resolve),
+            meta: { title: '打印表格demo' }
         },
         {
             path: '/qrcode',
