@@ -180,6 +180,11 @@ export default new Router({
         {
             path: '/403',
             component: resolve => require(['../components/page/403.vue'], resolve)
+        },
+        {
+            path:'/personal_settings',
+            component: resolve => require(['../components/page/Personal_settings.vue'], resolve),
+            meta: { title: '个人设置' }
         }
         // ,
         // {

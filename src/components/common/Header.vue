@@ -34,7 +34,9 @@
                             <el-dropdown-item>关于作者</el-dropdown-item>
                         </a> -->
                         <!-- <a href="https://github.com/lin-xin/vue-manage-system" target="_blank"> -->
-                            <el-dropdown-item>个人设置</el-dropdown-item>
+                            <el-dropdown-item>
+                                <router-link to = "/personal_settings">个人设置</router-link>
+                            </el-dropdown-item>
                         <!-- </a> -->
                         <el-dropdown-item divided  command="loginout">退出登录</el-dropdown-item>
                     </el-dropdown-menu>
