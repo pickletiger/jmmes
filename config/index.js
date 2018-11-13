@@ -10,7 +10,7 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     // npm run build 在/前加.形成打包的绝对路径，记住打包后将.去掉，不然项目run不起来
-    assetsPublicPath: './',
+    assetsPublicPath: '/',
     proxyTable: {
       '/api':{
           target:'http://jsonplaceholder.typicode.com',
@@ -68,7 +68,7 @@ module.exports = {
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
      // npm run build 在/前加.形成打包的绝对路径，记住打包后将.去掉，不然项目run不起来
-    assetsPublicPath: './',
+    assetsPublicPath: '/',
 
     /**
      * Source Maps

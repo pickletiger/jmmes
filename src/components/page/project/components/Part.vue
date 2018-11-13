@@ -5,7 +5,7 @@
       <el-tab-pane name="first" label="部件信息">
         <part-information :partdata="this.partdata" @change="handleChange"></part-information>
       </el-tab-pane>
-      <el-tab-pane name="second" label="部件进度">
+      <el-tab-pane name="second" label="子部件进度">
         <part-sch :partschdata="this.partschdata" @change="handleChange"></part-sch>
       </el-tab-pane>
     </el-tabs>
