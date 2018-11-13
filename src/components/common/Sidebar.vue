@@ -132,7 +132,7 @@
                     {   
                         icon: 'el-icon-date',
                         index: '7',
-                        title: '车间',
+                        title: '制造模块',
                         subs: [
                             {
                                 index: 'electronic',

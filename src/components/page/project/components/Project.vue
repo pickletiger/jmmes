@@ -3,7 +3,7 @@
   <el-tabs type="border-card">
     <el-tab-pane label="项目信息">
       <project-main :prodata="this.prodata"></project-main>
-    </el-tab-pane>
+    </el-tab-pane>    
     <el-tab-pane label="项目进度">
       <project-sch :proschdata="this.proschdata"></project-sch>
     </el-tab-pane>
@@ -27,31 +27,38 @@ export default {
   data () {
     return {
       prodata:{},
-      proschdata:[]
+      proschdata:{}
     }
   },
   // 监听数据的变化
   watch: {
     lxid : {
       immediate: true,   //如果不加这个属性，父组件第一次传进来的值监听不到
-      handler(val) {
-        axios.post('https://easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/projectmain',{
-          id: val
-        }).then(this.getProdataSucc)
-        axios.post('https://easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/routersch',{
-          id: val
-        }).then(this.getProschdataSucc)
+      handler(val) {        
+        // console.log(val)
+        var fd = new FormData() //定义获取prodata的传值
+        fd.append('id',val)
+        fd.append('flag','project')
+        axios.post(`${this.baseURL}/project.php`,fd).then(this.getProdataSucc)
+        var sch = new FormData() //定义获取proschdata的传值
+        sch.append('id',val)
+        sch.append('flag','prosch')
+        axios.post(`${this.baseURL}/project.php`,sch).then(this.getProschdataSucc)
       }  
     }
   },
   methods: {
     getProdataSucc(res) {
-      this.prodata = res.data.data
-      // console.log(this.prodata)
+      // console.log(res.data)
+      if(res.data.success =='success'){
+        this.prodata = res.data
+      }
     },
     getProschdataSucc(res) {
-      this.proschdata = res.data.data.route
-      // console.log(this.proschdata)
+      // console.log(res.data)
+      if(res.data.success) {
+        this.proschdata = res.data
+      }
     }
   }
 }

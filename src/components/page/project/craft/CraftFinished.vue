@@ -7,36 +7,82 @@
         </div>
         <div class="container">
           <el-container>
-            <el-aside width="200px">
-              <el-form :inline="true">
-                <el-form-item>
-                  <el-input 
-                    placeholder="输入关键字"
-                    v-model="filterText"
-                    style="width:120px">
-                  </el-input>
-                  <el-button type="primary">查询</el-button>
-                  </el-form-item>
-              </el-form>
-              <!-- tree控件 -->
-              <el-tree
-                class="filter-tree"
-                lazy
-                :load="loadNode"
-                :props="defaultProps"
-                @node-click="handleNodeClick"
-                :accordion="true"
-                :auto-expand-parent="false"
-                ref="tree">
-              </el-tree>
-            </el-aside>
-            <!-- 内容 -->
-            <el-main>
-              <project v-if="this.lx=='xm'" :lxid="lxid"></project>
-              <part v-if="this.lx=='bj'" :lxid="lxid"></part>
-            </el-main>
+            <el-header>
+              <el-row :gutter="20">
+                <el-col :span="2" :offset="20">
+                  <el-button type="primary" icon="el-icon-upload" @click="dialogUpload = true">导入</el-button>
+                </el-col>
+              </el-row>
+            </el-header>
+            <el-container style="height: 600px;">
+              <el-aside width="250px">
+                  <el-form :inline="true">
+                    <el-form-item>
+                      <el-input 
+                        placeholder="输入modid"
+                        v-model="filterText"
+                        style="width:150px">
+                      </el-input>
+                      <el-button type="primary" @click="handleFifter()">查询</el-button>
+                      </el-form-item>
+                  </el-form>
+                  <!-- tree控件 -->
+                  <el-tree
+                    v-if="updateTree"
+                    class="filter-tree"
+                    lazy
+                    :load="loadNode"
+                    :props="defaultProps"
+                    @node-click="handleNodeClick"
+                    :accordion="true"
+                    :auto-expand-parent="false"
+                    ref="tree">
+                  </el-tree>
+                </el-aside>
+                <!-- 内容 -->
+                <el-main>
+                  <project v-if="this.lx=='xm'" :lxid="lxid"></project>
+                  <part v-if="this.lx=='bj'" :lxid="lxid"></part>
+                </el-main>
+            </el-container>
           </el-container>
         </div>
+         <el-dialog title="项目导入" :visible.sync="dialogUpload">
+          <el-form >
+            <el-form-item label="项目名称" :label-width="formLabelWidth">
+              <el-input v-model="form.name"  auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="项目编号" :label-width="formLabelWidth">
+              <el-input v-model="form.number"  auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="项目类型" :label-width="formLabelWidth">
+              <el-input v-model="form.type"  auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="项目交付时间" :label-width="formLabelWidth">
+              <!-- value-format 参数为设置date的类型 -->
+              <el-date-picker type="date" value-format="yyyy-MM-dd"  placeholder="选择日期" v-model="form.date" ></el-date-picker>
+            </el-form-item>
+            <el-upload
+              class="upload-demo"
+              :before-upload="beforeupload"
+              ref="upload"
+              drag
+              :limit="1"
+              :data="form"
+              :on-success="handleSuc"
+              :action="uploadUrl"
+              :auto-upload="false"
+              style="margin-left:120px;">
+              <i class="el-icon-upload"></i>
+              <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+              <div class="el-upload__tip" slot="tip">只能上传xls文件</div>
+            </el-upload>
+          </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogUpload = false">取 消</el-button>
+          <el-button type="primary" @click="uploadFile">保存</el-button>
+        </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -55,8 +101,12 @@ export default {
       return {
         lx:'',
         lxid:'',
+        uploadUrl:`${this.baseURL}/craft/project_upload.php`,
         filterText: '',
-        data:[],
+        updateTree:true,
+        dialogUpload:false,
+        form:{},
+        formLabelWidth: "120px",
         defaultProps: {
           children: 'children',
           label: 'name',
@@ -65,6 +115,34 @@ export default {
       };
     },
     methods: {
+      // 过滤查询
+      handleFifter() {
+        // console.log(this.filterText)
+          this.updateTree = !this.updateTree
+          // 增加延时确保tree组件重新渲染
+          setTimeout(()=>{
+            this.updateTree = !this.updateTree
+          },500)
+      },
+      // 文件上传成功时的钩子
+      handleSuc(res,file, fileList) {
+        // console.log(res)
+        if(res.success == 'success'){
+          alert("文件上传成功")
+        }else  {
+          alert("文件上传失败，文件格式错误或该项目已存在")
+        }
+        
+      },
+      // 上传文件前的钩子
+      beforeupload (file){
+        // console.log(file)
+        this.form.ftype = file.type
+      },
+      // 上传文件
+      uploadFile(){
+        this.$refs.upload.submit()
+      },
       // Tree点击事件
       handleNodeClick(data) {
         // console.log(data.id)
@@ -73,79 +151,99 @@ export default {
         this.lxid = data.id 
         // console.log(this.$refs.tree.$children)
       },
+
+
       // Tree 控件显示
       loadNode(node, resolve){
-        // 定义0级菜单
-        if(node.level === 0) {
-          return resolve([{name:'大类1',id:0,lx:'dl'},{name:'大类2',id:1,lx:'dl'},{name:'大类3',id:2,lx:'dl'}])
-        }
-        // 定义大类1菜单
-        if(node.level === 1&node.data.id === 0 ){
-          // console.log(node.data.id)
-          axios.post('https://easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/project',{
-            fid:node.data.id,
-            lx: node.data.lx,
-            level:node.level
-          }).then(function (res){
-            // console.log(res)
-            if(res.data.success){
-              return resolve (res.data.data.pdata)
-            }
-          })  
-        }
-        // 定义大类2菜单
-        if(node.level === 1&node.data.id === 1 ){
-          // console.log(node.data.id)
-          axios.post('https://easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/project',{
-            fid:node.data.id,
-            lx: node.data.lx,
-            level:node.level
-          }).then(function (res){
-            // console.log(res)
-            if(res.data.success){
-              return resolve (res.data.data.pdata)
-            }
-          })
-        }
-        // 定义大类3菜单
-        if(node.level === 1&node.data.id === 2 ){
-          // console.log(node.data.id)
-          axios.post('https://easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/project',{
-            fid:node.data.id,
-            lx: node.data.lx,
-            level:node.level
-          }).then(function (res){
-            // console.log(res)
-            if(res.data.success){
-              return resolve (res.data.data.pdata)
-            }
-          })
-        }
-        if(node.level > 1 && node.level<4)　{
-          // console.log(node.data.id)
-          axios.post('https://easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/project',{
-            fid:node.data.id,
-            lx: node.data.lx,
-            level:node.level
-          }).then(function (res){
-            // console.log(res)
-            if(res.data.success){
-              return resolve (res.data.data.pdata)
-            }
-          })
-        }
-        if(node.level === 4)　{
-          // console.log(node.data)
-          axios.post('https://easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/project',{
-            fid:node.data.id,
-            lx: node.data.lx,
-            level:node.level
-          }).then(function (res){
-            // console.log(res)
-            if(res.data.success){
-              return resolve (res.data.data.pdata)
-            }
-          })
+        // 判断当前是否为查询状态
+        // console.log(this.filterText)
+        if(!this.filterText){
+          // 定义0级节点
+          if(node.level === 0) {
+            return resolve([{name:'大类',id:0,lx:'dl'}])   
+            // console.log(node.data.id)     
+          }
+          // 大类节点
+          if(node.level === 1&node.data.id === 0 ){
+            // console.log(node.data.id)
+            var fd = new FormData()
+            fd.append("flag","finished_type")
+            axios.post(`${this.baseURL}/tree.php`,fd).then(function (res){
+              // console.log(res.data)
+              if(res.data.success){
+                return resolve (res.data.data)
+              }else {
+                return resolve([])
+              }
+            })  
+          }
+          // 项目节点
+          if(node.level === 2)　{
+            // console.log(node.data.name) 
+            var fd = new FormData()
+            fd.append('flag','finished_project')
+            fd.append('type',node.data.name) //node.data 父节点所带参数
+            axios.post(`${this.baseURL}/tree.php`,fd).then(function (res){
+              // console.log(res)
+              if(res.data.success){
+                return resolve (res.data.data)
+              }else {
+                return resolve([])
+              }
+            })
+          }
+          // tree 3级树节点
+          if(node.level === 3)　{
+            // console.log(node.data.id) 
+            var fd = new FormData()
+            fd.append('flag','mpart')
+            fd.append('id',node.data.id) //node.data 父节点所带参数
+            fd.append('name',node.data.zhname) //node.data 父节点所带参数
+            fd.append('number',node.data.number) //node.data 父节点所带参数
+            axios.post(`${this.baseURL}/tree.php`,fd).then(function (res){
+              // console.log(res)
+              if(res.data.success){
+                return resolve (res.data.data)
+              }else {
+                return resolve([])
+              }
+            })
+          }
+          // 3级以下树子节点
+          if(node.level > 3)　{
+            // console.log(node.data.id) 
+            var fd = new FormData()
+            fd.append('flag','part')
+            fd.append('pid',node.data.pid) //node.data 父节点所带参数
+            fd.append('modid',node.data.modid) //node.data 父节点所带参数
+            fd.append('name',node.data.name) //node.data 父节点所带参数
+            fd.append('figure_number',node.data.figure_number) //node.data 父节点所带参数
+            fd.append('level',node.level)  //判断当前节点处于何级
+            axios.post(`${this.baseURL}/tree.php`,fd).then(function (res){
+              // console.log(res)
+              if(res.data.success){
+                return resolve (res.data.data)
+              }else {
+                return resolve([])
+              }
+            })
+          }
+        } else {
+          if(node.level === 0) {
+            var fd = new FormData()
+            fd.append('flag','treefilter')
+            fd.append('modid',this.filterText)
+            fd.append('state',1)
+            axios.post(`${this.baseURL}/tree.php`,fd).then((res)=>{
+              // console.log(res.data.data)
+              if(res.data.success == "success"){
+                return resolve(res.data.data)
+              }else {
+                return resolve([])
+              }
+            })
+            // console.log(node.data.id)     
+          }
         }
       }
     }

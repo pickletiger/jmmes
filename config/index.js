@@ -9,7 +9,8 @@ module.exports = {
 
     // Paths
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    // npm run build 在/前加.形成打包的绝对路径，记住打包后将.去掉，不然项目run不起来
+    assetsPublicPath: './',
     proxyTable: {
       '/api':{
           target:'http://jsonplaceholder.typicode.com',
@@ -21,6 +22,13 @@ module.exports = {
       '/ms':{
           target: 'https://www.easy-mock.com/mock/592501a391470c0ac1fab128',
           changeOrigin: true
+      },
+      '/jmmes':{
+        target: 'http://localhost:9096',
+        changeOrigin:true,
+        pathRewrite: {
+          '^/jmmes':'/jmmes/src'
+        }
       }
     },
     // Various Dev Server settings
@@ -59,6 +67,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
+     // npm run build 在/前加.形成打包的绝对路径，记住打包后将.去掉，不然项目run不起来
     assetsPublicPath: './',
 
     /**

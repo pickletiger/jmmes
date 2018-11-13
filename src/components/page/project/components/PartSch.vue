@@ -4,20 +4,20 @@
     <el-main>
       <el-collapse accordion>
         <!-- v-for(val,key,index) val是内容，key是键值名，index是索引 -->
-        <el-collapse-item v-for="(item,key,index) in data" :key="index"  :title="item.name">
+        <el-collapse-item v-if="data" v-for="(item,key,index) in data.item" :key="index"  :title="item.name">
           <el-form>
             <el-form-item label="工艺路线1"></el-form-item>
-              <el-steps :space="100" :active="item.finished.length" :align-center="true" finish-status="success">
+              <el-steps :space="100"  :align-center="true" >
                 <!-- 使用插槽嵌套循环 -->
                 <!-- element-ui 一些标签不能注册点击事件@click  需使用@click.native -->
                 <slot :item="item">
-                  <el-step v-for="(finished,f,index) in item.finished" :key="index"  :title="finished.routel" @click.native="handleStep(1)"></el-step>
-                  <el-step v-for="(bulid,b,index) in item.bulid" :key="index" :title="bulid.routel" @click.native="handleStep(2)"></el-step>
-                  <el-step  v-for="(unfinished,u,index) in item.unfinished" :key="index" :title="unfinished.routel" @click.native="handleStep(0)"></el-step>
+                  <el-step v-if="item.finished" v-for="(finished,f,index) in item.finished" :key="index" status="success"  :title="finished.route" ></el-step>
+                  <el-step v-if="item.build" v-for="(bulid,b,index) in item.bulid" :key="index" status="process" :title="bulid.route" ></el-step>
+                  <el-step v-if="item.unfinished" v-for="(unfinished,u,index) in item.unfinished" status="wait" :key="index" :title="unfinished.route" ></el-step>
                 </slot>
               </el-steps>
-              <el-button type="primary"  class="btn" @click.native="handleChange(201855566)">查看</el-button>
           </el-form>
+          <el-button type="primary" class="btn" @click="handleChange(item.id)">查看</el-button>
           </el-collapse-item>
       </el-collapse>
     </el-main>
@@ -34,7 +34,6 @@
         <template slot="table-row" slot-scope="props">
           <span v-if="props.column.field == 'operate'">
             <el-button type="primary">查看</el-button>
-            <el-button type="primary">向下增加工序</el-button>
             <el-button type="danger">删除</el-button>
           </span>
           <span v-else>
@@ -56,7 +55,7 @@ import { VueGoodTable } from "vue-good-table"
 export default {
   name: 'PartSch',
   props: {
-    partschdata:Array
+    partschdata:Object
   },
   components:{
     VueGoodTable

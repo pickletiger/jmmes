@@ -9,16 +9,16 @@
     >
       <template slot="table-row" slot-scope="props">
         <span v-if="props.column.field == 'operate'">
-          <el-button type="primary"   @click="handleTabledata(props.row.id)">查看</el-button>
-          <el-button type="primary" icon="el-icon-edit" circle @click="handleData(props.row.id)"></el-button>
-          <el-button type="danger" icon="el-icon-delete" circle @click="deleteStaff(props.row.id)" ></el-button>
+          <el-button type="primary"   @click="handleTabledata(props.row)">查看</el-button>
+          <el-button type="primary" icon="el-icon-edit" circle @click="handleData(props.row)"></el-button>
+          <el-button type="danger" icon="el-icon-delete" circle @click="deleteEquipment(props.row)" ></el-button>
         </span>
         <span v-else>
           {{props.formattedRow[props.column.field]}}
         </span>
       </template>
       <div slot="table-actions">
-        <el-button type="primary" @click="dialogFormVisible = true">新建</el-button>
+        <el-button type="primary" @click="creatData()">新建</el-button>
         <el-button type="primary">导入</el-button>
       </div>
     </vue-good-table>
@@ -49,7 +49,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+          <el-button type="primary" @click="updateDataInfo()">确 定</el-button>
         </div>
     </el-dialog>
     <!-- 设备点检记录 -->
@@ -160,15 +160,57 @@ export default {
     this.getDataInfo()
   },
   methods: {
+    // 新建设备
+    creatData () {
+      this.dialogFormVisible = true
+      this.dialogFormdata = {}
+    },
+    updateDataInfo () {
+      this.dialogFormVisible = false
+      // console.log(this.dialogFormdata)
+      // 判断dialogFormdata.id是否存在，若存在说明是已有设备，若不存在则说明是新建设备
+      if(this.dialogFormdata.id) {
+        // console.log(this.dialogFormdata.id)
+        var fd = new FormData()
+        fd.append("id",this.dialogFormdata.id)
+        fd.append("number",this.dialogFormdata.number)
+        fd.append("name",this.dialogFormdata.name)
+        fd.append("state",this.dialogFormdata.state)
+        fd.append("workcenter",this.dialogFormdata.workcenter)
+        fd.append("checkrequest",this.dialogFormdata.checkrequest)
+        fd.append("tallyposition",this.dialogFormdata.tallyposition)
+        fd.append("tallycycle",this.dialogFormdata.tallycycle)
+        // console.log(fd)
+        axios.post(`${this.baseURL}/basicdata/equipment_reserve.php`,fd).then(this.creatRefresh)
+      }else {
+        // console.log(this.dialogFormdata.id)
+      var fd = new FormData()
+      fd.append("number",this.dialogFormdata.number)
+      fd.append("name",this.dialogFormdata.name)
+      fd.append("state",this.dialogFormdata.state)
+      fd.append("workcenter",this.dialogFormdata.workcenter)
+      fd.append("checkrequest",this.dialogFormdata.checkrequest)
+      fd.append("tallyposition",this.dialogFormdata.tallyposition)
+      fd.append("tallycycle",this.dialogFormdata.tallycycle)
+      // console.log(fd)
+      axios.post(`${this.baseURL}/basicdata/equipment_reserve.php`,fd).then(this.creatRefresh)
+      }
+      
+    },
+    creatRefresh(res) {
+      // console.log(res)
+      this.getDataInfo()
+    },
     // 获取设备list
     getDataInfo () {
-      axios.post('https://easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/equipment').then(this.getDataInfoSucc)
+      axios.post(`${this.baseURL}/basicdata/equipment.php`).then(this.getDataInfoSucc)
     },
     getDataInfoSucc (res){
-      // console.log(res.data.rows)
+      // console.log(res.data.data)
       res = res.data
-      if(res.success && res.rows){
-        this.rows = res.rows
+      if(res.success && res.data){
+        this.rows = []
+        this.rows = res.data
         // console.log(this.rows)
       }
     },
@@ -182,10 +224,10 @@ export default {
         })
         .catch(_ => {});
     },
-    // 删除员工
-    deleteStaff(id) {
-      console.log(id)
-        this.$confirm('将删除该员工, 是否继续?', '提示', {
+    // 删除设备
+    deleteEquipment(row) {
+      // console.log(id)
+        this.$confirm('将删除该设备, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -194,6 +236,9 @@ export default {
             type: 'success',
             message: '删除成功!'
           });
+          var fd = new FormData()
+          fd.append("id",row.id)
+          axios.post(`${this.baseURL}/basicdata/equipment_del.php`,fd).then(this.creatRefresh)
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -202,25 +247,26 @@ export default {
         });
       },
     // 查看修改详情
-    handleData(id) {
+    handleData(row) {
       this.dialogFormdata = {}
-      this.dialogFormdata = this.rows[id-1]
+      this.dialogFormdata = row
       this.dialogFormVisible = true
     },
     // 点检记录异步数据获取
-    handleTabledata(id) {
-      axios.post('https://easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/check',{
-        number: this.rows[id-1].number,
-        name: this.rows[id-1].name
-      }).then(this.getcheckDataSucc)
+    handleTabledata(row) {
+      // console.log(row.id)
+      var fd = new FormData()
+      this.checkrows = []
+      fd.append("id",row.id)
+      axios.post(`${this.baseURL}/basicdata/equipment.php`,fd).then(this.getcheckDataSucc)
       this.dialogTableVisible = true
     },
     getcheckDataSucc(res) {
+      // console.log(res.data)
       res = res.data
-      this.checkrows = []
-      console.log(res)
+      // console.log(res.data)
       if (res.data && res.success){
-        this.checkrows = res.data.checkrows
+        this.checkrows = res.data
       }
     },
   }

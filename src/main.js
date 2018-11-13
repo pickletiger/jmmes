@@ -12,6 +12,7 @@ import 'vue-good-table/dist/vue-good-table.css'
 
 Vue.use(ElementUI, { size: 'small' }, VueGoodTablePlugin);
 Vue.prototype.$axios = axios;
+Vue.prototype.baseURL = process.env.API_ROOT; //配置全局变量判断当前处于开发环境or生产环境
 
 //使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {

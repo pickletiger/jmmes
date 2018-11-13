@@ -3,13 +3,10 @@
     <!-- el-tabs的v-model对应el-tab-pane的name ,即显示对应标签页 -->
     <el-tabs type="border-card" v-model="activeName">
       <el-tab-pane name="first" label="部件信息">
-        <part-information></part-information>
+        <part-information :partdata="this.partdata" @change="handleChange"></part-information>
       </el-tab-pane>
       <el-tab-pane name="second" label="部件进度">
         <part-sch :partschdata="this.partschdata" @change="handleChange"></part-sch>
-      </el-tab-pane>
-      <el-tab-pane name="third" label="部件工艺卡">
-        <part-card ></part-card>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -19,20 +16,19 @@
 import axios from 'axios'
 import PartInformation from './PartInformation'
 import PartSch from './PartSch'
-import PartCard from './PartCard'
 export default {
   name: 'ProjectPart',
   components: {
     PartInformation,
-    PartSch,
-    PartCard
+    PartSch
   },
   props: {
     lxid: String
   },
   data () {
     return {
-      partschdata: [],
+      partdata:{},
+      partschdata: {},
       mylxid: '',
       activeName: 'first'
     }
@@ -43,9 +39,6 @@ export default {
       handler(val) {
         // console.log(val)
         this.mylxid = val
-        axios.post('https://easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/routersch',{
-          id: val
-        }).then(this.getPartschdataSucc)
       }  
     },
     // 声明mylxid的原因:vue不允许直接修改props的值，通过声明赋值新变量重新渲染组件
@@ -53,21 +46,39 @@ export default {
       immediate: true,   //如果不加这个属性，父组件第一次传进来的值监听不到
       handler(val) {
         // console.log(val)
-        axios.post('https://easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/routersch',{
-          id: val
-        }).then(this.getPartschdataSucc)
+        var fd = new FormData() //定义获取prodata的传值
+        fd.append('id',val)
+        fd.append('flag','part')
+        axios.post(`${this.baseURL}/part.php`,fd).then(this.getPartdataSucc)
+        var sch = new FormData() //定义获取proschdata的传值
+        sch.append('id',val)
+        sch.append('flag','partsch')
+        axios.post(`${this.baseURL}/part.php`,sch).then(this.getPartschdataSucc)
       }  
     }
   },
   methods: {
-    getPartschdataSucc(res) {
-      this.partschdata = res.data.data.route
-      // console.log(this.partschdata)
+    getPartdataSucc(res) {
+      // console.log(res.data)
+      this.partdata = {}
+      if(res.data.success =='success'){
+        this.partdata = res.data
+        this.activeName = 'first'
+      }
     },
-    handleChange(data) {
-      console.log(data)
-      this.mylxid = data
+    getPartschdataSucc(res) {
+      // console.log(res.data)
+      this.partschdata = {}
+      if(res.data.success) {
+        this.partschdata = res.data
+      }
+    },
+    handleChange(id) {
+      // console.log(id)
+      this.mylxid = ''
+      this.mylxid = id
       this.activeName = 'first'
+      // console.log(this.lxid)
     }
   }
 }

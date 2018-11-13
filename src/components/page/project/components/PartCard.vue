@@ -61,6 +61,9 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="handleClick">保存</el-button>
+            <router-link to="/tprint">
+              <el-button type="primary">打印</el-button>
+            </router-link>
           </el-form-item>
         </el-form>
       </div>
