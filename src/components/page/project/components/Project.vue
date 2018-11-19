@@ -4,7 +4,7 @@
     <el-tab-pane label="项目信息">
       <project-main :prodata="this.prodata"></project-main>
     </el-tab-pane>    
-    <el-tab-pane label="项目进度">
+    <el-tab-pane label="子部件进度">
       <project-sch :proschdata="this.proschdata"></project-sch>
     </el-tab-pane>
   </el-tabs>
