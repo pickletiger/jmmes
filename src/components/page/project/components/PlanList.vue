@@ -6,6 +6,10 @@
       :search-options="{
         enabled: true
       }"
+      :select-options="{ 
+        enabled: true,
+        selectOnCheckboxOnly: true
+      }"
     >
     <template slot="table-row" slot-scope="props">
       <span v-if="props.column.field == 'operate'">
@@ -17,9 +21,9 @@
         {{props.formattedRow[props.column.field]}}
       </span>
     </template>
-    <!-- <div slot="table-actions">
-      <el-button type="primary">导入</el-button>
-    </div> -->
+   <div slot="table-actions">
+      <el-button type="primary" @click="Comfirm()">审核</el-button>
+    </div>
     </vue-good-table>
     
   </div>
@@ -60,20 +64,6 @@ export default {
         }
       ],
       rows: [
-        {
-          id:1,
-          orderName: "订单1",
-          importPerson: "小高",
-          importTime: "2018-09-08",
-          checkPerson: ''
-        },
-        {
-          id:2,
-          orderName: "订单2",
-          importPerson: "小周",
-          importTime: "2018-09-08",
-          checkPerson: '小周'
-        }
       ]
     };
   },
@@ -92,6 +82,9 @@ export default {
     },
     showpdf() {
       window.open("static/upload/MarketCheck/testPDF.pdf")
+    },
+    comfirm() {
+
     }
   }
 };
