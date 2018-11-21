@@ -107,6 +107,10 @@
                             {
                                 index: 'plancheck',
                                 title: '订单查看'
+                            },
+                            {
+                                index: 'plantable',
+                                title: '计划总表'
                             }
                         ]
                     },

@@ -1,5 +1,5 @@
 <template>
-  <div ref="table">
+  <div>
     <vue-good-table
       title="未检验部件"
       :columns="columns"
@@ -34,39 +34,7 @@
         </span>
       </template>
     </vue-good-table>
-    <el-dialog
-      title="检验部件"
-      :visible.sync="centerDialogVisible"
-      width="30%"
-      center>
-      <el-form :model="form" label-width="80px">
-        <el-form-item label="检验人员">
-          <el-input 
-            v-model="form.person" 
-            style="width: 50%;"
-            placeholder="请输入检验人员"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="检验结果">
-          <el-select v-model="form.result" placeholder="请选择检验结果">
-            <el-option label="合格" value="qualified"></el-option>
-            <el-option label="不合格" value="notqualified"></el-option>
-            <el-option label="部分合格" value="partqualified"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="合格数量" v-show="partQualified">
-          <el-input 
-            v-model="form.number" 
-            style="width: 50%;"
-            placeholder="请输入合格数量"
-          ></el-input>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="centerDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="centerDialogVisible = false" @click.native="checkComponent">确 定</el-button>
-      </span>
-    </el-dialog>
+    <examine-dialog :config="dialog"></examine-dialog>
   </div>
 </template>
 
@@ -74,26 +42,25 @@
 import { VueGoodTable } from "vue-good-table";
 import axios from "axios";
 import { Loading } from 'element-ui';
+import ExamineDialog from './Dialog';
 
 export default {
   name: 'ExamineTable',
   props: {
-    item: String
+    item: String,
   },
   components: {
-    VueGoodTable
+    VueGoodTable,
+    ExamineDialog
   },
   data () {
     return {
       rows: [],
-      centerDialogVisible: false,
-      form: {
-        person: "",
-        result: '',
+      dialog: {
+        centerDialogVisible: false,
         number: ''
       },
       loadingInstance: '',
-      number: ''
     }
   },
   computed: {
@@ -162,18 +129,9 @@ export default {
       return head;
     },
 
-    // 部分合格显示合格数量
-    partQualified () {
-      let res;
-      this.form.result == 'partqualified'? res = true : res = false;
-
-      return res; 
-    },
-
     // 加载框配置项
     options () {
       let obj = {
-        target: this.$refs.table,
         background: "rgba(f,f,f,0.5)",
         text: '加载中',
         spinner: 'el-icon-loading',
@@ -184,11 +142,10 @@ export default {
   methods: {
     // 检验按钮
     check (e) {
-      this.form.result = 'qualified';
-      this.centerDialogVisible = true;
-      this.number = e.currentTarget.getAttribute('name');// 部件编码
+      this.dialog.centerDialogVisible = true;
+      this.dialog.number = e.currentTarget.getAttribute('name');// 部件编码
 
-      console.log(this.number);
+      console.log(this.dialog.number);
     },
 
     onPageChange (params) {
@@ -244,11 +201,6 @@ export default {
         this.loadingInstance.close();
       });
 
-      console.log(e);
-    },
-
-    // 检验部件
-    checkComponent (e) {
       console.log(e);
     },
   },

@@ -62,6 +62,11 @@ export default new Router({
                     component: resolve => require(['../components/page/project/plan/PlanCheck.vue'], resolve),
                     meta: { title: '订单查看' }
                 },
+                {
+                    path: '/plantable',
+                    component: resolve => require(['../components/page/project/plan/PlanTable.vue'], resolve),
+                    meta: { title: '计划总表' }
+                },
                 // 工艺部
                 {
                     path: '/craftunreview',
