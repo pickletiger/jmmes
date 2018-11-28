@@ -179,6 +179,11 @@ export default new Router({
             meta: { title: '二维码demo' }
         },
         {
+            path: '/weldingprinter',
+            component: resolve => require(['../components/page/Weldingprinter.vue'], resolve),
+            meta: { title: '焊接信息打印' }
+        },
+        {
             path: '/login',
             component: resolve => require(['../components/page/Login.vue'], resolve)
         },
