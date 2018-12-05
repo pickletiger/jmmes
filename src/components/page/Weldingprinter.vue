@@ -252,7 +252,7 @@
             <table class="tabbodythree">
                 <tr>
                     <td class="weldingsequence" style="height:8mm;">焊接顺序</td>
-                    <td rowspan="2" id="imageBox" ref="imageBox"></td>
+                    <td rowspan="2" id="imageBox" ref="imageBox" v-html="weldngTableFour.imgHtml"></td>
                 </tr>
                 <tr>
                     <td>{{ weldngTableFour.weldingSequence }}</td>
@@ -334,7 +334,8 @@ export default {
             },
             weldngTableFour: {
                 "weldingSequence":"",
-                "weldNumberMap":""
+                "weldNumberMap":"",
+                "imgHtml":""
             }
         }       
     },
@@ -353,22 +354,16 @@ export default {
             axios.get('/jmmes/basicdata/document.php?flag=getWeldingInfoData&contactID='+contactId)
             .then((response) => {        
                 if(response.data.state == "success"){
-                this.weldingTableOne = response.data.data.weldingTableOne
-                this.weldingTableTwo_1 = response.data.data.weldingTableTwo_1
-                this.weldingTableTwo_2 = response.data.data.weldingTableTwo_2
-                this.weldingTableThree_1 = response.data.data.weldingTableThree_1
-                this.weldingTableThree_2 = response.data.data.weldingTableThree_2
-                this.weldingTableThree_3 = response.data.data.weldingTableThree_3
-                this.weldngTableFour = response.data.data.weldngTableFour
-                //图片显示
-                let tdDom = this.$refs.imageBox
-                let imgDom = document.createElement("img")
-                imgDom.src = '/jmmes/'+this.weldngTableFour.weldNumberMap
-                imgDom.style.maxWidth = '100%'
-                imgDom.style.maxHeight = '100%'
-                imgDom.style.pointerEvents = 'none'//事件无效化，穿透底层
-                tdDom.innerHTML = ""
-                tdDom.appendChild(imgDom)
+                    this.weldingTableOne = response.data.data.weldingTableOne
+                    this.weldingTableTwo_1 = response.data.data.weldingTableTwo_1
+                    this.weldingTableTwo_2 = response.data.data.weldingTableTwo_2
+                    this.weldingTableThree_1 = response.data.data.weldingTableThree_1
+                    this.weldingTableThree_2 = response.data.data.weldingTableThree_2
+                    this.weldingTableThree_3 = response.data.data.weldingTableThree_3
+                    this.weldngTableFour = response.data.data.weldngTableFour
+                    //图片显示
+                    let imgsrc = '/jmmes/'+this.weldngTableFour.weldNumberMap
+                    this.weldngTableFour.imgHtml = '<img src="'+imgsrc+'" style="max-width:100%;max-height:100%;pointer-events:none;">'
                 }
             })
             .catch(function(error){

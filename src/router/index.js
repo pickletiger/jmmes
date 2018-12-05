@@ -191,6 +191,11 @@ export default new Router({
             meta: { title: '焊接信息打印' }
         },
         {
+            path: '/craftsmanshipprinter',
+            component: resolve => require(['../components/page/Craftsmanshipprinter.vue'], resolve),
+            meta: { title: '制造工艺打印' }
+        },
+        {
             path: '/login',
             component: resolve => require(['../components/page/Login.vue'], resolve)
         },
