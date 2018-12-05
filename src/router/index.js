@@ -168,7 +168,14 @@ export default new Router({
                     meta: { title: '云平台交互' }
                 }
             ]
-        },{
+        },
+        {
+            path: '/printTable',
+            name: 'printTable',
+            component: resolve => require(['../components/page/printTable.vue'], resolve),
+            meta: { title: '打印车间表格' }
+        },
+        {
             path: '/tprint',
             component: resolve => require(['../components/page/Tprint.vue'], resolve),
             meta: { title: '打印表格demo' }
