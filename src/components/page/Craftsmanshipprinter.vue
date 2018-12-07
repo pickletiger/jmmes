@@ -245,7 +245,7 @@ export default {
             document.getElementById("app").style.overflow = "visible"
             
             let contactId = this.$route.query.contactId//获取url的参数
-            axios.get('/jmmes/basicdata/document.php?flag=getCraftsmanshipInfoData&contactID='+contactId)
+            axios.get(`${this.baseURL}/basicdata/document.php?flag=getCraftsmanshipInfoData&contactID=${contactId}`)
             .then((response) => {     
                 if(response.data.state == "success"){
                 this.craftsmanshipTableHeader = response.data.data.craftsmanshipTableHeader

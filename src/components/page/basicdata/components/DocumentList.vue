@@ -657,7 +657,7 @@ export default {
   methods: {
     //异步获取后台数据
     GetListData () {
-      axios.get('/jmmes/basicdata/document.php?flag=getTableListData')
+      axios.get(`${this.baseURL}/basicdata/document.php?flag=getTableListData`)
       .then((response) => {
         this.rows = response.data.data
       })
@@ -841,7 +841,7 @@ export default {
     Handlealter(contactId,diff){
       switch(diff){
         case "welding":
-          axios.get('/jmmes/basicdata/document.php?flag=getWeldingInfoData&contactID='+contactId)
+          axios.get(`${this.baseURL}/basicdata/document.php?flag=getWeldingInfoData&contactID=${contactId}`)
           .then((response) => {        
             if(response.data.state == "success"){
               this.weldingTableOne = response.data.data.weldingTableOne
@@ -864,7 +864,7 @@ export default {
           })
           break;
         case "craftsmanship":
-          axios.get('/jmmes/basicdata/document.php?flag=getCraftsmanshipInfoData&contactID='+contactId)
+          axios.get(`${this.baseURL}/basicdata/document.php?flag=getCraftsmanshipInfoData&contactID=${contactId}`)
           .then((response) => {     
             if(response.data.state == "success"){
               this.craftsmanshipTableHeader = response.data.data.craftsmanshipTableHeader
@@ -1007,7 +1007,7 @@ export default {
         if(typeof(this.weldngTableFour.weldNumberMap) != 'string' && this.weldngTableFour.weldNumberMap != ''){
           fd.append('myfile',this.weldngTableFour.weldNumberMap)//装载图片
         }
-        axios.post('/jmmes/basicdata/document.php',fd)
+        axios.post(`${this.baseURL}/basicdata/document.php`,fd)
         .then((response) => {
           console.log(response)
           alert("保存成功")
@@ -1029,7 +1029,7 @@ export default {
         fd.append('weldingtablethree', JSON.stringify(this.weldingTableThree_1)) //焊接工艺及检验记录的需循环第三个表格
         fd.append('weldingtablefour', JSON.stringify(this.weldingTableThree_2)) //焊接工艺及检验记录的需循环第四个表格
         fd.append('myfile',this.weldngTableFour.weldNumberMap)//装载图片
-        axios.post('/jmmes/basicdata/document.php',fd)
+        axios.post(`${this.baseURL}/basicdata/document.php`,fd)
         .then((response) => {
           console.log(response)
           alert("保存成功")
@@ -1052,7 +1052,7 @@ export default {
           fd.append("craftsmanshipTableBodyResult",JSON.stringify(this.craftsmanshipTableBodyResult))//结论与不符合确认
           fd.append("craftsmanshipTableFooter",JSON.stringify(this.craftsmanshipTableFooter))//尾部信息
 
-          axios.post('/jmmes/basicdata/document.php',fd)
+          axios.post(`${this.baseURL}/basicdata/document.php`,fd)
           .then((response) => {
             console.log(response)
             alert("保存成功")
@@ -1080,7 +1080,7 @@ export default {
             fd.append('myfilethree',this.craftsmanshipTableBody_2.fileThree)//装载图片三
           }
           
-          axios.post('/jmmes/basicdata/document.php',fd)
+          axios.post(`${this.baseURL}/basicdata/document.php`,fd)
           .then((response) => {
             console.log(response)
             alert("保存成功")          
@@ -1102,7 +1102,7 @@ export default {
             fd.append('myfile',this.craftsmanshipTableBody_3.fileOne)//装载图片
           }
           
-          axios.post('/jmmes/basicdata/document.php',fd)
+          axios.post(`${this.baseURL}/basicdata/document.php`,fd)
           .then((response) => {
             console.log(response)
             alert("保存成功")          
@@ -1121,7 +1121,7 @@ export default {
           fd.append("craftsmanshipTableBodyResult",JSON.stringify(this.craftsmanshipTableBodyResult))//结论与不符合确认
           fd.append("craftsmanshipTableFooter",JSON.stringify(this.craftsmanshipTableFooter))//尾部信息
 
-          axios.post('/jmmes/basicdata/document.php',fd)
+          axios.post(`${this.baseURL}/basicdata/document.php`,fd)
           .then((response) => {
             console.log(response)
             alert("保存成功")
@@ -1143,7 +1143,7 @@ export default {
           fd.append('myfiletwo',this.craftsmanshipTableBody_2.fileTwo)//装载图片二
           fd.append('myfilethree',this.craftsmanshipTableBody_2.fileThree)//装载图片三
           
-          axios.post('/jmmes/basicdata/document.php',fd)
+          axios.post(`${this.baseURL}/basicdata/document.php`,fd)
           .then((response) => {
             console.log(response)
             alert("保存成功")          
@@ -1160,7 +1160,7 @@ export default {
           fd.append("craftsmanshipTableFooter",JSON.stringify(this.craftsmanshipTableFooter))//尾部信息
           fd.append('myfile',this.craftsmanshipTableBody_3.fileOne)//装载图片一
 
-          axios.post('/jmmes/basicdata/document.php',fd)
+          axios.post(`${this.baseURL}/basicdata/document.php`,fd)
           .then((response) => {
             console.log(response)
             alert("保存成功")          

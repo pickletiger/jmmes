@@ -351,7 +351,7 @@ export default {
             
 
             let contactId = this.$route.query.contactId
-            axios.get('/jmmes/basicdata/document.php?flag=getWeldingInfoData&contactID='+contactId)
+            axios.get(`${this.baseURL}/basicdata/document.php?flag=getWeldingInfoData&contactID=${contactId}`)
             .then((response) => {        
                 if(response.data.state == "success"){
                     this.weldingTableOne = response.data.data.weldingTableOne
