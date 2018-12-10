@@ -329,7 +329,7 @@ export default {
     getDataInfo() {
       var fd = new FormData()
       fd.append("flag","Select")
-      axios.post("jmmes/system/authoritylist.php",fd).then((res)=> {  //ES6写法
+      axios.post(`${this.baseURL}/system/authoritylist.php`,fd).then((res)=> {  //ES6写法
         res = res.data;
         // if (res.success && res.data) {
         this.rows = [];
@@ -375,7 +375,7 @@ export default {
           fd.append("size",this.size)
           fd.append("place",this.place)
           fd.append("date",this.date)
-      axios.post("jmmes/system/authoritylist.php",fd).then(function(res){
+      axios.post(`${this.baseURL}/system/authoritylist.php`,fd).then(function(res){
           // console.log(res)
           if(res.data.success ==="success"){
             alert("修改成功")
@@ -404,7 +404,7 @@ export default {
           fd.append("flag","Seemodule")
           fd.append("seeModule",seeModule)
           fd.append("gNum",gNum)
-          axios.post("jmmes/system/authoritylist.php",fd).then(function(res){
+          axios.post(`${this.baseURL}/system/authoritylist.php`,fd).then(function(res){
             // console.log(res)
             if(res.data.success ==="success"){
               alert("修改成功")

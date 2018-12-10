@@ -54,7 +54,7 @@
                 var fd = new FormData()
                 fd.append("flag","Sidebar")
                 fd.append("account",account)
-                axios.post("jmmes/common/sidebar.php",fd).then((res)=> {  //ES6写法
+                axios.post(`${this.baseURL}/common/sidebar.php`,fd).then((res)=> {  //ES6写法
                     let retData = res.data;
                     if(retData.success == "success"){
                         this.items = JSON.parse(retData.data) 
