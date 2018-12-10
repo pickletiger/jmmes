@@ -1,22 +1,14 @@
 <template>
   <div>
-    <vue-good-table 
-      :columns="columns" 
-      :rows="rows" 
-      @on-column-filter="selectionChanged"
-      :search-options="{enabled: true}"
-    >
+    <vue-good-table :columns="columns" :rows="rows" :search-options="{enabled: true}">
       <template slot="table-row" slot-scope="props">
         <span v-if="props.column.field == 'operate'">
-          <el-button type="primary" icon="el-icon-edit" circle @click="dialogFormVisible = true"></el-button>
-          <el-button type="primary" icon="el-icon-tickets" circle @click="Displaymodule= true" ></el-button>
-          <el-button type="primary" icon="el-icon-message" circle @click="Msgmodule= true" ></el-button>
-          <el-button type="danger" icon="el-icon-delete" circle @click="deleteStaff" ></el-button>
-          
+          <el-button type="primary" icon="el-icon-edit" circle @click="editTable(props.row)"></el-button>
+          <el-button type="primary" icon="el-icon-tickets" circle @click="authority(props.row)"></el-button>
+          <el-button type="primary" icon="el-icon-message" circle @click="Msgmodule= true"></el-button>
+          <el-button type="danger" icon="el-icon-delete" circle @click="deleteStaff"></el-button>
         </span>
-        <span v-else>
-          {{props.formattedRow[props.column.field]}}
-        </span>
+        <span v-else>{{props.formattedRow[props.column.field]}}</span>
       </template>
       <div slot="table-actions">
         <el-button type="primary" @click="dialogFormVisible = true">新建</el-button>
@@ -24,66 +16,72 @@
       </div>
     </vue-good-table>
     <el-dialog title="职位设置" :visible.sync="dialogFormVisible">
-        <el-form :model="form">
-          <el-form-item label="工号" :label-width="formLabelWidth">
-            <el-input  auto-complete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="姓名" :label-width="formLabelWidth">
-            <el-input  auto-complete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="手机"  :label-width="formLabelWidth">
-            <el-input  auto-complete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="职位" :label-width="formLabelWidth">
-             <el-select v-model="value">
-              <el-option
-                v-for="item in options1"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-        </div>
+      <el-form :model="form">
+        <el-form-item label="工号" :label-width="formLabelWidth">
+          <el-input auto-complete="off" v-model="gNum" readonly="readonly"></el-input>
+        </el-form-item>
+        <el-form-item label="姓名" :label-width="formLabelWidth">
+          <el-input auto-complete="off" v-model="size"></el-input>
+        </el-form-item>
+        <el-form-item label="手机" :label-width="formLabelWidth">
+          <el-input auto-complete="off" v-model="place"></el-input>
+        </el-form-item>
+        <el-form-item label="职位" :label-width="formLabelWidth">
+          <el-select v-model="date">
+            <el-option
+              v-for="item in options1"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="sureJob(props.row)">确 定</el-button>
+      </div>
     </el-dialog>
 
     <el-dialog title="显示模块" :visible.sync="Displaymodule">
-        <el-form :model="form">
-          <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick" show-checkbox></el-tree>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="Displaymodule = false">取 消</el-button>
-          <el-button type="primary" @click="Displaymodule = false">确 定</el-button>
-        </div>
+      <el-form :model="form">
+        <el-tree 
+          :data="data" 
+          :props="defaultProps" 
+          show-checkbox 
+          ref="tree"
+          highlight-current
+          node-key="value"></el-tree>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="Displaymodule = false">取 消</el-button>
+        <el-button type="primary" @click="sureModule()">确 定</el-button>
+      </div>
     </el-dialog>
 
-        <el-dialog title="消息来源设置" :visible.sync="Msgmodule">
-        <el-form :model="form">
-          <el-form-item label="部门" :label-width="formLabelWidth">
-             <el-select v-model="value">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="Msgmodule = false">取 消</el-button>
-          <el-button type="primary" @click="Msgmodule = false">确 定</el-button>
-        </div>
+    <el-dialog title="消息来源设置" :visible.sync="Msgmodule">
+      <el-form :model="form">
+        <el-form-item label="部门" :label-width="formLabelWidth">
+          <el-select v-model="value">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="Msgmodule = false">取 消</el-button>
+        <el-button type="primary" @click="Msgmodule = false">确 定</el-button>
+      </div>
     </el-dialog>
   </div>
-  
 </template>
 
 <script>
+import axios from "axios";
 import { VueGoodTable } from "vue-good-table";
 export default {
   name: "AuthorityList",
@@ -92,6 +90,10 @@ export default {
       dialogFormVisible: false,
       Displaymodule: false,
       Msgmodule: false,
+      gNum:"",
+      size:"",
+      place:"",
+      date:"",
       form: {
         name: "",
         region: "",
@@ -102,125 +104,206 @@ export default {
         resource: "",
         desc: ""
       },
-       data: [{
-          label: '基础数据管理',
-          children: [{
-            label: '员工信息管理'
-          },{
-            label: '设备管理'
-          },{
-            label: '文档管理'
-          },{
-            label: '原材料管理'
-          }]
-        }, {
-          label: '销售部',
-          children: [{
-            label: '未审核项目',
-          },{
-            label: '在建项目',
-          },{
-            label: '已完成项目',
-          },{
-            label: '审核',
-          }]
-        }, {
-          label: '计划部',
-          children: [{
-            label: '未审核项目',
-          },{
-            label: '在建项目',
-          },{
-            label: '已完成项目',
-          },{
-            label: '审核',
-          }]
-        }, {
-          label: '工艺部',
-          children: [{
-            label: '未审核项目',
-          },{
-            label: '在建项目',
-          },{
-            label: '已完成项目',
-          }]
-        }, {
-          label: '车间',
-          children: [{
-            label: '电子看板',
-          },{
-            label: '车间计划',
-          }]
-        }, {
-          label: '统计分析',
-        }, {
-          label: '系统设置',
-          children: [{
-            label: '操作日志',
-          },{
-            label: '数据备份与还原',
-          },{
-            label: '车间管理',
-          },{
-            label: '权限管理',
-          },{
-            label: '云平台交互',
-          }]
-        }],
-        defaultProps: {
-          children: 'children',
-          label: 'label'
+      data: [
+        {
+          label:"系统首页",
+          value:"1" 
         },
+        {
+          label: "基础数据管理",
+          value:"2",
+          children: [
+            {
+              label: "员工信息管理",
+              value:"3"
+            },
+            {
+              label: "设备管理",
+              value:"4"
+            },
+            {
+              label: "文档管理",
+              value:"5"
+            },
+            {
+              label: "原材料管理",
+              value:"6"
+            }
+          ]
+        },
+        {
+          label:"消息通知",
+          value:"7"
+        },
+        {
+          label: "销售模块",
+          value:"8",
+          children: [
+            {
+              label: "未审核项目",
+              value:"9"
+            },
+            {
+              label: "在建项目",
+              value:"10"
+            },
+            {
+              label: "已完成项目",
+              value:"11"
+            },
+            {
+              label: "订单管理",
+              value:"12"
+            }
+          ]
+        },
+        {
+          label: "计划模块",
+          value:"13",
+          children: [
+            {
+              label: "未审核项目",
+              value:"14"
+            },{
+              label: "在建项目",
+              value:"15"
+            },{
+              label: "已完成项目",
+              value:"16"
+            },{
+              label: "订单查看",
+              value:"17"
+            },{
+              label: "计划总表",
+              value:"18"
+            }
+          ]
+        },
+        {
+          label: "工艺模块",
+          value:"19",
+          children: [
+            {
+              label: "未审核项目",
+              value:"20"
+            },
+            {
+              label: "在建项目",
+              value:"21"
+            },
+            {
+              label: "已完成项目",
+              value:"22"
+            }
+          ]
+        },{
+          label: "制作模块",
+          value:"23",
+          children: [
+            {
+              label: "电子看板",
+              value:"24"
+            },
+            {
+              label: "车间计划",
+              value:"25"
+            }
+          ]
+        },
+        {
+          label: "检验模块",
+          value:"26"
+        },
+        {
+          label: "统计分析",
+          value:"27"
+        },
+        {
+          label: "系统设置",
+          value:"28",
+          children: [
+            {
+              label: "操作日志",
+              value:"29"
+            },
+            {
+              label: "数据备份与还原",
+              value:"30"
+            },
+            {
+              label: "车间管理",
+              value:"31"
+            },
+            {
+              label: "权限管理",
+              value:"32"
+            },
+            {
+              label: "云平台交互",
+              value:"33"
+            }
+          ]
+        }
+      ],
+      defaultProps: {
+        children: "children",
+        label: "label"
+      },
       formLabelWidth: "120px",
       searchItem: "",
-      value1:'',
-      options: [{
-          value: '选项1',
-          label: '销售部'
-        }, {
-          value: '选项2',
-          label: '计划部'
-        }, {
-          value: '选项3',
-          label: '工艺部'
-        }, {
-          value: '选项4',
-          label: '车间'
-        }],
-        value: '',
-        props: {
-          label: 'name',
-          children: 'zones'
+      value1: "",
+      options: [
+        {
+          value: "销售部",
+          label: "销售部"
         },
-        options1: [{
-          value: '选项1',
-          label: '超级管理员'
-        }, {
-          value: '选项2',
-          label: '经理'
-        }, {
-          value: '选项3',
-          label: '主管'
-        }, {
-          value: '选项4',
-          label: '普通员工'
-        }],
-        value: '',
-        props: {
-          label: 'name',
-          children: 'zones'
+        {
+          value: "计划部",
+          label: "计划部"
         },
-        count: 1,
+        {
+          value: "工艺部",
+          label: "工艺部"
+        },
+        {
+          value: "车间",
+          label: "车间"
+        }
+      ],
+      value: "",
+      props: {
+        label: "name",
+        children: "zones"
+      },
+      options1: [   //职位设置中的职位
+        {
+          value: "超级管理员",
+          label: "超级管理员"
+        },
+        {
+          value: "经理",
+          label: "经理"
+        },
+        {
+          value: "主管",
+          label: "主管"
+        },
+        {
+          value: "工人",
+          label: "工人"
+        }
+      ],
+      count: 1,
       columns: [
         {
           label: "工号",
-          field: "specification",
+          field: "specification"
         },
         {
           label: "姓名",
           field: "size"
         },
-        {
+        { 
           label: "手机",
           field: "place"
         },
@@ -233,72 +316,104 @@ export default {
           field: "operate"
         }
       ],
-      rows: [
-        {
-          id: 1,
-          specification: "1",
-          size: "张三",
-          place: "13854215475",
-          date: "车间主任"
-        },
-        {
-          id: 2,
-          specification: "2",
-          size: "李四",
-          place: "13555215485",
-          date: "工人"
-        },
-        {
-          id: 3,
-          specification: "3",
-          size: "某某",
-          place: "13545215785",
-          date: "经理"
-        }
-      ]
+      rows: []
     };
   },
   components: {
     VueGoodTable
   },
+  created() {
+    this.getDataInfo();
+  },
   methods: {
-    selectionChanged(params) {
-      console.log(params.columnFilters);
-    },
-    handleClose(done) {
-      this.$confirm("确认关闭？")
-        .then(_ => {
-          done();
-        })
-        .catch(_ => {});
+    getDataInfo() {
+      var fd = new FormData()
+      fd.append("flag","Select")
+      axios.post("jmmes/system/authoritylist.php",fd).then((res)=> {  //ES6写法
+        res = res.data;
+        // if (res.success && res.data) {
+        this.rows = [];
+        this.rows = res.data;
+        // }
+
+      });
     },
     // 删除员工
     deleteStaff() {
-        this.$confirm('将删除该员工, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      this.$confirm("将删除该员工, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
           this.$message({
-            type: 'success',
-            message: '删除成功!'
+            type: "success",
+            message: "删除成功!"
           });
-        }).catch(() => {
+        })
+        .catch(() => {
           this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });          
+            type: "info",
+            message: "已取消删除"
+          });
         });
-      },
+    },
+    //职位设置修改
+    editTable(row) {
+      // console.log(row)
+      this.dialogFormVisible = true    //将模态框属性变成打开状态
+      this.gNum = row.specification    
+      this.size = row.size
+      this.place = row.place
+      this.date = row.date
+    },
+    //职位设置保存
+    sureJob(){
+      var fd = new FormData()
+          fd.append("flag","Save")
+          fd.append("gNum",this.gNum)
+          fd.append("size",this.size)
+          fd.append("place",this.place)
+          fd.append("date",this.date)
+      axios.post("jmmes/system/authoritylist.php",fd).then(function(res){
+          // console.log(res)
+          if(res.data.success ==="success"){
+            alert("修改成功")
+            location.reload();
+          }else{
+            alert("修改失败")
+          }
+      })
+      
+      this.dialogFormVisible = false    //关闭模态框
+    },
+    //显示模块设置
+    authority(row){
+      this.Displaymodule = true     //点击执行打开显示模块设置模态框
+      var storage = window.localStorage
+      var gNum = row.specification
+      storage.gNum = gNum
+    },
+    //显示模块设置内容修改
+    sureModule(row){
 
-      handleCheckChange(data) {
-        console.log(data);
-      }
-
-      //显示模块设置
-      // Displaymodule(){
-
-      // }
+      var seeModule = this.$refs.tree.getCheckedKeys()
+      var storage=window.localStorage
+      var gNum=storage.gNum
+      var fd = new FormData()
+          fd.append("flag","Seemodule")
+          fd.append("seeModule",seeModule)
+          fd.append("gNum",gNum)
+          axios.post("jmmes/system/authoritylist.php",fd).then(function(res){
+            // console.log(res)
+            if(res.data.success ==="success"){
+              alert("修改成功")
+            }else{
+              alert("修改失败")
+            }
+        })
+      this.Displaymodule = false     //点击执行关闭显示模块设置模态框  
+    }
   }
 };
 </script>
