@@ -37,9 +37,9 @@
                 <el-collapse-item>
                   <el-steps :space="100"  :align-center="true" >
                   <!-- element-ui 一些标签不能注册点击事件@click  需使用@click.native -->
-                    <el-step v-if="data.finished" v-for="(finished,f,index) in data.finished" :key="index" status="success" @click.native="handleStep(1)" :title="finished.route" ></el-step>
-                    <el-step v-if="data.bulid" v-for="(bulid,b,index) in data.bulid" :key="index" status="process" @click.native="handleStep(2)" :title="bulid.route" ></el-step>
-                    <el-step v-if="data.unfinished" v-for="(unfinished,u,index) in data.unfinished" status="wait" @click.native="handleStep(3)" :key="index" :title="unfinished.route"></el-step>
+                    <el-step v-if="data.finished" v-for="(finished,f,index) in data.finished" :key="index" status="success" @click.native="handleStep(finished.id)" :title="finished.route" ></el-step>
+                    <el-step v-if="data.bulid" v-for="(bulid,b,index) in data.bulid" :key="index" status="process" @click.native="handleStep(build.id)" :title="bulid.route" ></el-step>
+                    <el-step v-if="data.unfinished" v-for="(unfinished,u,index) in data.unfinished" status="wait" @click.native="handleStep(unfinished.id)" :key="index" :title="unfinished.route"></el-step>
                   </el-steps>
                 </el-collapse-item>
             </el-collapse>
@@ -48,7 +48,8 @@
             <el-button type="primary" v-if="back" @click="handleBack(fid)">返回上一级</el-button>
             <el-button type="primary" @click="handleAddPart(data.id)">增加子部件</el-button>
             <el-button type="primary" @click="handleSave(data.id)">保存</el-button>
-            <el-button type="danger">删除</el-button>
+            <el-button type="primary" @click="handleQrcode(data.id)">产品标识卡</el-button>
+            <el-button type="danger" @click="handleDelClick(data.id)">删除</el-button>
           </el-form-item>
           
         </el-form>
@@ -254,15 +255,41 @@ export default {
       console.log(params.columnFilters);
     },
     // 工艺路线点击事件
-    handleStep(isfinished) {
-      axios.post('https://easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/routelist',{
-        isfinished:isfinished
-      }).then(this.getDataInfoSucc)
+    handleStep(id) {
+      console.log(id)
     },
     getDataInfoSucc(res) {
       // console.log(res.data.data.rows)
       this.rows = res.data.data.rows
       this.dialogTableVisible = true
+    },
+    handleDelClick(id) {
+      this.$confirm('是否删除部件?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'error'
+      }).then(() => {
+        var fd = new FormData()
+        fd.append("id",id)
+        fd.append("flag","delpart")
+        axios.post(`${this.baseURL}/part.php`,fd).then((res)=>{
+          // console.log(res)
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+          this.$router.go(0)
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });          
+      });
+    },
+    // 产品标识卡
+    handleQrcode(id) {
+      window.open("./#/qrcode?id="+id)
     }
   }
 }
