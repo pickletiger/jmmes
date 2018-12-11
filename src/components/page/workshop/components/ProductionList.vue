@@ -1,139 +1,243 @@
 <template>
   <div>
     <!-- table上部按钮 -->
-    <div slot="table-actions" >
-      <el-dropdown>
-        <el-button type="primary">
-          车间<i class="el-icon-arrow-down el-icon--right"></i>
-        </el-button>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>全部</el-dropdown-item>
-          <el-dropdown-item>A</el-dropdown-item>
-          <el-dropdown-item>D</el-dropdown-item>
-          <el-dropdown-item>G</el-dropdown-item>
-          <el-dropdown-item>I</el-dropdown-item>
-          <el-dropdown-item>K</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+    <div slot="table-actions" class="table-actions" >
       <el-button type="primary" @click="exportExcel()">导出</el-button>
       <el-button type="primary" @click="print()">打印</el-button>
       <el-button type="primary" @click="dialogVisible = true">排产</el-button>
       <el-button type="primary" @click="clearFilter">清除过滤</el-button>
     </div>
-    <!-- element table 
-         arrayObject.slice(start,end)方法使数据分页显示
-    -->
-    <el-table
-      ref="filterTable"
-      :data="tableData.slice( (currentPage-1)*pageSize, currentPage*pageSize)"
-      style="width: 100%"
-      stripe
-      @selection-change="handleSelectionChange"
-      @filter-change="filterChange"
-    >
-      <!-- reserve-selection属性保持选中状态 -->
-      <el-table-column
-        type="selection"
-        width="55"
-        reserve-selection
-      >
-      </el-table-column>
-      <el-table-column
-        prop="modid"
-        width="60"
-        label="modid"
-        v-if=false
-      >
-      </el-table-column>
-      <el-table-column
-        prop="routeid"
-        width="60"
-        label="routeid"
-        v-if=false
-      >
-      </el-table-column>
-      <el-table-column
-        prop="product_name"
-        label="产品名称"
-        sortable
-      >
-      </el-table-column>
-      <el-table-column
-        prop="number"
-        label="工单"
-        sortable
-      >
-      </el-table-column>
-      <el-table-column
-        prop="figure_number"
-        label="零件图号"
-        sortable
-        :filters="Ffigure_number"
-        :filter-method="filterHandler"
-        column-key="figure_number"
-      >
-      </el-table-column>
-      <el-table-column
-        prop="name"
-        label="名称"
-        sortable
-        :filters="Fname"
-        :filter-method="filterHandler"
-        column-key="name"
-      >
-      </el-table-column>
-      <el-table-column
-        prop="child_material"
-        label="规格"
-        sortable
-        width="180"
-      >
-      </el-table-column>
-      <el-table-column
-        prop="standard"
-        label="开料尺寸"
-        sortable
-      >
-      </el-table-column>
-      <el-table-column
-        prop="count"
-        label="数量"
-        sortable
-      >
-      </el-table-column>
-      <el-table-column
-        prop="station"
-        label="工位"
-        sortable
-      >
-      </el-table-column>
-      <el-table-column
-        prop="completionTime"
-        label="完成时间"
-        sortable
-      >
-      </el-table-column>
-      <el-table-column
-        fixed="right"
-        label="操作"
-        width="100">
-        <template slot-scope="scope">
-          <el-button @click="handleClick(scope.row)" type="text" size="small">编辑</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <!-- 数据分页 -->
-    <div class="block">
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-sizes="[10, 25, 50, 100]"
-        :page-size="pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="tableData.length">
-      </el-pagination>
-    </div>
+    <el-tabs v-model="activeName" @tab-click="tabClick">
+      <!-- 未排产选项卡 -->
+      <el-tab-pane label="未排产" name="first">
+        <!-- element table 
+            arrayObject.slice(start,end)方法使数据分页显示
+        -->
+        <el-table
+          ref="filterTable"
+          :data="tableData.slice( (currentPage-1)*pageSize, currentPage*pageSize)"
+          style="width: 100%"
+          stripe
+          @selection-change="handleSelectionChange"
+          @filter-change="filterChange"
+        >
+          <!-- reserve-selection属性保持选中状态 -->
+          <el-table-column
+            type="selection"
+            width="55"
+            reserve-selection
+          >
+          </el-table-column>
+          <el-table-column
+            prop="modid"
+            width="60"
+            label="modid"
+            v-if=false
+          >
+          </el-table-column>
+          <el-table-column
+            prop="routeid"
+            width="60"
+            label="routeid"
+            v-if=false
+          >
+          </el-table-column>
+          <el-table-column
+            prop="product_name"
+            label="产品名称"
+            sortable
+          >
+          </el-table-column>
+          <el-table-column
+            prop="number"
+            label="工单"
+            sortable
+          >
+          </el-table-column>
+          <el-table-column
+            prop="figure_number"
+            label="零件图号"
+            sortable
+            :filters="Ffigure_number"
+            :filter-method="filterHandler"
+            column-key="figure_number"
+          >
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="名称"
+            sortable
+            :filters="Fname"
+            :filter-method="filterHandler"
+            column-key="name"
+          >
+          </el-table-column>
+          <el-table-column
+            prop="child_material"
+            label="规格"
+            sortable
+            width="180"
+          >
+          </el-table-column>
+          <el-table-column
+            prop="standard"
+            label="开料尺寸"
+            sortable
+          >
+          </el-table-column>
+          <el-table-column
+            prop="count"
+            label="数量"
+            sortable
+          >
+          </el-table-column>
+          <el-table-column
+            prop="station"
+            label="工位"
+            sortable
+          >
+          </el-table-column>
+          <el-table-column
+            prop="completionTime"
+            label="完成时间"
+            sortable
+          >
+          </el-table-column>
+          <el-table-column
+            fixed="right"
+            label="操作"
+            width="100">
+            <template slot-scope="scope">
+              <el-button @click="handleClick(scope.row)" type="text" size="small">编辑</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <!-- 数据分页 -->
+        <div class="block">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[10, 25, 50, 100]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="tableData.length">
+          </el-pagination>
+        </div>
+      </el-tab-pane>
+
+
+      <!-- 已排产选项卡 -->
+      <el-tab-pane label="已排产" name="second">
+        <!-- element table 
+            arrayObject.slice(start,end)方法使数据分页显示
+        -->
+        <el-table
+          ref="filterTable"
+          :data="tableData2.slice( (currentPage-1)*pageSize, currentPage*pageSize)"
+          style="width: 100%"
+          stripe
+          @selection-change="handleSelectionChange"
+          @filter-change="filterChange"
+        >
+          <el-table-column
+            prop="modid"
+            width="60"
+            label="modid"
+            v-if=false
+          >
+          </el-table-column>
+          <el-table-column
+            prop="routeid"
+            width="60"
+            label="routeid"
+            v-if=false
+          >
+          </el-table-column>
+          <el-table-column
+            prop="product_name"
+            label="产品名称"
+            sortable
+          >
+          </el-table-column>
+          <el-table-column
+            prop="number"
+            label="工单"
+            sortable
+          >
+          </el-table-column>
+          <el-table-column
+            prop="figure_number"
+            label="零件图号"
+            sortable
+            :filters="Ffigure_number2"
+            :filter-method="filterHandler"
+            column-key="figure_number"
+          >
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="名称"
+            sortable
+            :filters="Fname2"
+            :filter-method="filterHandler"
+            column-key="name"
+          >
+          </el-table-column>
+          <el-table-column
+            prop="child_material"
+            label="规格"
+            sortable
+            width="180"
+          >
+          </el-table-column>
+          <el-table-column
+            prop="standard"
+            label="开料尺寸"
+            sortable
+          >
+          </el-table-column>
+          <el-table-column
+            prop="count"
+            label="数量"
+            sortable
+          >
+          </el-table-column>
+          <el-table-column
+            prop="station"
+            label="工位"
+            sortable
+          >
+          </el-table-column>
+          <el-table-column
+            prop="schedule_date"
+            label="完成时间"
+            sortable
+          >
+          </el-table-column>
+          <el-table-column
+            fixed="right"
+            label="操作"
+            width="100">
+            <template slot-scope="scope">
+              <el-button @click="handleClick(scope.row)" type="text" size="small">编辑</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <!-- 数据分页 -->
+        <div class="block">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[10, 25, 50, 100]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="tableData2.length">
+          </el-pagination>
+        </div>
+      </el-tab-pane>
+    </el-tabs>
     <!-- form表单编辑 -->
     <el-dialog title="信息详情" :visible.sync="hasInfoDialog">
       <el-form :model="form">
@@ -230,25 +334,21 @@ export default {
       canImport: false,
       hasInfoDialog: false,
       form: {},
-      form: {},
       formLabelWidth: "120px",
       dialogVisible: false,
       schedule: "",
       checkList: [],
       tableData: [],
+      tableData2: [],
       pageSize: 10,
       currentPage: 1,
-      Fname: [
-        // {text:'钢板1',value:'钢板1'},
-        // {text:'轴',value:'轴'}
-      ],
-      Ffigure_number: [
-        // {text:'FY-48B.03-00',value:'FY-48B.03-00'},
-        // {text:'FY-48B.01.03.01-09',value:'FY-48B.01.03.01-09'}
-      ],
+      Fname: [],
+      Ffigure_number: [],
       columnsKey: [],
       modid: [],
-      routeid: []
+      routeid: [],
+      printVal: [],
+      activeName: 'first'
     };
   },
   components: {
@@ -265,7 +365,9 @@ export default {
     },
     getDataSucc(res) {
       res = res.data;
+      console.log(res.success)
       if (res.success && res.rows) {
+        // 已排产
         this.tableData = res.rows;
         let columns = this.columns;
         let data_length = res.rows.length;
@@ -279,18 +381,21 @@ export default {
         for(let i=0; i < length2; i++) {
           this.Ffigure_number.push({text:res.fFigure_number[i].f3,value:res.fFigure_number[i].f3});
         }
-        
       }
-    },
-    handleTableData(e) {
-      this.form = e.row;
-      this.hasInfoDialog = true;
+
+      if(res.rows2) {
+        // 未排产
+        this.tableData2 = res.rows2;
+      }
     },
     handleClose(done) {
       done();
     },
     print() {
-      window.print(); //打印方法
+      let routeData = this.$router.resolve({
+        name: "printTable"
+      });
+      window.open(routeData.href, '_blank');
     },
     importExcel() {
       this.canImport = true;
@@ -337,7 +442,6 @@ export default {
     handleSizeChange(val) {
       this.pageSize = val;
       this.currentPage = 1;
-      // console.log(`每页 ${val} 条`);
     },
     // 设置当前页数
     handleCurrentChange(val) {
@@ -347,6 +451,8 @@ export default {
     handleSelectionChange(e) {
       this.modid = [];
       this.routeid = [];
+      // 存储勾选项所有信息
+      this.printVal = e;
       let selectLength = e.length;
       if (selectLength) {
         // 存储已选值数据
@@ -363,34 +469,44 @@ export default {
     },
     // 排产日期操作
     handleSchedule() {
-      // console.log(this.schedule + this.checkList);
-      
-      // console.log(modid + routeid)
-      // if(this.selectedValue.length && this.schedule && this.checkList.length){
+      let that = this;
+      if(this.modid.length && this.schedule && this.checkList.length){
         var fd = new FormData();
-        console.log(this.schedule);
         fd.append('modid',this.modid);
         fd.append('routeid',this.routeid);
         fd.append('checkList',this.checkList);
         fd.append('schedule',this.schedule);
+        // 缓冲数据，作为打印页面传递数据
+        sessionStorage.setItem('table',JSON.stringify(this.printVal));
+        sessionStorage.setItem('checkList',JSON.stringify(this.checkList));
+        sessionStorage.setItem('schedule',JSON.stringify(this.schedule));
         axios.post(`${this.baseURL}/productionplan/schedule.php`,fd)
         .then(function(res){
-          console.log(res.data);
-          // console.log(response)
+          // 成功回调
+          that.dialogVisible = false;
+          alert('操作成功!');
+          location.reload();
         })
-      // }else {
-      //   this.messageBox();
-      // }
+      }else {
+        // 操作失败
+        this.$alert('出错啦（未选择项目或信息填写不全）~', '提醒', {
+          confirmButtonText: '确定',
+        });
+      }
+      
     },
-    // 提醒框
-    messageBox() {
-      this.$alert('操作出错,请填写需要的信息~', '提醒', {
-        confirmButtonText: '确定',
-      });
+
+    // 选项卡切换
+    tabClick(tab, event) {
+      console.log(tab.name)
     }
   }
 };
 </script>
 
 <style>
+  .table-actions {
+    /* position: absolute;
+    right: 80px; */
+  }
 </style>
