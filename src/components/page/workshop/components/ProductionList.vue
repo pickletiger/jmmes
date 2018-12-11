@@ -3,8 +3,8 @@
     <!-- table上部按钮 -->
     <div slot="table-actions" class="table-actions" >
       <el-button type="primary" @click="exportExcel()">导出</el-button>
-      <el-button type="primary" @click="print()">打印</el-button>
       <el-button type="primary" @click="dialogVisible = true">排产</el-button>
+      <el-button type="primary" @click="print()">打印</el-button>
       <el-button type="primary" @click="clearFilter">清除过滤</el-button>
     </div>
     <el-tabs v-model="activeName" @tab-click="tabClick">
@@ -485,7 +485,7 @@ export default {
           // 成功回调
           that.dialogVisible = false;
           alert('操作成功!');
-          location.reload();
+          // location.reload();
         })
       }else {
         // 操作失败

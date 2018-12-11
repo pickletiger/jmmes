@@ -72,20 +72,20 @@ export default {
       columns: [
         {
           label: "物料编码",
-          field: "specification",
+          field: "id",
 
         },
         {
           label: "物料名称",
-          field: "size"
+          field: "name"
         },
         {
           label: "规格",
-          field: "place"
+          field: "specifications"
         },
         {
           label: "数量",
-          field: "date"
+          field: "amount"
         },
         {
           label: "操作",

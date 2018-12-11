@@ -11,9 +11,9 @@
                 <!-- 使用插槽嵌套循环 -->
                 <!-- element-ui 一些标签不能注册点击事件@click  需使用@click.native -->
                 <slot :item="item">
-                  <el-step v-if="item.finished" v-for="(finished,f,index) in item.finished" :key="index" status="success"  :title="finished.route" ></el-step>
-                  <el-step v-if="item.build" v-for="(bulid,b,index) in item.bulid" :key="index" status="process" :title="bulid.route" ></el-step>
-                  <el-step v-if="item.unfinished" v-for="(unfinished,u,index) in item.unfinished" status="wait" :key="index" :title="unfinished.route" ></el-step>
+                  <el-step v-if="item.finished" v-for="(finished,f,index) in item.finished" :key="index" status="success"  :title="finished.route" @click.native="handleStep(finished.id)" ></el-step>
+                  <el-step v-if="item.build" v-for="(bulid,b,index) in item.bulid" :key="index" status="process" :title="bulid.route" @click.native="handleStep(build.id)"></el-step>
+                  <el-step v-if="item.unfinished" v-for="(unfinished,u,index) in item.unfinished" status="wait" :key="index" :title="unfinished.route" @click.native="handleStep(unfinished.id)"></el-step>
                 </slot>
               </el-steps>
           </el-form>
@@ -103,10 +103,8 @@ export default {
     selectionChanged(params) {
       console.log(params.columnFilters);
     },
-    handleStep(isfinished) {
-      axios.post('https://easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/routelist',{
-        isfinished:isfinished
-      }).then(this.getDataInfoSucc)
+    handleStep(id) {
+      console.log(id)
     },
     getDataInfoSucc(res) {
       // console.log(res.data.data.rows)
