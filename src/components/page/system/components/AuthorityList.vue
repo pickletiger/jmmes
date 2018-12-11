@@ -18,7 +18,7 @@
     <el-dialog title="职位设置" :visible.sync="dialogFormVisible">
       <el-form :model="form">
         <el-form-item label="工号" :label-width="formLabelWidth">
-          <el-input auto-complete="off" v-model="gNum" readonly="readonly"></el-input>
+          <el-input auto-complete="off" v-model="gNum"></el-input>
         </el-form-item>
         <el-form-item label="姓名" :label-width="formLabelWidth">
           <el-input auto-complete="off" v-model="size"></el-input>
@@ -379,7 +379,7 @@ export default {
           // console.log(res)
           if(res.data.success ==="success"){
             alert("修改成功")
-            location.reload();
+            location.reload()
           }else{
             alert("修改失败")
           }

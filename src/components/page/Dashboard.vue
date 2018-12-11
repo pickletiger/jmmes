@@ -200,7 +200,7 @@
                  fd.append("name",this.name)
                  fd.append("account",this.account)
                  fd.append("postword",this.postword)
-                 axios.post("jmmes/dashboard.php",fd).then(function(res){
+                 axios.post(`${this.baseURL}/dashboard.php`,fd).then(function(res){
                      console.log(res)
                  })
             }
