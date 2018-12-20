@@ -22,13 +22,6 @@ module.exports = {
       '/ms':{
           target: 'https://www.easy-mock.com/mock/592501a391470c0ac1fab128',
           changeOrigin: true
-      },
-      '/jmmes':{
-        target: 'http://localhost:9096',
-        changeOrigin:true,
-        pathRewrite: {
-          '^/jmmes':'/jmmes/src'
-        }
       }
     },
     // Various Dev Server settings

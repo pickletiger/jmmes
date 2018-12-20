@@ -365,7 +365,7 @@ export default {
     },
     getDataSucc(res) {
       res = res.data;
-      console.log(res.success)
+      console.log(res)
       if (res.success && res.rows) {
         // 已排产
         this.tableData = res.rows;

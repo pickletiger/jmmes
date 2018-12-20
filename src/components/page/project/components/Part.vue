@@ -46,11 +46,11 @@ export default {
       immediate: true,   //如果不加这个属性，父组件第一次传进来的值监听不到
       handler(val) {
         // console.log(val)
-        var fd = new FormData() //定义获取prodata的传值
+        var fd = new FormData() //定义获取partdata的传值
         fd.append('id',val)
         fd.append('flag','part')
         axios.post(`${this.baseURL}/part.php`,fd).then(this.getPartdataSucc)
-        var sch = new FormData() //定义获取proschdata的传值
+        var sch = new FormData() //定义获取partschdata的传值
         sch.append('id',val)
         sch.append('flag','partsch')
         axios.post(`${this.baseURL}/part.php`,sch).then(this.getPartschdataSucc)
@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     getPartdataSucc(res) {
-      // console.log(res.data)
+      console.log(res.data)
       this.partdata = {}
       if(res.data.success =='success'){
         this.partdata = res.data
@@ -68,9 +68,11 @@ export default {
     },
     getPartschdataSucc(res) {
       // console.log(res.data)
-      this.partschdata = {}
+      this.partschdata = {"item":[]}
       if(res.data.success) {
         this.partschdata = res.data
+      }else {
+        this.partschdata = {"key":"default"}
       }
     },
     handleChange(id) {
