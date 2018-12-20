@@ -3,8 +3,8 @@
     <!-- table上部按钮 -->
     <div slot="table-actions" class="table-actions" >
       <el-button type="primary" @click="exportExcel()">导出</el-button>
-      <el-button type="primary" @click="print()">打印</el-button>
       <el-button type="primary" @click="dialogVisible = true">排产</el-button>
+      <el-button type="primary" @click="print()"  >打印</el-button>
       <el-button type="primary" @click="clearFilter">清除过滤</el-button>
     </div>
     <el-tabs v-model="activeName" @tab-click="tabClick">
@@ -329,6 +329,7 @@ import { VueGoodTable } from "vue-good-table";
 import axios from "axios";
 export default {
   name: "TableList",
+  inject: ['reload'],
   data() {
     return {
       canImport: false,
@@ -365,7 +366,6 @@ export default {
     },
     getDataSucc(res) {
       res = res.data;
-      console.log(res)
       if (res.success && res.rows) {
         // 已排产
         this.tableData = res.rows;
@@ -485,7 +485,8 @@ export default {
           // 成功回调
           that.dialogVisible = false;
           alert('操作成功!');
-          location.reload();
+          that.reload();
+          // location.reload();
         })
       }else {
         // 操作失败
@@ -504,9 +505,9 @@ export default {
 };
 </script>
 
-<style>
-  .table-actions {
+<style scoped>
+  /* .table-actions { */
     /* position: absolute;
     right: 80px; */
-  }
+  /* } */
 </style>

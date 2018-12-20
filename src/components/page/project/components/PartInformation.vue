@@ -45,7 +45,7 @@
           <el-form-item label="部件进度">
             <el-collapse accordion>
                 <el-collapse-item>
-                  <el-steps :space="100"  :align-center="true" >
+                  <el-steps :space="100" :align-center="true">
                   <!-- element-ui 一些标签不能注册点击事件@click  需使用@click.native -->
                     <el-step v-if="data.finished" v-for="(finished,f,index) in data.finished" :key="index" status="success" @click.native="handleStep(finished.id)" :title="finished.route" ></el-step>
                     <el-step v-if="data.build" v-for="(build,b,index) in data.build" :key="index" status="process" @click.native="handleStep(build.id)" :title="build.route" ></el-step>
@@ -199,6 +199,7 @@ export default {
         // console.log(val)
         this.data = {}
         this.data = val
+        console.log(val);
         var fd = new FormData()
         fd.append("id",val.id)
         fd.append("flag","back")

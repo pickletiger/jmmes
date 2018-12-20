@@ -72,20 +72,20 @@ export default {
       columns: [
         {
           label: "工号",
-          field: "specification",
+          field: "id",
 
         },
         {
           label: "姓名",
-          field: "size"
+          field: "name"
         },
         {
           label: "手机",
-          field: "place"
+          field: "phone"
         },
         {
           label: "职位",
-          field: "date"
+          field: "position"
         },
         {
           label: "操作",
@@ -140,7 +140,7 @@ export default {
       getStuffInfoData () {
           axios.post('https://www.easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/StuffInfo').then((response) => {
               this.rows = response.data.rows;
-              console.log(response.data.rows)
+          //     console.log(response.data.rows)
           })
       },
       selectionChanged(params) {
