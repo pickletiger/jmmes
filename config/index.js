@@ -44,6 +44,7 @@ module.exports = {
           '^/jmmesphp':'/jm'
         }
       },
+     }
     },
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

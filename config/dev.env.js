@@ -4,5 +4,6 @@ const prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
-  API_ROOT: '"http://localhost:8081/jmmesphp"'
+  API_ROOT: '"http://localhost:8081/jmmesphp"',
+  API_ROOT: '"http://localhost:80/jmphp/src"'
 })

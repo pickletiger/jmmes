@@ -6,7 +6,7 @@
             </el-breadcrumb>
         </div>
         <div class="container">
-          <el-container>
+          <el-container style="height: 600px;">
             <el-header>
               <el-row :gutter="20">
                 <el-col :span="2" :offset="20">
@@ -14,7 +14,7 @@
                 </el-col>
               </el-row>
             </el-header>
-            <el-container>
+            <el-container style="height: 600px;">
               <el-aside width="250px">
                   <el-form :inline="true">
                     <el-form-item>

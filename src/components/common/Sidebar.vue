@@ -25,166 +25,13 @@
 </template>
 
 <script>
+    import axios from "axios";
     import bus from '../common/bus';
     export default {
         data() {
             return {
                 collapse: false,
-                items: [
-                    {
-                        icon: 'el-icon-setting',
-                        index: 'dashboard',
-                        title: '系统首页'
-                    },
-                    {
-                        icon: 'el-icon-more',
-                        index: '2',
-                        title: '基础数据管理',
-                        subs: [
-                            {
-                                index: 'staff',
-                                title: '员工信息管理'
-                            },
-                            {
-                                index: 'equipment',
-                                title: '设备管理'
-                            },
-                            {
-                                index: 'document',
-                                title: '文档管理'
-                            },
-                            {
-                                index: 'material',
-                                title: '原材料管理'
-                            }
-                        ]
-                    },
-                    {
-                        icon: 'el-icon-message',
-                        index: 'tabs',
-                        title: '消息通知'
-                    },
-                    {   
-                        icon: 'el-icon-tickets',
-                        index: '4',
-                        title: '销售模块',
-                        subs: [
-                            {
-                                index: 'marketunreview',
-                                title: '未审核项目'
-                            },
-                            {
-                                index: 'market',
-                                title: '在建项目'
-                            },
-                            {
-                                index: 'marketfinished',
-                                title: '已完成项目'
-                            },
-                            {
-                                index: 'marketcheck',
-                                title: '订单管理'
-                            }
-                        ]
-                    },
-                    {   
-                        icon: 'el-icon-tickets',
-                        index: '5',
-                        title: '计划模块',
-                        subs: [
-                            {
-                                index: 'planunreview',
-                                title: '未审核项目'
-                            },
-                            {
-                                index: 'plan',
-                                title: '在建项目'
-                            },
-                            {
-                                index: 'planfinished',
-                                title: '已完成项目'
-                            },
-                            {
-                                index: 'plancheck',
-                                title: '订单查看'
-                            },
-                            {
-                                index: 'plantable',
-                                title: '计划总表'
-                            }
-                        ]
-                    },
-                    {   
-                        icon: 'el-icon-tickets',
-                        index: '6',
-                        title: '工艺模块',
-                        subs: [
-                            {
-                                index: 'craftunreview',
-                                title: '未审核项目'
-                            },
-                            {
-                                index: 'craft',
-                                title: '在建项目'
-                            },
-                            {
-                                index: 'craftfinished',
-                                title: '已完成项目'
-                            }
-                        ]
-                    },
-                    {   
-                        icon: 'el-icon-date',
-                        index: '7',
-                        title: '制造模块',
-                        subs: [
-                            {
-                                index: 'electronic',
-                                title: '电子看板'
-                            },
-                            {
-                                index: 'productionplan',
-                                title: '车间计划'
-                            }
-                        ]
-                    },
-                    {
-                        icon: 'el-icon-search',
-                        index: 'examine',
-                        title: '检验模块'
-                    },
-                    {
-                        icon: 'el-icon-star-on',
-                        index: 'charts',
-                        title: '统计分析'
-                    },
-                    {
-                        icon: 'el-icon-setting',
-                        index: '9',
-                        title: '系统设置',
-                        subs: [
-                            {
-                                index: 'operationlog',
-                                title: '操作日志'
-                            },
-                            {
-                                index: 'data',
-                                title: '数据备份与还原'
-                            },{
-                                index: 'workshop',
-                                title: '车间管理'
-                            },
-                            {
-                                index: 'authority',
-                                title: '权限管理'
-                            },
-                            {
-                                index: 'cloudinteraction',
-                                title: '云平台交互'
-                            }
-                        ]
-                    }
-                ]
+                items: []
             }
         },
         computed:{
@@ -197,6 +44,229 @@
             bus.$on('collapse', msg => {
                 this.collapse = msg;
             })
+
+            this.getDataInfo();
+        },
+        methods:{
+            getDataInfo(){
+                var storage=window.localStorage
+                var account=storage.ms_username
+                var fd = new FormData()
+                fd.append("flag","Sidebar")
+                fd.append("account",account)
+                axios.post(`${this.baseURL}/common/sidebar.php`,fd).then((res)=> {  //ES6写法
+                    let retData = res.data;
+                    if(retData.success == "success"){
+                        this.items = JSON.parse(retData.data) 
+                    }
+                    // this.items = JSON.parse() 
+                    // this.items = [ {
+                    //     icon: 'el-icon-setting',
+                    //     index: 'dashboard',
+                    //     title: '系统首页'
+                    // },
+                    // {
+                    //     icon: 'el-icon-more',
+                    //     index: '2',
+                    //     title: '基础数据管理',
+                    //     subs: [
+                    //         {
+                    //             index: 'staff',
+                    //             title: '员工信息管理'
+                    //         },
+                    //         {
+                    //             index: 'equipment',
+                    //             title: '设备管理'
+                    //         },
+                    //         {
+                    //             index: 'document',
+                    //             title: '文档管理'
+                    //         },
+                    //         {
+                    //             index: 'material',
+                    //             title: '原材料管理'
+                    //         }
+                    //     ]
+                    // },
+                    // {
+                    //     icon: 'el-icon-message',
+                    //     index: 'tabs',
+                    //     title: '消息通知'
+                    // },
+                    // {   
+                    //     icon: 'el-icon-tickets',
+                    //     index: '4',
+                    //     title: '销售模块',
+                    //     subs: [
+                    //         {
+                    //             index: 'marketunreview',
+                    //             title: '未审核项目'
+                    //         },
+                    //         {
+                    //             index: 'market',
+                    //             title: '在建项目'
+                    //         },
+                    //         {
+                    //             index: 'marketfinished',
+                    //             title: '已完成项目'
+                    //         },
+                    //         {
+                    //             index: 'marketcheck',
+                    //             title: '订单管理'
+                    //         }
+                    //     ]
+                    // },
+                    // {   
+                    //     icon: 'el-icon-tickets',
+                    //     index: '5',
+                    //     title: '计划模块',
+                    //     subs: [
+                    //         {
+                    //             index: 'planunreview',
+                    //             title: '未审核项目'
+                    //         },
+                    //         {
+                    //             index: 'plan',
+                    //             title: '在建项目'
+                    //         },
+                    //         {
+                    //             index: 'planfinished',
+                    //             title: '已完成项目'
+                    //         },
+                    //         {
+                    //             index: 'plancheck',
+                    //             title: '订单查看'
+                    //         },
+                    //         {
+                    //             index: 'plantable',
+                    //             title: '计划总表'
+                    //         }
+                    //     ]
+                    // },
+                    // {   
+                    //     icon: 'el-icon-tickets',
+                    //     index: '6',
+                    //     title: '工艺模块',
+                    //     subs: [
+                    //         {
+                    //             index: 'craftunreview',
+                    //             title: '未审核项目'
+                    //         },
+                    //         {
+                    //             index: 'craft',
+                    //             title: '在建项目'
+                    //         },
+                    //         {
+                    //             index: 'craftfinished',
+                    //             title: '已完成项目'
+                    //         }
+                    //     ]
+                    // },
+                    // {   
+                    //     icon: 'el-icon-date',
+                    //     index: '7',
+                    //     title: '制造模块',
+                    //     subs: [
+                    //         {
+                    //             index: 'electronic',
+                    //             title: '电子看板'
+                    //         },
+                    //         {
+                    //             index: 'productionplan',
+                    //             title: '车间计划'
+                    //         }
+                    //     ]
+                    // },
+                    // {
+                    //     icon: 'el-icon-search',
+                    //     index: 'examine',
+                    //     title: '检验模块'
+                    // },
+                    // {
+                    //     icon: 'el-icon-star-on',
+                    //     index: 'charts',
+                    //     title: '统计分析'
+                    // },
+                    // {
+                    //     icon: 'el-icon-setting',
+                    //     index: '9',
+                    //     title: '系统设置',
+                    //     subs: [
+                    //         {
+                    //             index: 'operationlog',
+                    //             title: '操作日志'
+                    //         },
+                    //         {
+                    //             index: 'data',
+                    //             title: '数据备份与还原'
+                    //         },{
+                    //             index: 'workshop',
+                    //             title: '车间管理'
+                    //         },
+                    //         {
+                    //             index: 'authority',
+                    //             title: '权限管理'
+                    //         },
+                    //         {
+                    //             index: 'cloudinteraction',
+                    //             title: '云平台交互'
+                    //         }
+                    //     ]
+                    // }];
+                    // this.items = res.data;
+                    // this.items = [ {
+                    //     icon: 'el-icon-more',
+                    //     index: '2',
+                    //     title: '基础数据管理',
+                    //     subs: [
+                    //         {
+                    //             index: 'staff',
+                    //             title: '员工信息管理'
+                    //         },
+                    //         {
+                    //             index: 'equipment',
+                    //             title: '设备管理'
+                    //         },
+                    //         {
+                    //             index: 'document',
+                    //             title: '文档管理'
+                    //         },
+                    //         {
+                    //             index: 'material',
+                    //             title: '原材料管理'
+                    //         }
+                    //     ]
+                    // },
+                    // {
+                    //     icon: 'el-icon-message',
+                    //     index: 'tabs',
+                    //     title: '消息通知'
+                    // },
+                    // {   
+                    //     icon: 'el-icon-tickets',
+                    //     index: '4',
+                    //     title: '销售模块',
+                    //     subs: [
+                    //         {
+                    //             index: 'marketunreview',
+                    //             title: '未审核项目'
+                    //         },
+                    //         {
+                    //             index: 'market',
+                    //             title: '在建项目'
+                    //         },
+                    //         {
+                    //             index: 'marketfinished',
+                    //             title: '已完成项目'
+                    //         },
+                    //         {
+                    //             index: 'marketcheck',
+                    //             title: '订单管理'
+                    //         }
+                    //     ]
+                    // }];
+                });
+            }
         }
     }
 </script>

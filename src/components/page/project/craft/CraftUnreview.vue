@@ -14,7 +14,7 @@
                 </el-col>
               </el-row>
             </el-header>
-            <el-container>
+            <el-container style="height: 600px;">
               <el-aside width="250px">
                   <el-form :inline="true">
                     <el-form-item>
@@ -128,7 +128,13 @@ export default {
       handleSuc(res,file, fileList) {
         // console.log(res)
         if(res.success == 'success'){
+          this.dialogUpload = false
           alert("文件上传成功")
+          this.updateTree = !this.updateTree
+          // 增加延时确保tree组件重新渲染
+          setTimeout(()=>{
+            this.updateTree = !this.updateTree
+          },50)
         }else  {
           alert("文件上传失败，文件格式错误或该项目已存在")
         }
