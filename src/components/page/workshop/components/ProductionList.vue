@@ -2,9 +2,10 @@
   <div>
     <!-- table上部按钮 -->
     <div slot="table-actions" class="table-actions" >
-      <el-button type="primary" @click="exportExcel()">导出</el-button>
-      <el-button type="primary" @click="dialogVisible = true">排产</el-button>
-      <el-button type="primary" @click="print()"  >打印</el-button>
+      <el-button type="primary"  @click="exportExcel()">导出</el-button>
+      <el-button type="primary" v-if="show_2btn"  @click="dialogVisible = true">排产</el-button>
+      <el-button type="primary" v-if="show_3btn" @click="print()"  >生产计划表</el-button>
+      <el-button type="primary" v-if="show_3btn" @click="print2()"  >产品标志卡</el-button>
       <el-button type="primary" @click="clearFilter">清除过滤</el-button>
     </div>
     <el-tabs v-model="activeName" @tab-click="tabClick">
@@ -58,30 +59,34 @@
             prop="figure_number"
             label="零件图号"
             sortable
-            :filters="Ffigure_number"
-            :filter-method="filterHandler"
-            column-key="figure_number"
           >
           </el-table-column>
           <el-table-column
             prop="name"
             label="名称"
             sortable
-            :filters="Fname"
-            :filter-method="filterHandler"
-            column-key="name"
           >
           </el-table-column>
           <el-table-column
             prop="child_material"
             label="规格"
-            sortable
             width="180"
+            :filters="fChild_material"
+            :filter-method="filterHandler"
+            column-key="child_material"
           >
           </el-table-column>
           <el-table-column
             prop="standard"
             label="开料尺寸"
+            :filters="fStandard"
+            :filter-method="filterHandler"
+            column-key="standard"
+          >
+          </el-table-column>
+          <el-table-column
+            prop="route"
+            label="加工工艺路线"
             sortable
           >
           </el-table-column>
@@ -92,14 +97,8 @@
           >
           </el-table-column>
           <el-table-column
-            prop="station"
-            label="工位"
-            sortable
-          >
-          </el-table-column>
-          <el-table-column
-            prop="completionTime"
-            label="完成时间"
+            prop="demand_area"
+            label="需求区"
             sortable
           >
           </el-table-column>
@@ -133,17 +132,37 @@
             arrayObject.slice(start,end)方法使数据分页显示
         -->
         <el-table
-          ref="filterTable"
-          :data="tableData2.slice( (currentPage-1)*pageSize, currentPage*pageSize)"
+          ref="filterTable2"
+          :data="tableData2.slice( (currentPage2-1)*pageSize2, currentPage2*pageSize2)"
           style="width: 100%"
           stripe
           @selection-change="handleSelectionChange"
           @filter-change="filterChange"
         >
           <el-table-column
+            type="selection"
+            width="55"
+            reserve-selection
+          >
+          </el-table-column>
+          <el-table-column
             prop="modid"
             width="60"
             label="modid"
+            v-if=false
+          >
+          </el-table-column>
+          <el-table-column
+            prop="partid"
+            width="60"
+            label="partid"
+            v-if=false
+          >
+          </el-table-column>
+          <el-table-column
+            prop="fid"
+            width="60"
+            label="fid"
             v-if=false
           >
           </el-table-column>
@@ -170,30 +189,34 @@
             prop="figure_number"
             label="零件图号"
             sortable
-            :filters="Ffigure_number2"
-            :filter-method="filterHandler"
-            column-key="figure_number"
           >
           </el-table-column>
           <el-table-column
             prop="name"
             label="名称"
             sortable
-            :filters="Fname2"
-            :filter-method="filterHandler"
-            column-key="name"
           >
           </el-table-column>
           <el-table-column
             prop="child_material"
             label="规格"
-            sortable
             width="180"
+            :filters="FChild_material"
+            :filter-method="filterHandler2"
+            column-key="child_material2"
           >
           </el-table-column>
           <el-table-column
             prop="standard"
             label="开料尺寸"
+            :filters="FStandard"
+            :filter-method="filterHandler2"
+            column-key="standard2"
+          >
+          </el-table-column>
+          <el-table-column
+            prop="route"
+            label="加工工艺路线"
             sortable
           >
           </el-table-column>
@@ -207,12 +230,20 @@
             prop="station"
             label="工位"
             sortable
+            :filter-method="filterHandler2"
+          >
+          </el-table-column>
+          <el-table-column
+            prop="demand_area"
+            label="需求区"
+            sortable
           >
           </el-table-column>
           <el-table-column
             prop="schedule_date"
             label="完成时间"
             sortable
+            :filter-method="filterHandler2"
           >
           </el-table-column>
           <el-table-column
@@ -227,11 +258,11 @@
         <!-- 数据分页 -->
         <div class="block">
           <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="currentPage"
+            @size-change="handleSizeChange2"
+            @current-change="handleCurrentChange2"
+            :current-page="currentPage2"
             :page-sizes="[10, 25, 50, 100]"
-            :page-size="pageSize"
+            :page-size="pageSize2"
             layout="total, sizes, prev, pager, next, jumper"
             :total="tableData2.length">
           </el-pagination>
@@ -313,6 +344,8 @@
             <el-checkbox label="锯床"></el-checkbox>
           </el-checkbox-group>
         </el-form-item>
+        <el-form-item label="开料尺寸定额" :label-width="formLabelWidth">
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -342,14 +375,20 @@ export default {
       tableData: [],
       tableData2: [],
       pageSize: 10,
+      pageSize2: 10,
       currentPage: 1,
-      Fname: [],
-      Ffigure_number: [],
+      currentPage2: 1,
+      fStandard: [],
+      fChild_material: [],
+      FStandard: [],
+      FChild_material: [],
       columnsKey: [],
       modid: [],
       routeid: [],
       printVal: [],
-      activeName: 'first'
+      activeName: 'first',
+      show_2btn: true,
+      show_3btn: false
     };
   },
   components: {
@@ -359,6 +398,7 @@ export default {
     this.getData();
   },
   methods: {
+    
     getData() {
       axios
         .post(`${this.baseURL}/productionplan/list.php`)
@@ -367,35 +407,53 @@ export default {
     getDataSucc(res) {
       res = res.data;
       if (res.success && res.rows) {
-        // 已排产
+        // 未排产
         this.tableData = res.rows;
         let columns = this.columns;
         let data_length = res.rows.length;
-        // checkbox 名称赋值
-        let length1 = res.fName.length;
+        // checkbox 开料尺寸赋值
+        let length1 = res.fStandard.length;
         for(let i=0; i < length1; i++) {
-          this.Fname.push({text:res.fName[i].f4,value:res.fName[i].f4});
+          this.fStandard.push({text:res.fStandard[i].f6,value:res.fStandard[i].f6});
         }
-        // checkbox 零件图号赋值
-        let length2 = res.fFigure_number.length;
+        // checkbox 规格赋值
+        let length2 = res.fChild_material.length;
         for(let i=0; i < length2; i++) {
-          this.Ffigure_number.push({text:res.fFigure_number[i].f3,value:res.fFigure_number[i].f3});
+          this.fChild_material.push({text:res.fChild_material[i].f5,value:res.fChild_material[i].f5});
         }
       }
 
       if(res.rows2) {
-        // 未排产
+        // 已排产
         this.tableData2 = res.rows2;
+        // checkbox 规格赋值
+        let length3 = res.FChild_material.length;
+        for(let i=0; i < length3; i++) {
+          this.FChild_material.push({text:res.FChild_material[i].F5,value:res.FChild_material[i].F5});
+        }
+        // checkbox 开料尺寸规格赋值
+        let length4 = res.FStandard.length;
+        for(let i=0; i < length4; i++) {
+          this.FStandard.push({text:res.FStandard[i].F6,value:res.FStandard[i].F6});
+        }
       }
     },
     handleClose(done) {
       done();
     },
+    // 打印生产计划
     print() {
       let routeData = this.$router.resolve({
         name: "printTable"
       });
       window.open(routeData.href, '_blank');
+    },
+    // 打印产品标识卡
+    print2() {
+      let routeData2 = this.$router.resolve({
+        name: "QrcodeList"
+      });
+      window.open(routeData2.href, '_blank');
     },
     importExcel() {
       this.canImport = true;
@@ -411,6 +469,15 @@ export default {
         因此设置此值相当于一页进行多少条数据进行过滤
       */
       this.pageSize = 1000000;
+      return row[property] === value;
+    },
+    filterHandler2(value, row, column) {
+      const property = column["property"];
+      /* 
+        this.pageSize设置值是因为element table里只对本页数据进行过滤
+        因此设置此值相当于一页进行多少条数据进行过滤
+      */
+      this.pageSize2 = 1000000;
       return row[property] === value;
     },
     // 检测每次表格下拉筛选变化
@@ -433,6 +500,25 @@ export default {
         this.pageSize = 10;
       }
     },
+    filterChange2(filters) {
+      // 遍历筛选checkbox值（根据column-key返回参数）
+      for(let i in filters){
+        // 若筛选值为空(即每点击一次重置键)，去除数组内columnKey一个键名，否则插入一个键名
+        if(filters[i]=="") {
+          this.columnsKey.splice(0,1);
+        }else {
+          // 先判断是否已有这个键值（即是否已对某列进行筛选，若已有则不插入）
+          if(this.columnsKey.indexOf(i) == -1) {
+            this.columnsKey.push(i);
+          }
+        }
+      }
+      // 若所有列都未被筛选，则重置表格数据
+      if(this.columnsKey.length == 0) {
+        this.$refs.filterTable2.clearFilter();
+        this.pageSize2 = 10;
+      }
+    },
     // 编辑监听
     handleClick(e) {
       this.form = e;
@@ -443,9 +529,16 @@ export default {
       this.pageSize = val;
       this.currentPage = 1;
     },
+    handleSizeChange2(val) {
+      this.pageSize2 = val;
+      this.currentPage2 = 1;
+    },
     // 设置当前页数
     handleCurrentChange(val) {
       this.currentPage = val;
+    },
+    handleCurrentChange2(val) {
+      this.currentPage2 = val;
     },
     // 处理选中项
     handleSelectionChange(e) {
@@ -461,11 +554,21 @@ export default {
           this.routeid.push(e[i].routeid);
         }
       }
+      // 清空缓存
+      sessionStorage.removeItem('table');
+      sessionStorage.removeItem('checkList');
+      sessionStorage.removeItem('schedule');
+      // 缓冲数据，作为打印页面传递数据
+      sessionStorage.setItem('table',JSON.stringify(this.printVal));
+      sessionStorage.setItem('checkList',JSON.stringify(this.checkList));
+      sessionStorage.setItem('schedule',JSON.stringify(this.schedule));
     },
     // 清除过滤
     clearFilter() {
       this.$refs.filterTable.clearFilter();
+      this.$refs.filterTable2.clearFilter();
       this.pageSize = 10;
+      this.pageSize2 = 10;
     },
     // 排产日期操作
     handleSchedule() {
@@ -476,10 +579,6 @@ export default {
         fd.append('routeid',this.routeid);
         fd.append('checkList',this.checkList);
         fd.append('schedule',this.schedule);
-        // 缓冲数据，作为打印页面传递数据
-        sessionStorage.setItem('table',JSON.stringify(this.printVal));
-        sessionStorage.setItem('checkList',JSON.stringify(this.checkList));
-        sessionStorage.setItem('schedule',JSON.stringify(this.schedule));
         axios.post(`${this.baseURL}/productionplan/schedule.php`,fd)
         .then(function(res){
           // 成功回调
@@ -499,15 +598,19 @@ export default {
 
     // 选项卡切换
     tabClick(tab, event) {
-      console.log(tab.name)
+      // 已排产页面隐藏排产按钮
+      if (tab.name == 'second') {
+        this.show_2btn = false;
+        this.show_3btn = true;
+      }else {
+        this.show_2btn = true;
+        this.show_3btn = false;
+      }
     }
   }
 };
 </script>
 
 <style scoped>
-  /* .table-actions { */
-    /* position: absolute;
-    right: 80px; */
-  /* } */
+ 
 </style>

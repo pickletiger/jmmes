@@ -23,6 +23,7 @@
           <th>K计划完成</th>
           <th>K完成时间</th>
           <th>备注</th>
+          <th>条形码</th>
         </tr>
         <tr v-for="item in table" :key="item.id">
           <td>{{item.product_name}}</td>
@@ -40,8 +41,12 @@
           <td></td>
           <td></td>
           <td>{{item.remark}}</td>
+          <td>
+            <barcode :value="'{num:' + item.figure_number + '}'" :options="barcode_option"></barcode>
+          </td>
         </tr>
       </table>
+      
     </div>
   </div>
 </template>
@@ -53,7 +58,14 @@ export default {
     return {
       table: [],
       checkList: [],
-      schedule: ""
+      schedule: "",
+      barcode_option:{
+        displayValue: false, //是否默认显示条形码数据
+        //textPosition  :'top', //条形码数据显示的位置
+        background: '#fff', //条形码背景颜色
+        width:'1px',
+        height: '55px'
+      }
     }
   },
   mounted () {
@@ -61,10 +73,10 @@ export default {
     this.table = JSON.parse(sessionStorage.getItem('table'));
     this.checkList = JSON.parse(sessionStorage.getItem('checkList'));
     this.schedule = JSON.parse(sessionStorage.getItem('schedule'));
-    console.log(this.table);
-    console.log(this.checkList + this.schedule);
-    // 清空缓存
-    sessionStorage.clear();
+    // 使数据打印分页
+    document.getElementsByTagName("html")[0].style.overflow = "visible"
+    document.getElementsByTagName("body")[0].style.overflow = "visible"
+    document.getElementById("app").style.overflow = "visible"
   }
 };
 </script>
@@ -73,6 +85,7 @@ export default {
   *{
     padding: 0;
     margin: 0;
+    
   }
   table {
     width: 100%;
