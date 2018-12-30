@@ -29,7 +29,22 @@ module.exports = {
         pathRewrite: {
           '^/jmmes':'/jmmes/src'
         }
-      }
+      },
+//    '/upload': {
+//      target: 'http://172.20.10.2:8081',
+//      changeOrigin: true,
+//      pathRewrite: {
+//        '^/upload': '/jmmesphp'
+//      }
+//    },
+      '/jmmesphp': {
+        target: 'http://192.168.43.211:8081',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/jmmesphp':'/jm'
+        }
+      },
+     }
     },
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

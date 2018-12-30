@@ -10,8 +10,8 @@
     "build:dll": "webpack --config build/webpack.dll.conf.js"
   },
   "dependencies": {
-    "@xkeshi/vue-barcode": "^1.0.0",
     "@xkeshi/vue-qrcode": "xkeshi/vue-qrcode",
+    "@xkeshi/vue-qrcode": "github:xkeshi/vue-qrcode",
     "axios": "^0.15.3",
     "babel-polyfill": "^6.23.0",
     "define-properties": "^1.1.3",

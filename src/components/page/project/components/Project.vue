@@ -50,6 +50,7 @@ export default {
   methods: {
     getProdataSucc(res) {
       // console.log(res.data)
+      this.prodata = {}
       if(res.data.success =='success'){
         this.prodata = res.data
       }
@@ -58,6 +59,8 @@ export default {
       // console.log(res.data)
       if(res.data.success) {
         this.proschdata = res.data
+      }else {
+        this.proschdata = {"key":"default"}
       }
     }
   }

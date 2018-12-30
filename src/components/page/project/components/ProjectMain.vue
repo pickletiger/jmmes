@@ -27,7 +27,7 @@
                   <el-steps :space="100"  :align-center="true" >
                   <!-- element-ui 一些标签不能注册点击事件@click  需使用@click.native -->
                     <el-step v-if="data.finished" v-for="(finished,f,index) in data.finished" :key="index" status="success" @click.native="handleStep(finished.id)" :title="finished.route" ></el-step>
-                    <el-step v-if="data.bulid" v-for="(bulid,b,index) in data.bulid" :key="index" status="process" @click.native="handleStep(build.id)" :title="bulid.route" ></el-step>
+                    <el-step v-if="data.build" v-for="(build,b,index) in data.build" :key="index" status="process" @click.native="handleStep(build.id)" :title="build.route" ></el-step>
                     <el-step v-if="data.unfinished" v-for="(unfinished,u,index) in data.unfinished" status="wait" @click.native="handleStep(unfinished.id)" :key="index" :title="unfinished.route"></el-step>
                   </el-steps>
                 </el-collapse-item>
@@ -95,29 +95,44 @@
     </el-dialog>
     <!-- 工序详情 -->
     <el-dialog title="工序详情" :visible.sync="dialogTableVisible">
-      <el-form>
-        <vue-good-table 
-          :columns="columns" 
-          :rows="rows" 
-          @on-column-filter="selectionChanged"
-          :search-options="{enabled: true}"
-          :pagination-options="{enabled: true,mode: 'records',perPage: 5,perPageDropdown: [5],dropdownAllowAll: false,}"
-        >
-          <template slot="table-row" slot-scope="props">
-            <span v-if="props.column.field == 'operate'">
-              <el-button type="primary">查看</el-button>
-              <el-button type="danger">删除</el-button>
-            </span>
-            <span v-else>
-              {{props.formattedRow[props.column.field]}}
-            </span>
-          </template>
-          <div slot="table-actions">
-            <el-button type="primary">往后增加节点</el-button>
-          </div>
-        </vue-good-table>
+    <el-form>
+      <vue-good-table 
+        :columns="columns" 
+        :rows="rows" 
+        @on-column-filter="selectionChanged"
+        :search-options="{enabled: true}"
+        :pagination-options="{enabled: true,mode: 'records',perPage: 5,perPageDropdown: [5],dropdownAllowAll: false,}"
+      >
+        <template slot="table-row" slot-scope="props">
+          <span v-if="props.column.field == 'operate'">
+            <el-button type="primary">查看</el-button>
+            <el-button type="danger" @click="handleDelRoute(props.row)">删除</el-button>
+          </span>
+          <span v-else>
+            {{props.formattedRow[props.column.field]}}
+          </span>
+        </template>
+        <div slot="table-actions">
+          <el-button type="primary" v-if="state"  @click="handleOpeninner(state)">往后增加节点</el-button>
+        </div>
+      </vue-good-table>
       </el-form>
-    </el-dialog>
+        <el-dialog
+          width="30%"
+          title="往后增加节点"
+          :visible.sync="innerVisible"
+          append-to-body>
+          <el-form>
+              <el-form-item  label="节点名称" :label-width="'100px'">
+                <el-input v-model="nextroute"></el-input>
+              </el-form-item>
+            </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="innerVisible = false">取 消</el-button>
+            <el-button type="primary" @click="handleAddRoute(routeid,nextid)">确 定</el-button>
+          </div>
+      </el-dialog>
+  </el-dialog>
   </el-container>
   
 </template>
@@ -130,32 +145,40 @@ export default {
   props: {
     prodata: Object
   },
+  components: {
+    VueGoodTable
+  },
   data () {
     return {
       dialogaddVisible:false,
       dialogReviewVisible:false,
       dialogTableVisible:false,
+      innerVisible:false,
       data: {},
       review: {},
       addpart:{},
       rdate:'',
+      routeid:'',
+      listid:'',
+      state:'',
+      nextroute:'',
       formLabelWidth:'120px',
       columns: [
         {
           label: "工序",
-          field: "route",
+          field: "station",
         },
         {
-          label: "部件",
-          field: "part"
+          label: "modid",
+          field: "modid"
         },
         {
-          label: "部件编号",
-          field: "id"
+          label: "排产日期",
+          field: "schedule_date"
         },
         {
           label: "完成情况",
-          field: "isfinished"
+          field: "isfinish"
         },
         {
           label: "操作",
@@ -186,6 +209,9 @@ export default {
     }
   },
   methods: {
+    selectionChanged(params) {
+      console.log(params.columnFilters);
+    },
      // 保存修改信息
     handleSave(id) {
       // console.log(id)
@@ -286,8 +312,105 @@ export default {
         });
       })
     },
+    // 车间节点点击事件
     handleStep(id) {
-     console.log(id)
+      // console.log(id)
+      this.rows = []
+      this.dialogTableVisible = true
+      this.state = ''
+      this.nextid = ''
+      this.routeid = ''
+      var fd = new FormData()
+      fd.append("id",id)
+      fd.append("flag","show")
+      axios.post(`${this.baseURL}/craft/route.php`,fd).then((res)=>{
+        // console.log(res.data)
+        this.routeid = res.data.id
+        this.nextid = res.data.nextid
+        this.state = res.data.state
+        if(res.data.success){
+          this.rows = res.data.item
+        }
+      })
+    },
+    // 打开内层diog
+    handleOpeninner(state) {
+      if(state==0){
+        alert("该部件已经完成,不允许再继续增加节点")
+        this.dialogTableVisible = false
+      }else if(state==1){
+        alert("该节点的下一节点已经在进行,不允许再进行增加节点！")
+        this.dialogTableVisible = false
+      }else{
+        this.innerVisible = true
+        this.nextroute = ''
+      }
+    },
+    // routeid 为车间id，nextid为下车间节点的所属位置，nextroute为填入的下个车间节点名
+    handleAddRoute(routeid,nextid) {
+      // console.log(routeid)
+      // console.log(nextid)
+      // console.log(this.nextroute)
+
+      if(!this.nextroute){
+        alert("请输入节点名")
+      }else {
+        // 新增新节点的相应信息
+        var fd = new FormData()
+        fd.append("id",routeid)
+        fd.append("nextid",nextid)
+        fd.append("route",this.nextroute)
+        fd.append("flag",'addroute')
+        axios.post(`${this.baseURL}/craft/route.php`,fd).then((res)=>{
+          // console.log(res.data)
+            var fd = new FormData() //定义获取prodata的传值,并重新更新项目信息
+            fd.append('id',this.data.id)
+            fd.append('flag','project')
+            axios.post(`${this.baseURL}/project.php`,fd).then(this.getProdataSucc)
+        })
+      }
+      
+    },
+    // 获取更新后的项目信息
+    getProdataSucc(res) {
+      // console.log(res.data)
+      this.data = {}
+      // console.log(this.data)
+      if(res.data.success) {
+        alert("添加成功！")
+        this.data = res.data
+      }
+      this.dialogTableVisible = false
+      this.innerVisible = false
+    },
+    handleDelRoute(row) {
+      // console.log(row.isfinish)
+      if(row.isfinish!=='未完成'){
+        alert("该工艺无法删除！")
+      }else {
+        this.$confirm('是否删除该工序?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          var fd = new FormData()
+          fd.append("id",row.id)
+          fd.append("flag","del")
+          axios.post(`${this.baseURL}/craft/route.php`,fd).then((res)=>{
+            // console.log(res)
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+            this.dialogTableVisible = false
+          })
+        }).catch(() => {
+            this.$message({
+            type: 'info',
+            message: '取消删除!'
+          });    
+        });
+      }
     }
   }
 };

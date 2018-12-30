@@ -33,26 +33,56 @@ export default {
       columns: [
         {
           label: "班组编号",
-          field: "Serial"
+          field: "Serial",
+          filterOptions: {
+            enabled: true,
+            placeholder: "请输入",
+            filterValue: "",
+            filterDropdownItems: []
+          }
         },
         {
           label: "部件名称",
-          field: "name"
+          field: "name",
+          filterOptions: {
+            enabled: true,
+            placeholder: "请输入",
+            filterValue: "",
+            filterDropdownItems: []
+          }
         },
         {
           label: "产品类型",
-          field: "type"
+          field: "type",
+          filterOptions: {
+            enabled: true,
+            placeholder: "请输入",
+            filterValue: "",
+            filterDropdownItems: []
+          }
         },
         {
           label: "计划完成时间",
           field: "time",
           type:"date",
           dateInputFormat: 'YYYY-MM-DD',
-          dateOutputFormat: 'YYYY-M-Do'
+          dateOutputFormat: 'YYYY-M-Do',
+          filterOptions: {
+            enabled: true,
+            placeholder: "请输入",
+            filterValue: "",
+            filterDropdownItems: []
+          }
         },
         {
           label: "工作进度",
-          field: "schedule"
+          field: "schedule",
+          filterOptions: {
+            enabled: true,
+            placeholder: "请输入",
+            filterValue: "",
+            filterDropdownItems: []
+          }
         },
         {
           label: "备注",
@@ -67,12 +97,13 @@ export default {
   },
   methods:{
   	getDataInfo () {
-      axios.post('https://www.easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/workingcondition').then(this.getDataInfoSucc)
+      axios.post(`${this.baseURL}/workingcondition.php`).then(this.getDataInfoSucc)
    },
   	 getDataInfoSucc(res){
-    	res=res.data
-    	if(res.success && res.rows){
-        this.rows = res.rows
+  	 	let success = res.data.pop()
+  	 	res = res.data
+    	if(success){
+        this.rows = res
       }
 //  	console.log(res)
     }

@@ -17,7 +17,7 @@
 					<td>工单号</td>
 					<td>{{data.pro}}</td>
 					<td>零件名称</td>
-					<td colspan="4">{{data.child}}</td>
+					<td colspan="4">{{data.child_material}}</td>
 				</tr>
         <tr style="text-align: center;">
 					<td>零件数量</td>
@@ -27,7 +27,7 @@
           <td colspan="2" rowspan="2">
             <qrcode
               :value="qrcodeCard"
-              :options="{ size: 80 }"
+              :options="{ size: 95 }"
             >
             </qrcode>
           </td>
@@ -40,12 +40,12 @@
 				</tr>
         
 			</table>
-			<qrcode
+			<!-- <qrcode
         :value="qrcodePer"
         :options="{ size: 100 }"
       >
     	</qrcode>
-			<p>张三</p>
+			<p>张三</p> -->
 
 			
 		</div>
@@ -69,10 +69,9 @@ export default {
     }
 	},
 	created () {
-		this.qrcodeCard = '{"id":"'+this.$route.query.id+'","flag":"jmmes"}'
-		// console.log(this.$route.query.id)
+		// console.log(this.$route.query.modid)
 		this.getData(this.$route.query.id)
-		console.log(this.qrcodePer);
+		// console.log(this.qrcodePer);
 		document.getElementsByTagName('html')[0].style.overflow='visible'
 		document.getElementsByTagName('body')[0].style.overflow='visible'
 		document.getElementById('app').style.overflow='visible'
@@ -85,6 +84,7 @@ export default {
 			axios.post(`${this.baseURL}/part.php`,fd).then((res)=>{
 				console.log(res.data)
 				this.data = res.data
+				this.qrcodeCard = '{"id":"'+this.$route.query.id+'","flag":"jmmes","modid":"'+this.$route.query.modid+'","pid":"'+res.data.pid+'"}'
 			})
 		}
 	}
@@ -105,7 +105,7 @@ td {
     border-collapse: collapse;
 }
 .main {
-	margin-left: 50%;
+	margin-left: 32.5%;
 	transform: translateX(-50%);
 }
 @media print {

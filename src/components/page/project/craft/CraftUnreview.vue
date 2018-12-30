@@ -14,7 +14,7 @@
                 </el-col>
               </el-row>
             </el-header>
-            <el-container>
+            <el-container style="height: 600px;">
               <el-aside width="250px">
                   <el-form :inline="true">
                     <el-form-item>

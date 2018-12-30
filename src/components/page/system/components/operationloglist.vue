@@ -31,23 +31,35 @@ export default {
   data() {
     return {
       columns: [
+       {
+          label: "账号",
+          field: "account"
+        },
         {
           label: "操作内容",
           field: "content"
         },
         {
+          label: "操作日期",
+          field: "data",
+          type:"date",
+          dateInputFormat: 'YYYY-MM-DD',
+          dateOutputFormat: 'YYYY-MM-Do'
+        },
+        {
           label: "操作时间",
           field: "time",
           type:"date",
-          dateInputFormat: 'YYYY-MM-DD H',
-          dateOutputFormat: 'YYYY-M-Do H时'
+          dateInputFormat: 'HH:mm:ss',
+          dateOutputFormat: 'HH:mm:ss'
         },
         {
-          label: "备注",
-          field: "Remarks"
+          label: "操作人员",
+          field: "man"
         }
       ],
-      rows: []
+      rows: [],
+      account:'admin'
     };
   },
   mounted(){
@@ -55,14 +67,18 @@ export default {
   },
   methods:{
   	getDataInfo () {
-      axios.post('https://www.easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/operationlog').then(this.getDataInfoSucc)
+  		axios.get(`${this.baseURL}/operationloglist.php`,{
+  		  params:{
+  			  account:this.account
+  		  }
+  		}).then(this.getDataInfoSucc)
    },
   	 getDataInfoSucc(res){
+	 	let success=res.data.pop()
     	res=res.data
-    	if(res.success && res.rows){
-        this.rows = res.rows
-      }
-//  	console.log(res)
+    	if(success){
+        this.rows = res
+     }
     }
   }
 };
