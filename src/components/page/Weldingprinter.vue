@@ -405,10 +405,8 @@ export default {
             
 
             let relateId = this.$route.query.relateId //获取URL的参数
-            console.log(relateId)
             axios.get(`${this.baseURL}/basicdata/document.php?flag=getWeldingPrintData&relateId=${relateId}`)
             .then((response) => {        
-                console.log(response)
                 if(response.data.state == "success"){
                     //创建明细表
                     this.detailList = response.data.data.detailList                    

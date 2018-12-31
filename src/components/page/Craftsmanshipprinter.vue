@@ -253,8 +253,9 @@ export default {
             let relateId = this.$route.query.relateId//获取url的参数
             axios.get(`${this.baseURL}/basicdata/document.php?flag=getCraftsmanshipPrintData&relateId=${relateId}`)
             .then((response) => {
-                console.log(response)
-                this.craftsmanship = response.data.data
+                if(response.data.state == "success"){
+                    this.craftsmanship = response.data.data
+                }               
             })
             .catch(function(error){
                 console.log(error)
