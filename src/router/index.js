@@ -183,7 +183,13 @@ export default new Router({
         {
             path: '/qrcode',
             component: resolve => require(['../components/page/Qrcode.vue'], resolve),
-            meta: { title: '二维码demo' }
+            meta: { title: '产品标识卡' }
+        }, 
+        {
+            path: '/QrcodeList',
+            name: 'QrcodeList',
+            component: resolve => require(['../components/page/QrcodeList.vue'], resolve),
+            meta: { title: '排产产品标识卡' }
         },
         {
             path: '/weldingprinter',

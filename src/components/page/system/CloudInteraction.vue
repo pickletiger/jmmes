@@ -15,13 +15,13 @@
                 class="filter-tree"
                 :data="data"
                 :props="defaultProps"
-                show-checkbox
+                @node-click='handleNodeclick'
+                node-key="id"
                 default-expand-all
                 :filter-node-method="filterNode"
                 ref="tree">
             </el-tree>
         </div>
-        <el-button @click="getCheckedNodes">通过 node 获取</el-button>
     </div>
 </template>
 
@@ -56,7 +56,7 @@ export default {
                     id: 6,
                     label: '二级 2-2'
                 }, {
-                    id: 6,
+                    id: 7,
                     label: '二级 2-2'
                 }]
                 }, {
@@ -73,14 +73,12 @@ export default {
             defaultProps:{
                 children:'children',
                 label:'label'
-            },
-            leafOnly: false, 
-            includeHalfChecked: true
+            }
         }
     },
     watch: {
         filterText(val) {
-        this.$refs.tree2.filter(val);
+        this.$refs.tree.filter(val);
         }
     },
 
@@ -89,8 +87,27 @@ export default {
             if (!value) return true;
             return data.label.indexOf(value) !== -1;
         },
-        getCheckedNodes() {
-            console.log(this.$refs.tree.getCheckedNodes(this.leafOnly,this.includeHalfChecked))
+        handleNodeclick(data,node,self) {
+            // console.log(data)
+            console.log(node.data.label)
+            // console.log(self)
+            this.$confirm('是否删除部件： '+node.data.label+' ?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+                }).then(() => {
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                    this.$refs.tree.remove(node)
+                    console.log(this.data)
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });          
+            });
         }
         
     }
