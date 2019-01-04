@@ -23,8 +23,8 @@
                 <tr class="detailList" v-for="(item,index) in detailList">
                     <td>{{ item.serial }}</td>
                     <td>{{ item.processnumber }}</td>
-                    <td>{{ item.producname }}</td>
-                    <td>{{ item.productcode }}</td>
+                    <td>{{ item.partname }}</td>
+                    <td>{{ item.partdrawingnumber }}</td>
                     <td>{{ item.pageNum }}</td>
                     <td>{{ item.level }}</td>
                     <td>&nbsp;</td>

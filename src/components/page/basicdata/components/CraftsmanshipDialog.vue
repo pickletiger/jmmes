@@ -14,23 +14,23 @@
             <table class="craftsmanshipTableHeader">
                 <tr>
                 <td>产品名称</td>
-                <td><el-input v-model="craftsmanshipTableHeader.productName"/></td>
+                <td><input v-model="craftsmanshipTableHeader.productName"/></td>
                 <td>所属部件名称</td>
-                <td><el-input v-model="craftsmanshipTableHeader.ownPartName"/></td>
+                <td><input v-model="craftsmanshipTableHeader.ownPartName"/></td>
                 <td colspan="4">零部件名称</td>
-                <td><el-input v-model="craftsmanshipTableHeader.partsName"/></td>
+                <td><input v-model="craftsmanshipTableHeader.partsName"/></td>
                 <td colspan="4">工件编号</td>
-                <td><el-input v-model="craftsmanshipTableHeader.workpieceNumber"/></td>
+                <td><input v-model="craftsmanshipTableHeader.workpieceNumber"/></td>
                 </tr>
                 <tr>
                 <td>产品图号</td>
-                <td><el-input v-model="craftsmanshipTableHeader.productDrawingNumber"/></td>
+                <td><input v-model="craftsmanshipTableHeader.productDrawingNumber"/></td>
                 <td>所属部件图号</td>
-                <td><el-input v-model="craftsmanshipTableHeader.ownPartDrawingNumber"/></td>
+                <td><input v-model="craftsmanshipTableHeader.ownPartDrawingNumber"/></td>
                 <td colspan="4">零部件图号</td>
-                <td><el-input v-model="craftsmanshipTableHeader.partsDrawingNumber"/></td>
+                <td><input v-model="craftsmanshipTableHeader.partsDrawingNumber"/></td>
                 <td colspan="4">数量</td>
-                <td><el-input v-model="craftsmanshipTableHeader.quantity"/></td>
+                <td><input v-model="craftsmanshipTableHeader.quantity"/></td>
                 </tr>
             </table>
             <table class="craftsmanshipTableBody_1" v-if="tablecraftsmanshipBodyVisible[0]">
@@ -55,28 +55,28 @@
                 <td>16#</td>
                 </tr>
                 <tr v-for="(item,index) in craftsmanshipTableBody_1">
-                <td><el-input v-model="item.serialNumber" /></td>
-                <td><el-input v-model="item.processFlow" /></td>
-                <td><el-input v-model="item.inspectionContent" /></td>
-                <td><el-input v-model="item.skillsRequirement" maxlength="7" placeholder="限7个字" /></td>
-                <td><el-input v-model="item.selfTest_13" maxlength="7" placeholder="限7个字" /></td>
-                <td><el-input v-model="item.selfTest_14" maxlength="7" placeholder="限7个字" /></td>
-                <td><el-input v-model="item.selfTest_15" maxlength="7" placeholder="限7个字" /></td>
-                <td><el-input v-model="item.selfTest_16" maxlength="7" placeholder="限7个字" /></td>
-                <td><el-input v-model="item.signature_1" maxlength="7" placeholder="限7个字" /></td>
-                <td><el-input v-model="item.qualityInspection_13" maxlength="7" placeholder="限7个字" /></td>
-                <td><el-input v-model="item.qualityInspection_14" maxlength="7" placeholder="限7个字" /></td>
-                <td><el-input v-model="item.qualityInspection_15" maxlength="7" placeholder="限7个字" /></td>
-                <td><el-input v-model="item.qualityInspection_16" maxlength="7" placeholder="限7个字" /></td>
-                <td><el-input v-model="item.signatture_2" maxlength="7" placeholder="限7个字" /></td>
+                <td><input v-model="item.serialNumber" /></td>
+                <td><input v-model="item.processFlow" /></td>
+                <td><input v-model="item.inspectionContent" /></td>
+                <td><input v-model="item.skillsRequirement" maxlength="7" placeholder="限7个字" /></td>
+                <td><input v-model="item.selfTest_13" maxlength="7" placeholder="限7个字" /></td>
+                <td><input v-model="item.selfTest_14" maxlength="7" placeholder="限7个字" /></td>
+                <td><input v-model="item.selfTest_15" maxlength="7" placeholder="限7个字" /></td>
+                <td><input v-model="item.selfTest_16" maxlength="7" placeholder="限7个字" /></td>
+                <td><input v-model="item.signature_1" maxlength="7" placeholder="限7个字" /></td>
+                <td><input v-model="item.qualityInspection_13" maxlength="7" placeholder="限7个字" /></td>
+                <td><input v-model="item.qualityInspection_14" maxlength="7" placeholder="限7个字" /></td>
+                <td><input v-model="item.qualityInspection_15" maxlength="7" placeholder="限7个字" /></td>
+                <td><input v-model="item.qualityInspection_16" maxlength="7" placeholder="限7个字" /></td>
+                <td><input v-model="item.signatture_2" maxlength="7" placeholder="限7个字" /></td>
                 </tr>
                 <tr>
                 <td colspan="4">结论</td>
-                <td colspan="10"><el-input v-model="craftsmanshipTableBodyResult.conclusion" /></td>
+                <td colspan="10"><input v-model="craftsmanshipTableBodyResult.conclusion" /></td>
                 </tr>
                 <tr>
                 <td colspan="4">不符合确认</td>
-                <td colspan="10"><el-input v-model="craftsmanshipTableBodyResult.inconsistentConfirmation" /></td>
+                <td colspan="10"><input v-model="craftsmanshipTableBodyResult.inconsistentConfirmation" /></td>
                 </tr>
             </table>
             <table class="craftsmanshipTableBody_2" v-if="tablecraftsmanshipBodyVisible[1]">
@@ -89,21 +89,21 @@
                 <td>签名/日期</td>
                 </tr>
                 <tr  v-for="(item,index) in craftsmanshipTableBody_2.rowsData">
-                <td class="serialNumber"><el-input v-model="item.serialNumber" /></td>
-                <td><el-input v-model="item.processFlow" /></td>
-                <td><el-input v-model="item.inspectionContent" /></td>
-                <td><el-input v-model="item.skillsRequirement" /></td>
-                <td><el-input v-model="item.selfTest" /></td>
-                <td><el-input v-model="item.signature" /></td>
+                <td class="serialNumber"><input v-model="item.serialNumber" /></td>
+                <td><input v-model="item.processFlow" /></td>
+                <td><input v-model="item.inspectionContent" /></td>
+                <td><input v-model="item.skillsRequirement" /></td>
+                <td><input v-model="item.selfTest" /></td>
+                <td><input v-model="item.signature" /></td>
                 </tr>          
                 <tr>
                 <td colspan="4">结论</td>
-                <td><el-input v-model="craftsmanshipTableBodyResult.conclusion" /></td>
+                <td><input v-model="craftsmanshipTableBodyResult.conclusion" /></td>
                 <td>&nbsp;</td>
                 </tr>
                 <tr>
                 <td colspan="4">不符合确认</td>
-                <td><el-input v-model="craftsmanshipTableBodyResult.inconsistentConfirmation" /></td>
+                <td><input v-model="craftsmanshipTableBodyResult.inconsistentConfirmation" /></td>
                 <td>&nbsp;</td>
                 </tr>
                 <tr>
@@ -120,18 +120,18 @@
             <table class="craftsmanshipTableFooter">
                 <tr>
                 <td colspan="2">最终结论：</td>
-                <td colspan="3"><el-input v-model="craftsmanshipTableFooter.finalConclusion"/></td>
+                <td colspan="3"><input v-model="craftsmanshipTableFooter.finalConclusion"/></td>
                 <td>检验员：（日期）</td>
-                <td><el-input v-model="craftsmanshipTableFooter.inspector"/></td>
+                <td><input v-model="craftsmanshipTableFooter.inspector"/></td>
                 <td>检验审核：（日期）</td>
-                <td><el-input v-model="craftsmanshipTableFooter.inspectionAudit"/></td>
+                <td><input v-model="craftsmanshipTableFooter.inspectionAudit"/></td>
                 </tr>
                 <tr>
-                <td><el-input v-model="craftsmanshipTableFooter.mark"/></td>
-                <td><el-input v-model="craftsmanshipTableFooter.numberOfPlaces"/></td>
-                <td><el-input v-model="craftsmanshipTableFooter.changeTheFileNumber"/></td>
-                <td><el-input v-model="craftsmanshipTableFooter.signature"/></td>
-                <td><el-input v-model="craftsmanshipTableFooter.date"/></td>
+                <td><input v-model="craftsmanshipTableFooter.mark"/></td>
+                <td><input v-model="craftsmanshipTableFooter.numberOfPlaces"/></td>
+                <td><input v-model="craftsmanshipTableFooter.changeTheFileNumber"/></td>
+                <td><input v-model="craftsmanshipTableFooter.signature"/></td>
+                <td><input v-model="craftsmanshipTableFooter.date"/></td>
                 <td colspan="2">编制（日期） </td>
                 <td colspan="2">审核（日期）</td>
                 </tr>
@@ -141,8 +141,8 @@
                 <td>更改文件号</td>
                 <td>签名</td>
                 <td>日期</td>
-                <td colspan="2"><el-input v-model="craftsmanshipTableFooter.establishment"/></td>
-                <td colspan="2"><el-input v-model="craftsmanshipTableFooter.review"/></td>
+                <td colspan="2"><input v-model="craftsmanshipTableFooter.establishment"/></td>
+                <td colspan="2"><input v-model="craftsmanshipTableFooter.review"/></td>
                 </tr>
             </table>
             <div slot="footer" class="dialog-footer">
@@ -637,6 +637,11 @@ export default {
 </script>
 
 <style scoped>
+input {
+    border: none;
+    height: 30px;
+    width: 100%;
+}
   .tableOne,.tableTwo,.tableThree,.tableFour,.craftsmanshipTableHeader,.craftsmanshipTableBody_1,.craftsmanshipTableFooter{
     border-collapse: collapse;
     text-align: center;
@@ -645,11 +650,6 @@ export default {
   .tableOne tr,td,th,.tableTwo tr,td,th,.tableThree tr,td,th,.tableFour tr,td,th,.craftsmanshipTableHeader tr,td,th,.craftsmanshipTableBody_1 tr,td,th,.craftsmanshipTableFooter tr,td,th{
     border: 1px solid black;
     padding: 2px;
-  }
-  .tableOne input,.tableTwo input,.tableThree input,.tableFour input,.craftsmanshipTableHeader input,.craftsmanshipTableBody_1 input,.craftsmanshipTableFooter input{
-    width: 100%;
-    height: 100%;
-    border: none;   
   }
   .craftsmanshipTableBody_2{
     width: 100%;
@@ -660,11 +660,6 @@ export default {
     border: 1px solid black;
     padding: 2px;
   }
-  .craftsmanshipTableBody_2 input{
-    width: 100%;
-    height: 100%;
-    border: none; 
-  }
   .craftsmanshipTableBody_3{
     width: 100%;
     border-collapse: collapse;
@@ -674,11 +669,6 @@ export default {
   .weldingsequence{
     height: 25px;
     width: 10%
-  }
-  .weldingsequenceinput{
-    width: 100%;
-    height: 500px;
-    border: none; 
   }
   .tableFour{
     width: 100%;

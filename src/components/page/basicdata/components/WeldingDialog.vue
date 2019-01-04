@@ -5,281 +5,278 @@
         title="焊接工艺及检验记录" 
         :visible.sync="dialogWeldingVisible"
         width="100%">
-        <div slot="title" class="dialog-header">
-            <h3>焊接工艺及检验记录</h3>
-            <!-- <el-button type="primary" v-if="!weldingTableOne.contactId" @click="resetInput">重置输入</el-button> -->
-        </div>
-        <table class="tableOne">
-            <tr>
-            <td>工艺卡号</td>
-            <td><el-input v-model="weldingTableOne.processNumber"/></td>
-            <td>数量</td>
-            <td><el-input  v-model="weldingTableOne.quantity"/></td>
-            <td>工件编号</td>
-            <td><el-input v-model="weldingTableOne.workpieceNumber"/></td>
-            <td>车间</td>
-            <td><el-input v-model="weldingTableOne.workshop"/></td>
-            <td>工单号</td>
-            <td><el-input v-model="weldingTableOne.workOrderNumber"/></td>
-            </tr>
-            <tr>
-            <td>产品名称</td>
-            <td><el-input v-model="weldingTableOne.productName"/></td>
-            <td>产品代号</td>
-            <td><el-input v-model="weldingTableOne.productCode"/></td>
-            <td>部件名称</td>
-            <td><el-input v-model="weldingTableOne.partName"/></td>
-            <td>部件图号</td>
-            <td colspan="3"><el-input v-model="weldingTableOne.partDrawingNumber"/></td>	          
-            </tr>
+            <div slot="title" class="dialog-header">
+                <h3>焊接工艺及检验记录</h3>
+                <!-- <el-button type="primary" v-if="!weldingTableOne.contactId" @click="resetInput">重置输入</el-button> -->
+            </div>
+            <table class="tableOne">
+                <tr>
+                    <td>工艺卡号</td>
+                    <td><input v-model="weldingTableOne.processNumber"/></td>
+                    <td>数量</td>
+                    <td><input  v-model="weldingTableOne.quantity"/></td>
+                    <td>工件编号</td>
+                    <td><input v-model="weldingTableOne.workpieceNumber"/></td>
+                    <td>车间</td>
+                    <td><input v-model="weldingTableOne.workshop"/></td>
+                    <td>工单号</td>
+                    <td><input v-model="weldingTableOne.workOrderNumber"/></td>
+                </tr>
+                <tr>
+                    <td>产品名称</td>
+                    <td><input v-model="weldingTableOne.productName"/></td>
+                    <td>产品代号</td>
+                    <td><input v-model="weldingTableOne.productCode"/></td>
+                    <td>部件名称</td>
+                    <td><input v-model="weldingTableOne.partName"/></td>
+                    <td>部件图号</td>
+                    <td colspan="3"><input v-model="weldingTableOne.partDrawingNumber"/></td>	          
+                </tr>
             </table>
-        <table class="tableTwo">
-            <tr>
-            <td rowspan="2" class="serialNumber">焊缝编号</td>
-            <td colspan="4" rowspan="2">材质及规格</td>
-            <td rowspan="2">焊接方法</td>
-            <td rowspan="2">坡口形式</td>
-            <td rowspan="2">焊材</td>
-            <td rowspan="2">规格</td>
-            <td colspan="2">焊接层次</td>
-            <td rowspan="2">保护气体</td>
-            <td rowspan="2">焊接电流(A)</td>
-            <td colspan="2">实际操作电流(A)</td>
-            <td rowspan="2">焊接电压(V)</td>
-            <td colspan="2">实际操作电压(V)</td>
-            <td rowspan="2">预焊接工艺规程编号</td>
-            <td rowspan="2">焊接工艺评定编号</td>
-            <td rowspan="2">探伤要求</td>
-            <td rowspan="2">钢印号</td>
-            </tr>
-            <tr>
-            <td>层数</td>
-            <td>道数</td>
-            <td colspan="2">检验员确认</td>
-            <td colspan="2">检验员确认</td>
-            </tr>
-            <tr v-for="(item,index) in weldingTableTwo_1">
-                <td><el-input v-model="item.weldNumber" @change="weldNumberChangeCompletion(index)" /></td>
-                <td>
-                <el-select 
-                    v-model="item.materialAndSpecifications_1" 
-                    size="mini" 
-                    placeholder=""
-                    @change="completionInformation(index)">
-                    <el-option
-                    v-for="item in materialOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                    </el-option>
-                </el-select>
-                </td>
-                <td>
-                <el-select 
-                    v-model="item.materialAndSpecifications_1_thickness" 
-                    size="mini" 
-                    placeholder=""
-                    @change="thicknessChange(index)">
-                    <el-option
-                    v-for="item in thicknessOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                    </el-option>
-                </el-select>
-                </td>
-                <td>
-                <el-select 
-                    v-model="item.materialAndSpecifications_2" 
-                    size="mini" 
-                    placeholder=""
-                    @change="completionInformation(index)">
-                    <el-option
-                    v-for="item in materialOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                    </el-option>
-                </el-select>
-                </td>
-                <td>
-                <el-select 
-                    v-model="item.materialAndSpecifications_2_thickness" 
-                    size="mini" 
-                    placeholder=""
-                    @change="thicknessChange(index)">
-                    <el-option
-                    v-for="item in thicknessOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                    </el-option>
-                </el-select>
-                </td>
-                <td>
-                <el-select
-                    v-model="item.weldingMethod" 
-                    size="mini" 
-                    placeholder=""
-                    @change="mothodChangeConsumables(index)">
-                    <el-option 
-                    v-for="item in weldingMethodOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                    </el-option>
-                </el-select>
-                </td>
-                <!-- <td><el-input v-model="item.weldingMethod" /></td> -->
-                <!-- <td><el-input v-model="item.grooveForm" /></td> -->
-                <td>
-                <el-select
-                    v-model="item.grooveForm" 
-                    size="mini" 
-                    placeholder="">
-                    <el-option 
-                    v-for="item in grooveFormOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                    </el-option>
-                </el-select>
-                </td>
-                <td><el-input v-model="item.consumables" /></td>
-                <td><el-input v-model="item.specifications" /></td>
-                <td><el-input v-model="item.weldingLevel_numberOfLayers" /></td>
-                <td><el-input v-model="item.weldingLevel_numberOftracks" /></td>
-                <td><el-input v-model="item.protectiveGas" /></td>
-                <td><el-input v-model="item.weldingCurrent" /></td>
-                <td><el-input v-model="item.actualCurrent_1" /></td>
-                <td><el-input v-model="item.actualCurrent_2" /></td>
-                <td><el-input v-model="item.weldingVoltage" /></td>
-                <td><el-input v-model="item.actualVoltage_1" /></td>
-                <td><el-input v-model="item.actualVoltage_2" /></td>
-                <td><el-input v-model="item.specificationNumber" /></td>
-                <td><el-input v-model="item.ratingNumber" /></td>
-                <!-- <td><el-input v-model="item.flawDetectionRequirements" /></td> -->
-                <td>
-                <el-select
-                    v-model="item.flawDetectionRequirements" 
-                    size="mini" 
-                    placeholder="">
-                    <el-option 
-                    v-for="item in flawDetectionRequirementsOptions"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                    </el-option>
-                </el-select>
-                </td>
-                <td><el-input v-model="item.steelStamp" /></td>
-            </tr>
-            <tr>
-            <td colspan="22" align="center" valign="middle">表1焊缝检验记录</td>
-            </tr>
-            <tr>
-            <td>控制点</td>
-            <td>序号</td>
-            <td colspan="4">检查内容</td>
-            <td colspan="6">技术（工艺）要求</td>
-            <td colspan="6">检验结果</td>
-            <td colspan="4">检验员签名（日期）</td>
-            </tr>
-            <tr v-for="(item,index) in weldingTableTwo_2">
-            <!-- <td><el-input v-model="item.controlPoint" /></td>
-            <td><el-input v-model="item.serialNumber" /></td> -->
-            <td rowspan="6" v-if="index == 0">焊中检查</td>
-            <td rowspan="2" v-if="index == 6">焊后检查</td>
-            <td><el-input v-model="item.serialNumber" /></td>
-            <td colspan="4"><el-input v-model="item.checkContent" /></td>
-            <td colspan="6"><el-input v-model="item.processRequirements" /></td>
-            <td colspan="6"><el-input v-model="item.testResult" /></td>
-            <td colspan="4"><el-input v-model="item.inspectorSingnature" /></td>
-            </tr>
+            <table class="tableTwo">
+                <tr>
+                    <td rowspan="2" class="serialNumber">焊缝编号</td>
+                    <td colspan="4" rowspan="2">材质及规格</td>
+                    <td rowspan="2">焊接方法</td>
+                    <td rowspan="2">坡口形式</td>
+                    <td rowspan="2">焊材</td>
+                    <td rowspan="2">规格</td>
+                    <td colspan="2">焊接层次</td>
+                    <td rowspan="2">保护气体</td>
+                    <td rowspan="2">焊接电流(A)</td>
+                    <td colspan="2">实际操作电流(A)</td>
+                    <td rowspan="2">焊接电压(V)</td>
+                    <td colspan="2">实际操作电压(V)</td>
+                    <td rowspan="2">预焊接工艺规程编号</td>
+                    <td rowspan="2">焊接工艺评定编号</td>
+                    <td rowspan="2">探伤要求</td>
+                    <td rowspan="2">钢印号</td>
+                </tr>
+                <tr>
+                    <td>层数</td>
+                    <td>道数</td>
+                    <td colspan="2">检验员确认</td>
+                    <td colspan="2">检验员确认</td>
+                </tr>
+                <tr v-for="(item,index) in weldingTableTwo_1">
+                    <td><input v-model="item.weldNumber" @change="weldNumberChangeCompletion(index)" /></td>
+                    <td>
+                        <el-select 
+                            v-model="item.materialAndSpecifications_1" 
+                            size="mini" 
+                            placeholder=""
+                            @change="completionInformation(index)">
+                            <el-option
+                            v-for="item in materialOptions"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </td>
+                    <td>
+                        <el-select 
+                            v-model="item.materialAndSpecifications_1_thickness" 
+                            size="mini" 
+                            placeholder=""
+                            @change="thicknessChange(index)">
+                            <el-option
+                            v-for="item in thicknessOptions"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </td>
+                    <td>
+                        <el-select 
+                            v-model="item.materialAndSpecifications_2" 
+                            size="mini" 
+                            placeholder=""
+                            @change="completionInformation(index)">
+                            <el-option
+                            v-for="item in materialOptions"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </td>
+                    <td>
+                        <el-select 
+                            v-model="item.materialAndSpecifications_2_thickness" 
+                            size="mini" 
+                            placeholder=""
+                            @change="thicknessChange(index)">
+                            <el-option
+                            v-for="item in thicknessOptions"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </td>
+                    <td>
+                        <el-select
+                            v-model="item.weldingMethod" 
+                            size="mini" 
+                            placeholder=""
+                            @change="mothodChangeConsumables(index)">
+                            <el-option 
+                            v-for="item in weldingMethodOptions"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </td>
+                    <td>
+                        <el-select
+                            v-model="item.grooveForm" 
+                            size="mini" 
+                            placeholder=""
+                            @change="grooveFormChangeCompletion(index)">
+                            <el-option 
+                            v-for="item in grooveFormOptions"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </td>
+                    <td><input v-model="item.consumables" /></td>
+                    <td><input v-model="item.specifications" /></td>
+                    <td><input v-model="item.weldingLevel_numberOfLayers" /></td>
+                    <td><input v-model="item.weldingLevel_numberOftracks" /></td>
+                    <td><input v-model="item.protectiveGas" /></td>
+                    <td><input v-model="item.weldingCurrent" /></td>
+                    <td><input v-model="item.actualCurrent_1" /></td>
+                    <td><input v-model="item.actualCurrent_2" /></td>
+                    <td><input v-model="item.weldingVoltage" /></td>
+                    <td><input v-model="item.actualVoltage_1" /></td>
+                    <td><input v-model="item.actualVoltage_2" /></td>
+                    <td><input v-model="item.specificationNumber" /></td>
+                    <td><input v-model="item.ratingNumber" /></td>
+                    <!-- <td><input v-model="item.flawDetectionRequirements" /></td> -->
+                    <td>
+                        <el-select
+                            v-model="item.flawDetectionRequirements" 
+                            size="mini" 
+                            placeholder="">
+                            <el-option 
+                            v-for="item in flawDetectionRequirementsOptions"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </td>
+                    <td><input v-model="item.steelStamp" /></td>
+                </tr>
+                <tr>
+                    <td colspan="22" align="center" valign="middle">表1焊缝检验记录</td>
+                </tr>
+                <tr>
+                    <td>控制点</td>
+                    <td>序号</td>
+                    <td colspan="4">检查内容</td>
+                    <td colspan="6">技术（工艺）要求</td>
+                    <td colspan="6">检验结果</td>
+                    <td colspan="4">检验员签名（日期）</td>
+                </tr>
+                <tr v-for="(item,index) in weldingTableTwo_2">            
+                    <td rowspan="6" v-if="index == 0">焊中检查</td>
+                    <td rowspan="2" v-if="index == 6">焊后检查</td>
+                    <td><input v-model="item.serialNumber" /></td>
+                    <td colspan="4"><input v-model="item.checkContent" /></td>
+                    <td colspan="6"><input v-model="item.processRequirements" /></td>
+                    <td colspan="6"><input v-model="item.testResult" /></td>
+                    <td colspan="4"><input v-model="item.inspectorSingnature" /></td>
+                </tr>
             </table>
-        <table class="tableThree">
-            <tr>
-            <td rowspan="2">焊接编号</td>
-            <td colspan="3">焊缝待焊区域清理</td>
-            <td colspan="3">坡口形式、大小</td>
-            <td colspan="3">组立间隙</td>
-            </tr>
-            <tr>
-            <td>工艺要求</td>
-            <td>检验结果</td>
-            <td>检验员签名（日期）</td>
-            <td>工艺要求</td>
-            <td>检验结果</td>
-            <td>检验员签名（日期）</td>
-            <td>工艺要求</td>
-            <td>检验结果</td>
-            <td>检验员签名（日期）</td>
-            </tr>
-            <tr v-for="(item,index) in weldingTableThree_1">
-            <td><el-input v-model="item.weldNumber" /></td>
-            <td><el-input v-model="item.processRequirements_1" /></td>
-            <td><el-input v-model="item.testResult_1" /></td>
-            <td><el-input v-model="item.inspectorSingnature_1" /></td>
-            <td><el-input v-model="item.processRequirements_2" /></td>
-            <td><el-input v-model="item.testResult_2" /></td>
-            <td><el-input v-model="item.inspectorSingnature_2" /></td>
-            <td><el-input v-model="item.processRequirements_3" /></td>
-            <td><el-input v-model="item.testResult_3" /></td>
-            <td><el-input v-model="item.inspectorSingnature_3" /></td>
-            </tr>
-            <tr>
-            <td rowspan="2">焊缝编号</td>
-            <td colspan="3">层间清理</td>
-            <td colspan="3">焊脚尺寸</td>
-            <td colspan="3">焊缝外观质量</td>
-            </tr>
-            <tr>
-            <td>工艺要求</td>
-            <td>检验结果</td>
-            <td>检验员签名（日期）</td>
-            <td>工艺要求</td>
-            <td>检验结果</td>
-            <td>检验员签名（日期）</td>
-            <td>工艺要求</td>
-            <td>检验结果</td>
-            <td>检验员签名（日期）</td>
-            </tr>
-            <tr v-for="(item,index) in weldingTableThree_2">
-            <td><el-input v-model="item.weldNumber" /></td>
-            <td><el-input v-model="item.processRequirements_1" /></td>
-            <td><el-input v-model="item.testResult_1" /></td>
-            <td><el-input v-model="item.inspectorSingnature_1" /></td>
-            <td><el-input v-model="item.processRequirements_2" /></td>
-            <td><el-input v-model="item.testResult_2" /></td>
-            <td><el-input v-model="item.inspectorSingnature_2" /></td>
-            <td><el-input v-model="item.processRequirements_3" /></td>
-            <td><el-input v-model="item.testResult_3" /></td>
-            <td><el-input v-model="item.inspectorSingnature_3" /></td>
-            </tr>
-            <tr>
-            <td>终检结果</td>
-            <td colspan="3"><el-input v-model="weldingTableThree_3.finalInspectionResult" /></td>
-            <td>检验员签名</td>
-            <td colspan="3"><el-input v-model="weldingTableThree_3.inspectorSingnature" /></td>
-            <td>日期</td>
-            <td><el-input v-model="weldingTableThree_3.date" /></td>
-            </tr>
-        </table>
-        <table class="tableFour">
-            <tr>
-            <td class="weldingsequence">焊接顺序</td>
-            <td rowspan="2" id="imageBox" ref="imageBox" @drop="drop($event,'0')" @dragover="allowDrop($event)" v-html="weldngTableFour.imgHtml">
-                
-            </td>
-            </tr>
-            <tr>
-            <td><el-input class="weldingsequenceinput" v-model="weldngTableFour.weldingSequence" /></td>
-            </tr>
-        </table>
-        <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogWeldingVisible = false">取 消</el-button>
-            <el-button type="primary" @click="weldingSaveData">确 定</el-button>
-        </div>
+            <table class="tableThree">
+                <tr>
+                    <td rowspan="2">焊接编号</td>
+                    <td colspan="3">焊缝待焊区域清理</td>
+                    <td colspan="3">坡口形式、大小</td>
+                    <td colspan="3">组立间隙</td>
+                </tr>
+                <tr>
+                    <td>工艺要求</td>
+                    <td>检验结果</td>
+                    <td>检验员签名（日期）</td>
+                    <td>工艺要求</td>
+                    <td>检验结果</td>
+                    <td>检验员签名（日期）</td>
+                    <td>工艺要求</td>
+                    <td>检验结果</td>
+                    <td>检验员签名（日期）</td>
+                </tr>
+                <tr v-for="(item,index) in weldingTableThree_1">
+                    <td><input v-model="item.weldNumber" /></td>
+                    <td><input v-model="item.processRequirements_1" /></td>
+                    <td><input v-model="item.testResult_1" /></td>
+                    <td><input v-model="item.inspectorSingnature_1" /></td>
+                    <td><input v-model="item.processRequirements_2" /></td>
+                    <td><input v-model="item.testResult_2" /></td>
+                    <td><input v-model="item.inspectorSingnature_2" /></td>
+                    <td><input v-model="item.processRequirements_3" /></td>
+                    <td><input v-model="item.testResult_3" /></td>
+                    <td><input v-model="item.inspectorSingnature_3" /></td>
+                </tr>
+                <tr>
+                    <td rowspan="2">焊缝编号</td>
+                    <td colspan="3">层间清理</td>
+                    <td colspan="3">焊脚尺寸</td>
+                    <td colspan="3">焊缝外观质量</td>
+                </tr>
+                <tr>
+                    <td>工艺要求</td>
+                    <td>检验结果</td>
+                    <td>检验员签名（日期）</td>
+                    <td>工艺要求</td>
+                    <td>检验结果</td>
+                    <td>检验员签名（日期）</td>
+                    <td>工艺要求</td>
+                    <td>检验结果</td>
+                    <td>检验员签名（日期）</td>
+                </tr>
+                <tr v-for="(item,index) in weldingTableThree_2">
+                    <td><input v-model="item.weldNumber" /></td>
+                    <td><input v-model="item.processRequirements_1" /></td>
+                    <td><input v-model="item.testResult_1" /></td>
+                    <td><input v-model="item.inspectorSingnature_1" /></td>
+                    <td><input v-model="item.processRequirements_2" /></td>
+                    <td><input v-model="item.testResult_2" /></td>
+                    <td><input v-model="item.inspectorSingnature_2" /></td>
+                    <td><input v-model="item.processRequirements_3" /></td>
+                    <td><input v-model="item.testResult_3" /></td>
+                    <td><input v-model="item.inspectorSingnature_3" /></td>
+                </tr>
+                <tr>
+                <td>终检结果</td>
+                    <td colspan="3"><input v-model="weldingTableThree_3.finalInspectionResult" /></td>
+                    <td>检验员签名</td>
+                    <td colspan="3"><input v-model="weldingTableThree_3.inspectorSingnature" /></td>
+                    <td>日期</td>
+                    <td><input v-model="weldingTableThree_3.date" /></td>
+                </tr>
+            </table>
+            <table class="tableFour">
+                <tr>
+                    <td class="weldingsequence">焊接顺序</td>
+                    <td rowspan="2" id="imageBox" ref="imageBox" @drop="drop($event,'0')" @dragover="allowDrop($event)" v-html="weldngTableFour.imgHtml"></td>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="weldingsequenceinput" v-model="weldngTableFour.weldingSequence" />
+                    </td>
+                </tr>
+            </table>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogWeldingVisible = false">取 消</el-button>
+                <el-button type="primary" @click="weldingSaveData">确 定</el-button>
+            </div>
         </el-dialog>
     </div>
 </template>
@@ -909,19 +906,32 @@ export default {
             //  this.weldingTableTwo_1[index]["weldNumber"]
             this.weldingTableThree_1[index]["weldNumber"] = this.weldingTableTwo_1[index]["weldNumber"]
             this.weldingTableThree_1[index]["processRequirements_1"] = "焊缝两侧30mm范围内打磨见白"
-            this.weldingTableThree_1[index]["processRequirements_2"] = "角焊缝"
+            // this.weldingTableThree_1[index]["processRequirements_2"] = "角焊缝"
             this.weldingTableThree_1[index]["processRequirements_3"] = "≤2"
 
             this.weldingTableThree_2[index]["weldNumber"] = this.weldingTableTwo_1[index]["weldNumber"]
             this.weldingTableThree_2[index]["processRequirements_1"] = "清理干净"
             this.weldingTableThree_2[index]["processRequirements_2"] = "6"
             this.weldingTableThree_2[index]["processRequirements_3"] = "按检验标准A级"
+        },
+        //选择坡口形式时进行操作
+        grooveFormChangeCompletion(index){
+            this.weldingTableThree_1[index]["processRequirements_2"] = this.weldingTableTwo_1[index]["grooveForm"];
         }
     }
 }
 </script>
 
 <style scoped>
+input {
+    border: none;
+    height: 30px;
+    width: 100%;
+}
+.weldingsequenceinput{
+    height: 450px;
+}
+
 .tableOne,.tableTwo,.tableThree,.tableFour,.craftsmanshipTableHeader,.craftsmanshipTableBody_1,.craftsmanshipTableFooter{
     border-collapse: collapse;
     text-align: center;
@@ -931,11 +941,7 @@ export default {
     border: 1px solid black;
     padding: 2px;
   }
-  .tableOne input,.tableTwo input,.tableThree input,.tableFour input,.craftsmanshipTableHeader input,.craftsmanshipTableBody_1 input,.craftsmanshipTableFooter input{
-    width: 100%;
-    height: 100%;
-    border: none;   
-  }
+  
   .craftsmanshipTableBody_2{
     width: 100%;
     border-collapse: collapse;
@@ -945,11 +951,7 @@ export default {
     border: 1px solid black;
     padding: 2px;
   }
-  .craftsmanshipTableBody_2 input{
-    width: 100%;
-    height: 100%;
-    border: none; 
-  }
+  
   .craftsmanshipTableBody_3{
     width: 100%;
     border-collapse: collapse;
@@ -959,11 +961,6 @@ export default {
   .weldingsequence{
     height: 25px;
     width: 10%
-  }
-  .weldingsequenceinput{
-    width: 100%;
-    height: 500px;
-    border: none; 
   }
   .tableFour{
     width: 100%;
