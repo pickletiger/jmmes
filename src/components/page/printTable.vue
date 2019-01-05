@@ -42,7 +42,7 @@
           <td></td>
           <td>{{item.remark}}</td>
           <td>
-            <barcode :value="'{num:' + item.figure_number + '}'" :options="barcode_option"></barcode>
+            <barcode :value='`{"num":"${item.figure_number}"}`' :options="barcode_option"></barcode>
           </td>
         </tr>
       </table>
