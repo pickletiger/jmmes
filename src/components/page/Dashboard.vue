@@ -15,34 +15,34 @@
                             <div class="user-info-list">上次登录时间：<span>2018-01-01</span></div>
                             <div class="user-info-list">上次登录地点：<span>东莞</span></div>
                         </el-card>
-                        <el-card shadow="hover">
+                        <el-card shadow="hover" >
                             <div slot="header" class="clearfix">
                                 <span>个人信息</span>
                             </div>
                             <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign">
                                 <el-form-item label="姓名">
-                                    <el-input v-model="formLabelAlign.name"></el-input>
+                                    <el-input v-model="name"></el-input>
                                 </el-form-item>
                                 <el-form-item label="账号">
-                                    <el-input v-model="formLabelAlign.region" readonly="readonly"></el-input>
+                                    <el-input v-model="account"></el-input>
                                 </el-form-item>
                                 <el-form-item label="密码">
-                                    <el-input v-model="formLabelAlign.type"></el-input>
+                                    <el-input v-model="postword"></el-input>
                                 </el-form-item>
                             </el-form>
-                            <el-button type="danger">保存</el-button>
+                            <el-button type="danger" style="float: right; margin-bottom:10px" @click="person_save()">保存</el-button>
                         </el-card>
                     </el-col>
                 </el-row>
             </el-col>
             <el-col :span="16">
-                <el-card shadow="hover" :body-style="{ height: '304px'}">
+                <el-card shadow="hover" >
                     <div slot="header" class="clearfix">
                         <span>消息通知</span>
                     </div>
                     <div class="container">
-                        <el-header style="text-align: right; font-size: 12px; height: 20px">
-                            <el-button type="primary" @click="canupload = true" icon="el-icon-edit" circle></el-button>
+                        <el-header style="text-align: right; font-size: 12px; height: 10px">
+                            <el-button type="primary" style="z-index:99" @click="canupload = true" icon="el-icon-edit" circle></el-button>
                         </el-header>
                         <el-tabs v-model="message">
                             <el-tab-pane :label="`未读消息(${unread.length})`" name="first">
@@ -50,7 +50,7 @@
                                     <el-table-column>
                                         <template slot-scope="scope">
                                             <span class="message-title">{{scope.row.title}}</span>
-                                        </template>
+                                        </template>  
                                     </el-table-column>
                                     <el-table-column prop="date" width="180"></el-table-column>
                                     <el-table-column width="120">
@@ -60,7 +60,7 @@
                                     </el-table-column>
                                 </el-table>
                                 <div class="handle-row">
-                                    <el-button type="danger" @click="allRead($index)">全部标为已读</el-button>
+                                    <el-button type="danger" style="margin-top:10px" @click="allRead($index)">全部标为已读</el-button>
                                 </div>
                             </el-tab-pane>
                             <el-tab-pane :label="`已读消息(${read.length})`" name="second">
@@ -79,7 +79,7 @@
                                         </el-table-column>
                                     </el-table>
                                     <div class="handle-row">
-                                        <el-button type="danger" @click="allDel($index)">删除全部</el-button>
+                                        <el-button type="danger" style="margin-top:10px" @click="allDel($index)">删除全部</el-button>
                                     </div>
                                 </template>
                             </el-tab-pane>
@@ -99,7 +99,7 @@
                                         </el-table-column>
                                     </el-table>
                                     <div class="handle-row">
-                                        <el-button type="danger" @click="emptyTrash($index)">清空回收站</el-button>
+                                        <el-button type="danger" style="margin-top:10px" @click="emptyTrash($index)">清空回收站</el-button>
                                     </div>
                                 </template>
                             </el-tab-pane>
@@ -130,6 +130,7 @@
 </template>
 
 <script>
+    import axios from 'axios'
     export default {
         name: 'dashboard',
         data() {
@@ -137,9 +138,10 @@
                 name: localStorage.getItem('ms_username'),
                 canupload: false,
                 message: 'first',
+                textarea: '',
                 showHeader: false,
                 labelPosition: 'right',
-                checkList: ['全部','车间'],
+                checkList: ['全部','车间'],  
                 unread: [{
                     date: '2018-04-19 20:00:00',
                     title: 'XX项目出现新的节点变更',
@@ -160,25 +162,13 @@
                     name: '',
                     region: 'admin',
                     type: ''
-                }
+                },
+                name: '',
+                account: '',
+                postword: ''
             }
         },
-        created () {
-            this.getDataInfo()
-        },
-         methods: {
-             // 获取设备list
-            getDataInfo () {
-            axios.post('https://www.easy-mock.com/mock/5bb09b6d0478cd27d90001e8/example/mock').then(this.getDataInfoSucc)
-            },
-            getDataInfoSucc (res){
-            // console.log(res.data.rows)
-            res = res.data
-            if(res.success && res.rows){
-                this.rows = res.rows
-                // console.log(this.rows)
-            }
-            },
+        methods: {
             handleRead(index) {
                 const item = this.unread.splice(index, 1);
                 console.log(item);
@@ -203,6 +193,16 @@
             },
             emptyTrash(index) {
                 this.recycle.splice(index);
+            },
+            person_save(){
+                var fd = new FormData()
+                 fd.append("flag","Save")
+                 fd.append("name",this.name)
+                 fd.append("account",this.account)
+                 fd.append("postword",this.postword)
+                 axios.post(`${this.baseURL}/dashboard.php`,fd).then(function(res){
+                     console.log(res)
+                 })
             }
         },
         computed: {

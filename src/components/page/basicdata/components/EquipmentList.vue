@@ -182,6 +182,10 @@ export default {
         fd.append("tallycycle",this.dialogFormdata.tallycycle)
         // console.log(fd)
         axios.post(`${this.baseURL}/basicdata/equipment_reserve.php`,fd).then(this.creatRefresh)
+        this.$message({
+        type: 'success',
+        message: '保存成功!'
+      });
       }else {
         // console.log(this.dialogFormdata.id)
       var fd = new FormData()
@@ -194,6 +198,10 @@ export default {
       fd.append("tallycycle",this.dialogFormdata.tallycycle)
       // console.log(fd)
       axios.post(`${this.baseURL}/basicdata/equipment_reserve.php`,fd).then(this.creatRefresh)
+      this.$message({
+        type: 'success',
+        message: '新建成功!'
+      });
       }
       
     },

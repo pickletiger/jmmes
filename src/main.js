@@ -9,8 +9,13 @@ import "babel-polyfill";
 // vue-good-table
 import VueGoodTablePlugin from 'vue-good-table'; 
 import 'vue-good-table/dist/vue-good-table.css'
+import VueBarcode from '@xkeshi/vue-barcode';
+
+
 
 Vue.use(ElementUI, { size: 'small' }, VueGoodTablePlugin);
+// 条形码声明
+Vue.component(VueBarcode.name, VueBarcode);
 Vue.prototype.$axios = axios;
 Vue.prototype.baseURL = process.env.API_ROOT; //配置全局变量判断当前处于开发环境or生产环境
 

@@ -63,12 +63,13 @@ export default {
   },
   methods:{
   	getDataInfo () {
-      axios.post('https://www.easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/abnormal').then(this.getDataInfoSucc)
+      axios.post(`${this.baseURL}/abnormal.php`).then(this.getDataInfoSucc)
    },
   	 getDataInfoSucc(res){
+  	 	let success=res.data.pop()
     	res=res.data
-    	if(res.success && res.rows){
-        this.rows = res.rows
+    	if(success){
+        this.rows = res
       }
 //  	console.log(res)
     }

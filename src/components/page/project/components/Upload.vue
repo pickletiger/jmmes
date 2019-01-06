@@ -1,7 +1,7 @@
 <template>
   <div>
-    <el-dialog 
-      title="导入计划总表" 
+    <el-dialog
+      title="导入计划总表"
       :visible.sync="show"
       width="30%"
     >
@@ -20,17 +20,17 @@
       <i class="el-icon-upload"></i>
       <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
       </el-upload>
-      <el-form 
-        :model="form" 
+      <el-form
+        :model="form"
         label-position="left"
         style="margin-top:16px;"
         label-width="80px"
       >
-         <el-form-item 
+         <el-form-item
           label="工艺路线"
           prop="route">
-          <el-select 
-            v-model="form.route" 
+          <el-select
+            v-model="form.route"
             placeholder="请选择工艺路线"
             @change="selectChange">
             <el-option label="K" value="K"></el-option>
@@ -46,12 +46,12 @@
             <el-option label="外协轨道立柱/塔架/金字架架/转盘" value="外协轨道立柱/塔架/金字架架/转盘"></el-option>
             <el-option label="厂内轨道立柱/塔架" value="厂内轨道立柱/塔架"></el-option>
             <el-option label="座舱/车体/船体" value="座舱/车体/船体"></el-option>
-          </el-select> 
+          </el-select>
         </el-form-item>
-        <el-form-item 
-          label="预期天数" 
+        <el-form-item
+          label="预期天数"
         >
-          <el-input 
+          <el-input
             v-model="form.date"
             class="input"
             @change="dayChange"
@@ -60,8 +60,8 @@
         </el-form-item>
       </el-form>
       <div style="text-align: center">
-        <el-button 
-          type="primary" 
+        <el-button
+          type="primary"
           size="medium"
           @click.native="upload"
         >导入
@@ -136,7 +136,7 @@ export default {
       this.processDate[this.form.route] = e;
     },
 
-    // 超出上传限制提示框 
+    // 超出上传限制提示框
     fileExceed (e) {
       let options = {
         message: '已添加文件！',
@@ -184,7 +184,7 @@ export default {
           type: 'warning',
           message: '您未添加任何文件！'
         });
-      }    
+      }
     },
 
     // 上传成功回调

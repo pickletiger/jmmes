@@ -168,7 +168,14 @@ export default new Router({
                     meta: { title: '云平台交互' }
                 }
             ]
-        },{
+        },
+        {
+            path: '/printTable',
+            name: 'printTable',
+            component: resolve => require(['../components/page/printTable.vue'], resolve),
+            meta: { title: '打印车间表格' }
+        },
+        {
             path: '/tprint',
             component: resolve => require(['../components/page/Tprint.vue'], resolve),
             meta: { title: '打印表格demo' }
@@ -176,7 +183,13 @@ export default new Router({
         {
             path: '/qrcode',
             component: resolve => require(['../components/page/Qrcode.vue'], resolve),
-            meta: { title: '二维码demo' }
+            meta: { title: '产品标识卡' }
+        }, 
+        {
+            path: '/QrcodeList',
+            name: 'QrcodeList',
+            component: resolve => require(['../components/page/QrcodeList.vue'], resolve),
+            meta: { title: '排产产品标识卡' }
         },
         {
             path: '/weldingprinter',
