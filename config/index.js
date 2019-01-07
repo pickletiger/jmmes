@@ -24,10 +24,10 @@ module.exports = {
           changeOrigin: true
       },
       '/jmmes':{
-        target: 'http://localhost:9096',
+        target: 'http://localhost:8081',
         changeOrigin:true,
         pathRewrite: {
-          '^/jmmes':'/jmmes/src'
+          '^/jmmes':'/jmphp/src'
         }
       },
 //    '/upload': {

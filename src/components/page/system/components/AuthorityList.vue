@@ -330,10 +330,10 @@ export default {
       var fd = new FormData()
       fd.append("flag","Select")
       axios.post(`${this.baseURL}/system/authoritylist.php`,fd).then((res)=> {  //ES6写法
-        res = res.data;
+        res = res.data
         // if (res.success && res.data) {
-        this.rows = [];
-        this.rows = res.data;
+        this.rows = []
+        this.rows = res.data
         // }
 
       });
