@@ -81,8 +81,8 @@
 </template>
 
 <script>
-import axios from "axios";
-import { VueGoodTable } from "vue-good-table";
+import axios from "axios"
+import { VueGoodTable } from "vue-good-table"
 export default {
   name: "AuthorityList",
   data() {
@@ -323,7 +323,7 @@ export default {
     VueGoodTable
   },
   created() {
-    this.getDataInfo();
+    this.getDataInfo()
   },
   methods: {
     getDataInfo() {

@@ -142,8 +142,8 @@ export default {
     check (e) {
       this.dialog.centerDialogVisible = true;
       this.dialog.number = e.currentTarget.getAttribute('name');// 部件编码
-
-      console.log(this.dialog.number);
+      
+      
     },
 
     // 成功回调
