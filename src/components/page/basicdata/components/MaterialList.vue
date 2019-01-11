@@ -12,36 +12,36 @@
     >
       <template slot="table-row" slot-scope="props">
         <span v-if="props.column.field == 'operate'">
-          <el-button type="primary" icon="el-icon-edit" circle @click="dialogFormVisible = true"></el-button>
-          <el-button type="danger" icon="el-icon-delete" circle @click="deleteStaff" ></el-button>
+          <el-button type="primary" icon="el-icon-edit" circle @click="handleData(props.row)"></el-button>
+          <el-button type="danger" icon="el-icon-delete" circle @click="deleteStaff(props.row)" ></el-button>
         </span>
         <span v-else>
           {{props.formattedRow[props.column.field]}}
         </span>
       </template>
       <div slot="table-actions">
-        <el-button type="primary" @click="dialogFormVisible = true">新建</el-button>
+        <el-button type="primary" @click="creatData()">新建</el-button>
         <el-button type="primary">导入</el-button>
       </div>
     </vue-good-table>
     <el-dialog title="信息详情" :visible.sync="dialogFormVisible">
         <el-form :model="form">
           <el-form-item label="物料编码" :label-width="formLabelWidth">
-            <el-input  auto-complete="off"></el-input>
+            <el-input v-model="dialogFormdata.mNum" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="物料名称" :label-width="formLabelWidth">
-            <el-input  auto-complete="off"></el-input>
+            <el-input v-model="dialogFormdata.name" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="规格"  :label-width="formLabelWidth">
-            <el-input  auto-complete="off"></el-input>
+            <el-input v-model="dialogFormdata.specifications" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="数量" :label-width="formLabelWidth">
-            <el-input  auto-complete="off"></el-input>
+            <el-input v-model="dialogFormdata.amount" auto-complete="off"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+          <el-button type="primary" @click="updateDataInfo()">确 定</el-button>
         </div>
     </el-dialog>
   </div>
@@ -66,13 +66,14 @@ export default {
         resource: "",
         desc: ""
       },
+      dialogFormdata: {},
       formLabelWidth: "120px",
       searchItem: "",
       value1:'',
       columns: [
         {
           label: "物料编码",
-          field: "id",
+          field: "mNum",
 
         },
         {
@@ -135,12 +136,49 @@ export default {
         })
         .catch(_ => {});
     },
-
+    creatRefresh(response) {
+      console.log(response)
+      this.getListData()
+    },
+    //新建材料及修改
+    updateDataInfo(){
+      this.dialogFormVisible = false
+      // 判断dialogFormdata.id是否存在，若存在说明是已有材料，若不存在则说明是新建材料
+      if(this.dialogFormdata.id) {
+        // console.log(this.dialogFormdata.id)
+        var fd = new FormData()
+        fd.append("id",this.dialogFormdata.id)
+        fd.append("mNum",this.dialogFormdata.mNum)//编号
+        fd.append("name",this.dialogFormdata.name)//名字
+        fd.append("specifications",this.dialogFormdata.specifications)//规格
+        fd.append("amount",this.dialogFormdata.amount)//数量
+        // console.log(fd)
+        axios.post(`${this.baseURL}/basicdata/components/material_reserve.php`,fd).then(this.creatRefresh)
+          this.$message({
+          type: 'success',
+          message: '保存成功!'
+        });
+      }else {
+        // console.log(this.dialogFormdata.id)
+        var fd = new FormData()
+        fd.append("mNum",this.dialogFormdata.mNum)//编号
+        fd.append("name",this.dialogFormdata.name)//名称
+        fd.append("specifications",this.dialogFormdata.specifications)//规格
+        fd.append("amount",this.dialogFormdata.amount)//数量
+        // console.log(fd)
+        axios.post(`${this.baseURL}/basicdata/components/material_reserve.php`,fd).then(this.creatRefresh)
+        this.$message({
+          type: 'success',
+          message: '新建成功!'
+        });
+      }
+    },
       //获取后台数据
       getListData () {
-          axios.post('https://www.easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/Material').then((response) => {
-              this.rows = response.data.rows;
-             /* console.log(response.data.rows)*/
+          axios.post(`${this.baseURL}/basicdata/components/material.php`).then((response) => {
+              this.rows = []
+              this.rows = response.data.data
+            //  console.log(response.data.data)
           })
       },
       selectionChanged(params) {
@@ -153,14 +191,28 @@ export default {
               })
               .catch(_ => {});
       },
+      //新建材料
+      creatData(){
+        this.dialogFormdata = {}
+        this.dialogFormVisible = true
+      },
+      // 查看修改详情
+      handleData(row) {
+        this.dialogFormdata = {}
+        this.dialogFormdata = row
+        this.dialogFormVisible = true
+      },
 
-    // 删除员工
-    deleteStaff() {
-        this.$confirm('将删除该员工, 是否继续?', '提示', {
+    // 删除材料
+    deleteStaff(row) {
+        this.$confirm('将删除该材料, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+          var fd = new FormData()
+          fd.append("id",row.id)
+          axios.post(`${this.baseURL}/basicdata/components/material_del.php`,fd).then(this.creatRefresh)
           this.$message({
             type: 'success',
             message: '删除成功!'
@@ -179,5 +231,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+
 </style>
+

@@ -10,6 +10,20 @@
       <i class="el-icon-upload el-icon--left"></i>
       </el-button>
     </div>
+    <div class="search">
+      <el-input v-model="searchValue" placeholder="请输入关键词" style="width: 200px;"></el-input>
+      <el-select v-model="searchCondition" placeholder="请选择要搜索的内容" style="margin-left: 16px">
+        <el-option
+          v-for="item in searchOptions"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
+      <el-button type="primary" @click.native="search" style="margin-left: 16px">搜索
+        <i class="el-icon-search el-icon--right"></i>
+      </el-button>
+    </div>
     <div class="table" ref="loading">
       <el-table
       border
@@ -32,7 +46,6 @@
           label="操作"
           width="100">
           <template slot-scope="scope">
-            <el-button type="text" size="small">查看</el-button>
             <el-button @click="handleClick(scope.row)" type="text" size="small">编辑</el-button>
           </template>
         </el-table-column>
@@ -40,8 +53,9 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
+        :current-page="currentPage"
         :page-sizes="[10, 20, 30, 50]"
-        :page-size="10"
+        :page-size="pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="count"
         :small='true'
@@ -132,9 +146,12 @@ export default {
           spinner: 'el-icon-loading',
         }, // 加载框配置
         message: {
-          message: '数据加载失败！',
+          message: '暂无数据！',
           duration: 3000,
         }, // 弹出框配置
+        searchOptions: [{value: '0',label: '全部'},{value: 'serial_number',label: '序号'},{value: 'product_name',label: '产品名称'},{value: 'numbering',label: '编号'},{value: 'work_order',label: '工单'},{value: 'installation_site',label: '安装场地'},{value: 'exterior',label: '外观'},{value: 'colour',label: '颜色'},{value: 'barrage',label: '拦河'},{value: 'control_room',label: '控制室'},{value: 'basic_embedded_parts',label: '基础预埋件'},{value: 'platform_automatic_door',label: '站台/自动门'},{value: 'car_body_cockpit',label: '车体/座舱'},{value: 'remarks',label: '备注'},{value: 'priority',label: '优先级'},{value: 'frp_embedded_parts',label: '玻璃钢预埋件状态'},{value: 'scheduling_process_list',label: '排产工艺清单'},{value: 'important_product',label: '重点产品'},{value: 'important_material_information',label: '重要材料信息'},{value: 'due_time',label: '交付时间'},{value: 'arrival_time',label: '进厂时间'},{value: 'initial_planning_start_time',label: '初始计划开始时间'},{value: 'initial_plan_completion_time',label: '初始计划完成时间'},{value: 'actual_planned_start_time',label: '实际计划开始时间'},{value: 'actual_planned_completion_time',label: '实际计划完成时间'},{value: 'planned_scheduling_time',label: '计划排产时间'},{value: 'K',label: 'K'},{value: 'T_before_welding',label: 'T-焊前'},{value: 'T_welding',label: 'T组焊'},{value: 'T_assembly',label: 'T装配'},{value: 'F',label: 'F'},{value: 'W',label: 'W'},{value: 'D_assembly',label: 'D装配'},{value: 'G',label: 'G'},{value: 'L_welding',label: 'L组焊'},{value: 'IL_assembly',label: 'I/L装配'},{value: 'outer_track_column',label: '外协轨道立柱/塔架/金字架架/转盘'},{value: 'in_plant_track_column',label: '厂内轨道立柱/塔架'},{value: 'cockpit',label: '座舱/车体/船体'}], // 搜索下拉选项
+        searchCondition: '',
+        searchValue: '',
     }
   },
   methods: {
@@ -171,15 +188,18 @@ export default {
 
     // 改变当前页和每页条数时加载数据
     getData () {
-      
-      axios.get(`${this.baseURL}/planTable/loadTable.php?pageSize=${this.pageSize}&current=${this.currentPage}`).then(this.success).catch(this.error);
-
+      axios.get(`${this.baseURL}/planTable/loadTable.php?pageSize=${this.pageSize}&current=${this.currentPage}&searchValue=${this.searchValue || 0}&searchCondition=${this.searchCondition || 0}`).then(this.success).catch(this.error);
       this.loadingInstance = Loading.service(this.options);
+    },
+
+    // 搜索记录
+    search() {
+      this.currentPage = 1;
+      this.getData();
     },
 
     // 上传成功回调
     uploadSuccess (res) {
-
       // console.log(res);
       if(res.result) {
         this.options.text = '上传成功，正在加载...';
@@ -191,15 +211,12 @@ export default {
 
     // 成功回调
     success (ret) {
-      // console.log(ret.data);
-
       if(ret.data && ret.data.ret) {
         this.tableData = ret.data.data;
         this.count = Number(ret.data.count);
       }else {
-        Message.error(this.message);
+        Message.warning(this.message);
       }
-
       // 关闭加载框
       this.$nextTick(() => {
         this.loadingInstance.close();
@@ -208,18 +225,15 @@ export default {
 
     // 失败回调
     error (e) {
-      console.log(e);
-
       // 关闭加载框
       this.$nextTick(() => { 
         this.loadingInstance.close();
       });
-      Message.error(this.message);
+      Message.warning(this.message);
     }
   },
   created () {
-
-    axios.get(`${this.baseURL}/planTable/loadTable.php?pageSize=${this.pageSize}&current=${this.currentPage}`).then(this.success).catch(this.error);
+    axios.get(`${this.baseURL}/planTable/loadTable.php?pageSize=${this.pageSize}&current=${this.currentPage}&searchValue=${this.searchValue || 0}&searchCondition=${this.searchCondition || 0}`).then(this.success).catch(this.error);
 
     this.loadingInstance = Loading.service(this.options);
   },
@@ -239,5 +253,10 @@ export default {
   }
   .table {
     height: 600px;
+  }
+  .search {
+    display: flex;
+    float: left;
+    margin: 8px 0;
   }
 </style>

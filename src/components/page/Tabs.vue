@@ -20,7 +20,7 @@
                         <el-table-column prop="date" width="180"></el-table-column>
                         <el-table-column width="120">
                             <template slot-scope="scope">
-                                <el-button size="small" @click="handleRead(scope.$index)">标为已读</el-button>
+                                <el-button size="small" @click="handleRead(scope.row)">标为已读</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -39,7 +39,7 @@
                             <el-table-column prop="date" width="150"></el-table-column>
                             <el-table-column width="120">
                                 <template slot-scope="scope">
-                                    <el-button type="danger" @click="handleDel(scope.$index)">删除</el-button>
+                                    <el-button type="danger" @click="handleDel(scope.row)">删除</el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -59,7 +59,7 @@
                             <el-table-column prop="date" width="150"></el-table-column>
                             <el-table-column width="120">
                                 <template slot-scope="scope">
-                                    <el-button @click="handleRestore(scope.$index)">还原</el-button>
+                                    <el-button @click="handleRestore(scope.row)">还原</el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -100,31 +100,31 @@ import axios from 'axios'
                 message: 'first',
                 showHeader: false,
                 checkList: ['全部','车间'],
-                unread: [{
-                    date: '2018-04-19 20:00:00',
-                    title: 'XX项目出现新的节点变更',
-                },{
-                    date: '2018-04-19 21:00:00',
-                    title: 'XX车间焊机温度过高',
-                },{
-                    date: '2018-04-19 20:00:00',
-                    title: 'XX项目即将到达截止日期',
-                }],
-                read: [
-
-                ],
-                recycle: [
-                    
-                ]
+                textarea: [],
+                unread: [],
+                read: [],
+                recycle: []
                 }
         },
          created () {
-            this.getDataInfo()
+            this.getDataUnread()
+            this.getDataRead()
+            this.getDataRecycle()
         },
         methods: {
-             // 获取设备list
-            getDataInfo () {
-            axios.post('https://www.easy-mock.com/mock/5bb09b6d0478cd27d90001e8/example/mock').then(this.getDataInfoSucc)
+             // 获取未读
+            getDataUnread () {
+                var fd = new FormData()
+                fd.append("flag","Unread")
+                axios.post(`${this.baseURL}/tabs.php`,fd).then((unread)=> {  //ES6写法
+                    unread = unread.data;
+                    // console.log(unread)
+                    if (unread.success && unread.data) {
+                    this.unread = [];
+                    this.unread = unread.data;
+                    }
+
+                });
             },
             getDataInfoSucc (res){
             // console.log(res.data.rows)
@@ -134,28 +134,87 @@ import axios from 'axios'
                 // console.log(this.rows)
             }
             },
-            handleRead(index) {
-                const item = this.unread.splice(index, 1);
-                console.log(item);
-                this.read = item.concat(this.read);
+            //获取已读
+            getDataRead () {
+                var fd = new FormData()
+                fd.append("flag","Read")
+                axios.post(`${this.baseURL}/tabs.php`,fd).then((read)=> {  //ES6写法
+                    read = read.data;
+                    // console.log(read)
+                    if (read.success && read.data) {
+                    this.read = [];
+                    this.read = read.data;
+                    }
+
+                });
             },
+            //获取回收站
+            getDataRecycle () {
+                var fd = new FormData()
+                fd.append("flag","Recycle")
+                axios.post(`${this.baseURL}/tabs.php`,fd).then((recycle)=> {  //ES6写法
+                    recycle = recycle.data;
+                    // console.log(recycle)
+                    if (recycle.success && recycle.data) {
+                    this.recycle = [];
+                    this.recycle = recycle.data;
+                    }
+
+                });
+            },
+            //进入已读
+            handleRead(row) {
+                console.log(row.id);
+                const item = this.unread.splice(row, 1);
+                // console.log(this.unread);
+                this.read = item.concat(this.read);
+                var fd = new FormData()
+                fd.append("flag","ReadIn")
+                fd.append("id",row.id)
+                axios.post(`${this.baseURL}/tabs.php`,fd).then((recycle)=> {  //ES6写法
+                    recycle = recycle.data;
+
+                });
+            },
+            //全部标记已读
             allRead: function(index){
                 const item = this.unread.splice(index);
                 console.log(item);
                 this.read = item.concat(this.read);
             },
-            handleDel(index) {
-                const item = this.read.splice(index, 1);
+            //删除
+            handleDel(row) {
+                console.log(row.id);
+                const item = this.read.splice(row, 1);
                 this.recycle = item.concat(this.recycle);
+                var fd = new FormData()
+                fd.append("flag","RecycleIn")
+                fd.append("id",row.id)
+                axios.post(`${this.baseURL}/tabs.php`,fd).then((recycle)=> {  //ES6写法
+                recycle = recycle.data;
+
+                });
             },
+            //删除全部
             allDel(index) {
+                alert(index)
                 const item = this.read.splice(index);
                 this.recycle = item.concat(this.recycle);
             },
-            handleRestore(index) {
-                const item = this.recycle.splice(index, 1);
+            //还原
+            handleRestore(row) {
+                console.log(row.id);
+                const item = this.recycle.splice(row, 1);
                 this.read = item.concat(this.read);
+                var fd = new FormData()
+                fd.append("flag","Reduction")
+                fd.append("id",row.id)
+                axios.post(`${this.baseURL}/tabs.php`,fd).then((reduction)=> {  //ES6写法
+                reduction = reduction.data;
+
+                });
             },
+            //清空回收站
             emptyTrash(index) {
                 this.recycle.splice(index);
             }

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <el-dialog 
-      title="导入计划总表" 
+    <el-dialog
+      title="导入计划总表"
       :visible.sync="show"
       width="30%"
     >
@@ -20,17 +20,17 @@
       <i class="el-icon-upload"></i>
       <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
       </el-upload>
-      <el-form 
-        :model="form" 
+      <el-form
+        :model="form"
         label-position="left"
         style="margin-top:16px;"
         label-width="80px"
       >
-         <el-form-item 
+         <el-form-item
           label="工艺路线"
           prop="route">
-          <el-select 
-            v-model="form.route" 
+          <el-select
+            v-model="form.route"
             placeholder="请选择工艺路线"
             @change="selectChange">
             <el-option label="K" value="K"></el-option>
@@ -46,12 +46,12 @@
             <el-option label="外协轨道立柱/塔架/金字架架/转盘" value="外协轨道立柱/塔架/金字架架/转盘"></el-option>
             <el-option label="厂内轨道立柱/塔架" value="厂内轨道立柱/塔架"></el-option>
             <el-option label="座舱/车体/船体" value="座舱/车体/船体"></el-option>
-          </el-select> 
+          </el-select>
         </el-form-item>
-        <el-form-item 
-          label="预期天数" 
+        <el-form-item
+          label="预期天数"
         >
-          <el-input 
+          <el-input
             v-model="form.date"
             class="input"
             @change="dayChange"
@@ -60,8 +60,8 @@
         </el-form-item>
       </el-form>
       <div style="text-align: center">
-        <el-button 
-          type="primary" 
+        <el-button
+          type="primary"
           size="medium"
           @click.native="upload"
         >导入
@@ -85,7 +85,21 @@ export default {
         date: '',
         route: ''
       },
-      processDate: {}, // 工艺路线预期天数
+      processDate: {
+        'K': '',
+        'T-焊前': '',
+        'I组焊': '',
+        'T装配': '',
+        'F': '',
+        'W': '',
+        'D装配': '',
+        'G': '',
+        'L组焊': '',
+        'I/L装配': '',
+        '外协轨道立柱/塔架/金字架架/转盘': '',
+        '厂内轨道立柱/塔架': '',
+        '座舱/车体/船体': ''
+      }, // 工艺路线预期天数
       target: `${this.baseURL}/planTable/PlanTable.php`
     }
   },
@@ -109,9 +123,10 @@ export default {
 
     // 切换工艺路线显示对应预期天数
     selectChange (e) {
-      let item = localStorage.getItem(e);
       // 判断是否已有存储
-      item?this.form.date = item : localStorage.setItem(e, '');
+      if (localStorage.getItem(e)) {
+        this.form.date = localStorage.getItem(e);
+      }
     },
 
     // 改变预期天数则保存
@@ -121,7 +136,7 @@ export default {
       this.processDate[this.form.route] = e;
     },
 
-    // 超出上传限制提示框 
+    // 超出上传限制提示框
     fileExceed (e) {
       let options = {
         message: '已添加文件！',
@@ -133,27 +148,43 @@ export default {
 
     // 上传
     upload () {
-      let options = {
-        message: '请填写预期天数！',
-        type: 'warning',
-        duration: 2000,
-      };
-      let processDate = Object.keys(this.processDate);
-
-      // 判断预期天数是否填写
-      if(processDate.length == 13) {
-        for(let key of processDate) {
-          if(!this.processDate[key]) {  
-            Message(options);
-            return
+      if (this.$refs.upload.uploadFiles && this.$refs.upload.uploadFiles.length >0){
+        let flag = false // 已填写预期天数为false
+        for (let key in this.processDate) {
+          if (!this.processDate[key]) {
+            flag = true;
+            break;
           }
         }
-      }else {
-        Message(options);
-        return
+        if (flag && this.form.date) {
+          this.$confirm(`未填写预期天数的工艺路线是否默认${this.form.date}天？`, '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            for (let key in this.processDate) {
+              if (!this.processDate[key]) {
+                this.processDate[key] = this.form.date;
+              }
+              localStorage.removeItem(key);
+              localStorage.setItem(key, this.processDate[key]);
+            }
+            this.$refs.upload.submit(); // 上传
+          }).catch(() => {})
+        } else if (flag && !this.form.date) {
+          this.$message({
+            type: 'warning',
+            message: '请填写预期天数！'
+          });
+        } else {
+          this.$refs.upload.submit(); // 上传
+        }
+      } else {
+        this.$message({
+          type: 'warning',
+          message: '您未添加任何文件！'
+        });
       }
-
-      this.$refs.upload.submit(); // 上传
     },
 
     // 上传成功回调
