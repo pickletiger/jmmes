@@ -81,8 +81,8 @@
 </template>
 
 <script>
-import axios from "axios";
-import { VueGoodTable } from "vue-good-table";
+import axios from "axios"
+import { VueGoodTable } from "vue-good-table"
 export default {
   name: "AuthorityList",
   data() {
@@ -323,17 +323,17 @@ export default {
     VueGoodTable
   },
   created() {
-    this.getDataInfo();
+    this.getDataInfo()
   },
   methods: {
     getDataInfo() {
       var fd = new FormData()
       fd.append("flag","Select")
       axios.post(`${this.baseURL}/system/authoritylist.php`,fd).then((res)=> {  //ES6写法
-        res = res.data;
+        res = res.data
         // if (res.success && res.data) {
-        this.rows = [];
-        this.rows = res.data;
+        this.rows = []
+        this.rows = res.data
         // }
 
       });

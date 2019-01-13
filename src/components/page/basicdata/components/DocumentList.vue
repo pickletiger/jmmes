@@ -16,7 +16,7 @@
       <template slot="table-row" slot-scope="props">
         <span v-if="props.column.field == 'operate'">
           <el-button type="primary" icon="el-icon-edit" circle @click="Handlealter(props.row.contactId,props.row.diff)"></el-button>
-          <!-- <el-button type="primary" icon="el-icon-printer" circle @click="handlePrinter(props.row.contactId,props.row.diff)"></el-button> -->
+          <el-button type="primary" icon="el-icon-printer" circle @click="handlePrinter(props.row.contactId,props.row.diff)"></el-button>
           <el-button type="danger" icon="el-icon-delete" circle @click="deleteStaff(props.row.contactId,props.row.diff)" ></el-button>
         </span>
         <span v-else>
@@ -219,15 +219,30 @@ export default {
           console.log("无效")
       }
     },
-    //焊接与制造信息打印（直接新开页面做打印操作）    
+    //焊接与制造信息打印-单个
+    handlePrinter(contactId,diff){
+      switch(diff){
+        case "welding":
+          var myUrl = '#/Weldingprinter?contactId='+contactId
+          window.open(myUrl,'_blank')
+          break
+        case "craftsmanship":
+          var myUrl = '#/Craftsmanshipprinter?contactId='+contactId
+          window.open(myUrl,'_blank')
+          break
+        default:
+          console.log("分类参数出错")
+      }
+    },
+    //焊接与制造信息打印全部（直接新开页面做打印操作）    
     handlePrinterAll(){      
       switch(this.selectedTreeNode.tableFlag){
         case 1:
-          var myUrl = '#/Weldingprinter?relateId='+this.selectedTreeNode.relateId
+          var myUrl = '#/WeldingprinterAll?relateId='+this.selectedTreeNode.relateId
           window.open(myUrl,'_blank')
           break
         case 2:
-          var myUrl = '#/Craftsmanshipprinter?relateId='+this.selectedTreeNode.relateId
+          var myUrl = '#/CraftsmanshipprinterAll?relateId='+this.selectedTreeNode.relateId
           window.open(myUrl,'_blank')
           break
         default:

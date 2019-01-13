@@ -202,6 +202,16 @@ export default new Router({
             meta: { title: '制造工艺打印' }
         },
         {
+            path: '/weldingprinterAll',
+            component: resolve => require(['../components/page/WeldingprinterAll.vue'], resolve),
+            meta: { title: '焊接信息打印' }
+        },
+        {
+            path: '/craftsmanshipprinterAll',
+            component: resolve => require(['../components/page/CraftsmanshipprinterAll.vue'], resolve),
+            meta: { title: '制造工艺打印' }
+        },
+        {
             path: '/login',
             component: resolve => require(['../components/page/Login.vue'], resolve)
         },

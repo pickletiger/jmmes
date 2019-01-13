@@ -59,8 +59,5 @@ export default {
     border-radius: 5px;
     background: #fff;
   }
-/*  .el-tabs__item:focus,.is-active,.is-focus:not(:active) {
-    -webkit-box-shadow: none !important;
-    box-shadow: none !important;
-  }*/
+  
 </style>

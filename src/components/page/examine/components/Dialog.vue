@@ -27,14 +27,14 @@
         </el-form-item>
         <el-form-item label="检验结果" v-if="allCheck">
           <el-select v-model="form.result" placeholder="请选择检验结果">
-            <el-option label="全部合格" value="qualified"></el-option>
-            <el-option label="部分合格" value="partQualified"></el-option>
+            <el-option label="合格" value="qualified"></el-option>
+            <el-option label="不合格" value="partQualified"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="合格率" v-else prop="passRate">
           <el-radio-group v-model="form.passRate">
-            <el-radio label="已达到"></el-radio>
-            <el-radio label="未达到"></el-radio>
+            <el-radio label="已达到" value="已达到"></el-radio>
+            <el-radio label="未达到" value="未达到"></el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item 
@@ -58,6 +58,7 @@
 </template>
 
 <script>
+import axios from "axios"
 export default {
   name: "ExamineDialog",
   props: {
@@ -98,15 +99,16 @@ export default {
     // 判断检验类型
     allCheck () {
       return this.form.type == 'allCheck'? true : false;
-    },
+    }
   },
 
   methods: {
     // 检验部件
     submitForm (formName) {
+
+      
       // 检验表单
       this.$refs[formName].validate((valid,obj) => {
-
         if(this.form.type == 'allCheck' && this.form.result == 'partQualified') {
           // check检验人员和合格数量是否填写
           obj.person || obj.number
@@ -123,12 +125,37 @@ export default {
 
     // 保存检验数据
     saveData () {
-      this.config.centerDialogVisible = false;
-      this.$message({
-        message: '检验成功',
-        type: 'success',
-        duration: 1500
+      if(this.form.type == "allCheck"){
+        var type = "全检"
+      }else{
+        var type = "抽检"
+      }
+
+      if(this.form.result == "partQualified" ||this.form.passRate =="未达到"){
+        var result = "4"    //不合格
+      }else{
+        var result = "3"    //合格
+      }
+      console.log(result)
+
+      var fd = new FormData()
+      fd.append("flag","Test")
+      fd.append("Number",this.config.number)            //部件编号
+      fd.append("person",this.form.person)
+      fd.append("result",result)
+      fd.append("type",type)
+      console.log(fd)
+      axios.post(`${this.baseURL}/examine.php`,fd).then((res)=> {  //ES6写法
+        this.config.centerDialogVisible = false;
+        this.$message({
+          message: '检验成功',
+          type: 'success',
+          duration: 1500
+        });
+        location.reload()
+
       });
+     
     }
   },
 }  
