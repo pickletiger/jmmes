@@ -186,6 +186,12 @@ export default new Router({
             meta: { title: '产品标识卡' }
         }, 
         {
+            path: '/userQRcode',
+            name: 'userQRcode',
+            component: resolve => require(['../components/page/userQRcode.vue'], resolve),
+            meta: { title: '用户二维码' }
+        },
+        {
             path: '/QrcodeList',
             name: 'QrcodeList',
             component: resolve => require(['../components/page/QrcodeList.vue'], resolve),

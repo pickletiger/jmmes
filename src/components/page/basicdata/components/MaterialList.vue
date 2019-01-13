@@ -21,7 +21,7 @@
       </template>
       <div slot="table-actions">
         <el-button type="primary" @click="creatData()">新建</el-button>
-        <el-button type="primary">导入</el-button>
+        <el-button type="primary" @click="enter()">导入</el-button>
       </div>
     </vue-good-table>
     <el-dialog title="信息详情" :visible.sync="dialogFormVisible">
@@ -44,18 +44,42 @@
           <el-button type="primary" @click="updateDataInfo()">确 定</el-button>
         </div>
     </el-dialog>
+    <el-dialog title="人员导入" :visible.sync="dialogFormUpload">
+        <el-upload
+          class="upload-demo"
+          :on-success="success"
+          :on-exceed="fileExceed"
+          :on-change="onchangeFunc"
+          drag
+          :auto-upload="false"
+          ref="upload"
+          :limit="1"
+          :action="target"
+          multiple>
+          <i class="el-icon-upload"></i>
+          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+          <div class="el-upload__tip" slot="tip">只能上传xlsx、lsx文件</div>
+        </el-upload>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormUpload = false">取 消</el-button>
+          <el-button type="primary" @click="upload()">导 入</el-button>
+        </div>
+    </el-dialog>
   </div>
 
 </template>
 
 <script>
 import { VueGoodTable } from "vue-good-table";
+import { Message } from 'element-ui';
 import axios from 'axios'
 export default {
   name: "MaterialList",
   data() {
     return {
       dialogFormVisible: false,
+      dialogFormUpload:false,
+      fileList:[],
       form: {
         name: "",
         region: "",
@@ -115,7 +139,8 @@ export default {
           place: "H型钢200X200",
           date: "2"
         }*/
-      ]
+      ],
+      target: `${this.baseURL}/basicdata/components/materialUpload.php`
     };
   },
   components: {
@@ -172,6 +197,51 @@ export default {
           message: '新建成功!'
         });
       }
+    },
+    //选择文件时触发
+    onchangeFunc(file,fileList){
+      console.log(fileList)
+      this.fileList = fileList
+    },
+    //导入按钮
+    enter(){
+      this.dialogFormUpload = true
+    },
+    //导入按钮
+    upload(){
+      if(this.$refs.upload.uploadFiles){
+        this.$refs.upload.submit() // 上传
+      } else {
+        this.$message({
+          type: 'warning',
+          message: '您未添加任何文件！'
+        });
+      }
+    },
+    // 超出上传限制提示框
+    fileExceed (e) {
+      let options = {
+        message: '已添加文件！',
+        type: 'warning',
+        duration: 2000,
+      }
+      Message(options);
+    },
+    // 上传成功回调
+    success (res) {
+      // this.$emit('uploadSuccess',res);
+      console.log(res)
+      this.$alert('导入完成', '金马MES系统', {
+        confirmButtonText: '确定',
+        callback: action => {
+          this.$message({
+            type: 'info',
+            message: `action: ${ action }`
+          });
+        }
+      });
+      this.dialogFormUpload = false
+      this.getListData()
     },
       //获取后台数据
       getListData () {

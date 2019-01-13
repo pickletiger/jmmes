@@ -14,6 +14,7 @@
         <span v-if="props.column.field == 'operate'">
           <el-button type="primary" icon="el-icon-edit" circle @click="handleData(props.row)"></el-button>
           <el-button type="danger" icon="el-icon-delete" circle @click="deleteStaff(props.row)" ></el-button>
+          <el-button type="primary" @click="QRcode(props.row)">生成二维码</el-button>
         </span>
         <span v-else>
           {{props.formattedRow[props.column.field]}}
@@ -41,6 +42,16 @@
           <el-form-item label="部门" :label-width="formLabelWidth">
             <el-input v-model="dialogFormdata.department" auto-complete="off"></el-input>
           </el-form-item>
+          <el-form-item label="终端" :label-width="formLabelWidth">
+            <el-select v-model="dialogFormdata.terminal" placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -61,7 +72,7 @@
           multiple>
           <i class="el-icon-upload"></i>
           <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-          <div class="el-upload__tip" slot="tip">只能上传xlsx/lsx文件</div>
+          <div class="el-upload__tip" slot="tip">只能上传xlsx、lsx文件</div>
         </el-upload>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormUpload = false">取 消</el-button>
@@ -147,6 +158,14 @@ export default {
           date: "经理"
         }*/
       ],
+      options: [{
+          value: '0',
+          label: 'PC端'
+        }, {
+          value: '1',
+          label: 'PDA端'
+        }],
+        value:'',
       target: `${this.baseURL}/basicdata/components/tableUpload.php`
     };
   },
@@ -168,7 +187,7 @@ export default {
         .catch(_ => {});
     },
     creatRefresh(response) {
-      console.log(response)
+      // console.log(response)
       this.getStuffInfoData()
     },
     //新建人员及修改
@@ -184,6 +203,7 @@ export default {
         fd.append("phone",this.dialogFormdata.phone)//电话
         fd.append("position",this.dialogFormdata.position)//职位
         fd.append("department",this.dialogFormdata.department)//部门
+        fd.append("terminal",this.dialogFormdata.terminal)//终端
         // console.log(fd)
         axios.post(`${this.baseURL}/basicdata/components/tableList_reserve.php`,fd).then(this.creatRefresh)
           this.$message({
@@ -198,6 +218,7 @@ export default {
         fd.append("phone",this.dialogFormdata.phone)//电话
         fd.append("position",this.dialogFormdata.position)//职位
         fd.append("department",this.dialogFormdata.department)//部门
+        fd.append("terminal",this.dialogFormdata.terminal)//终端
         // console.log(fd)
         axios.post(`${this.baseURL}/basicdata/components/tableList_reserve.php`,fd).then(this.creatRefresh)
         this.$message({
@@ -224,7 +245,7 @@ export default {
             })
             .catch(_ => {});
     },
-    //选择图片时触发
+    //选择文件时触发
     onchangeFunc(file,fileList){
       console.log(fileList)
       this.fileList = fileList
@@ -256,7 +277,26 @@ export default {
     },
     // 上传成功回调
     success (res) {
-      this.$emit('uploadSuccess',res);
+      // this.$emit('uploadSuccess',res);
+      console.log(res)
+      this.getStuffInfoData()
+    },
+    //导出二维码
+    QRcode(row){
+      // 清空缓存
+      sessionStorage.removeItem('userId')
+      sessionStorage.removeItem('userName')
+      sessionStorage.removeItem('userNum')
+      sessionStorage.removeItem('userDepartment')
+      sessionStorage.removeItem('userPosition')
+      //缓存浏览器
+      sessionStorage.setItem('userId',row.id)
+      sessionStorage.setItem('userName',row.name)
+      sessionStorage.setItem('userNum',row.gNum)
+      sessionStorage.setItem('userDepartment',row.department)
+      sessionStorage.setItem('userPosition',row.position)
+      //打开生成二维码页面
+      window.open('#/userQRcode', '_blank');
     },
     //新建人员
     creatData(){
