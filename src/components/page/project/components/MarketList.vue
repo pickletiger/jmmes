@@ -21,7 +21,7 @@
       </span>
     </template>
     <div slot="table-actions">
-      <el-button type="primary" @click="canupload = true">导入</el-button>
+      <el-button type="primary" @click="canupload = true">新建</el-button>
       <el-button type="primary" @click="batchCheckComfirm()">审核</el-button>
     </div>
     </vue-good-table>
@@ -45,16 +45,42 @@
           <el-button type="primary" @click="checkComfirm()" >确 定</el-button>
         </div>
     </el-dialog>
-    <el-dialog title="导入" :visible.sync="canupload">
-      <el-upload
-        class="upload-demo"
-        drag
-        action="https://jsonplaceholder.typicode.com/posts/"
-        multiple>
-        <i class="el-icon-upload"></i>
-        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-        <div class="el-upload__tip" slot="tip">只能上传pdf文件，且不超过500kb</div>
-      </el-upload>
+    <el-dialog title="新建" :visible.sync="canupload">
+      <el-form >
+        <el-form-item label="订单名称" :label-width="formLabelWidth">
+          <el-input v-model="form.name"  auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="导入人员" :label-width="formLabelWidth">
+          <el-input v-model="form.number"  auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="审核人" :label-width="formLabelWidth">
+          <el-input v-model="form.type"  auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="导入时间" :label-width="formLabelWidth">
+          <!-- value-format 参数为设置date的类型 -->
+          <el-date-picker type="date" value-format="yyyy-MM-dd"  placeholder="选择日期" v-model="form.date" ></el-date-picker>
+        </el-form-item>
+
+        <el-upload
+          class="upload-demo"
+          :before-upload="beforeupload"
+          ref="upload"
+          drag
+          :limit="1"
+          :data="form"
+          :on-success="handleSuc"
+          :action="uploadUrl"
+          :auto-upload="false"
+          style="margin-left:120px;">
+          <i class="el-icon-upload"></i>
+          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+          <div class="el-upload__tip" slot="tip">只能上传pdf文件，且不超过500kb</div>
+        </el-upload>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="canupload = false">取 消</el-button>
+        <el-button type="primary" @click="uploadFile" >保存</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -63,6 +89,7 @@
 import { VueGoodTable } from "vue-good-table";
 import axios from 'axios';
 import vueshowpdf from 'vueshowpdf'
+
 export default {
   name: "MarketList",
   components: {
@@ -71,10 +98,12 @@ export default {
   },
   data() {
     return {
+      form:{},
       formData:{},
       canupload: false,
       dialogFormVisible: false,
       formLabelWidth: "80px",
+      uploadUrl:`${this.baseURL}/market/upload.php`,
       multipleSelection: [],
       notCheckSelection: [], 
       columns: [
@@ -107,7 +136,7 @@ export default {
   },
   methods: {
     getData() {
-      axios.post('https://www.easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/MarketCheck').then(this.getDataSucc)
+      axios.post(`${this.baseURL}/market/upload.php`).then(this.getDataSucc)
     },
     getDataSucc(res) {
       res = res.data;
@@ -131,9 +160,34 @@ export default {
       // 查看pdf
       window.open("static/upload/MarketCheck/testPDF.pdf")
     },
+      // 上传文件
+    uploadFile(){
+      this.$refs.upload.submit()
+    },
+      // 上传文件前的钩子
+    beforeupload (file){
+      // console.log(file)
+      this.form.ftype = file.type
+    },
     selectionChanged(val) {
       // 存入选择项的值(数组)
       this.multipleSelection = val;
+    },
+      // 文件上传成功时的钩子
+    handleSuc(res,file, fileList) {
+      // console.log(res)
+      if(res.success == 'success'){
+        this.dialogUpload = false
+        alert("文件上传成功")
+        this.updateTree = !this.updateTree
+        // 增加延时确保tree组件重新渲染
+        setTimeout(()=>{
+          this.updateTree = !this.updateTree
+        },50)
+      }else  {
+        alert("文件上传失败，文件格式错误或该项目已存在")
+      }
+      
     },
     batchCheckComfirm() {
       let multipleSelection = this.multipleSelection;
