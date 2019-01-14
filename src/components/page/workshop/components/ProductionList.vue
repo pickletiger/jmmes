@@ -583,7 +583,7 @@ export default {
       }
 
       if(res.rows3) {
-        // 已排产
+        // 生产中
         this.tableData3 = res.rows3;
         // // checkbox 规格赋值
         // let length3 = res.FChild_material.length;
