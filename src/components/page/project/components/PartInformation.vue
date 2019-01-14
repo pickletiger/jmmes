@@ -29,6 +29,12 @@
               <el-input v-model="data.modid" :disabled="true"></el-input>
             </el-col>
           </el-form-item>
+          <el-form-item label="关键部件">
+            <template>
+              <el-radio v-model="radio" label="1">是</el-radio>
+              <el-radio v-model="radio" label="2">否</el-radio>
+            </template>
+          </el-form-item>
           <el-form-item label="子物料">
             <el-col :span="10">
               <el-input v-model="data.child_material" :disabled="true"></el-input>
@@ -56,12 +62,12 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary" v-if="back" @click="handleBack(fid)">返回上一级</el-button>
-            <el-button type="primary" @click="handleAddPart(data.id)">增加子部件</el-button>
-            <el-button type="primary" @click="handleSave(data.id)">保存</el-button>
-            <el-button type="primary" @click="handleQrcode(data.id)">产品标识卡</el-button>
-            <el-button type="primary" @click="handleWelding(data.figure_number)">工艺卡</el-button>
-            <el-button type="primary" @click="handleCrafts(data.figure_number)">机械制造卡</el-button>
-            <el-button type="danger" @click="handleDelClick(data.id)">删除</el-button>
+            <el-button type="primary" v-if="showAddPart" @click="handleAddPart(data.id)">增加子部件</el-button>
+            <el-button type="primary" v-if="showSave" @click="handleSave(data.id)">保存</el-button>
+            <el-button type="primary" v-if="showQrcode" @click="handleQrcode(data.id)">产品标识卡</el-button>
+            <el-button type="primary" v-if="showWelding" @click="handleWelding(data.figure_number)">工艺卡</el-button>
+            <el-button type="primary" v-if="showCrafts" @click="handleCrafts(data.figure_number)">机械制造卡</el-button>
+            <el-button type="danger" v-if="showDel" @click="handleDelClick(data.id)">删除</el-button>
           </el-form-item>
           
         </el-form>
@@ -166,6 +172,14 @@ export default {
       fid:'',
       addpart:[],
       data: [],
+      radio: '2',
+      showAddPart:false,
+      showSave:false,
+      showQrcode:true,
+      showWelding:true,
+      showCrafts:true,
+      showDel:false,
+
       columns: [
         {
           label: "工序",
@@ -191,6 +205,9 @@ export default {
       rows:[]
     }
   },
+  created() {
+    this.AuthorityInfo()
+  },
    // 监听数据的变化
   watch: {
     partdata : {
@@ -208,6 +225,13 @@ export default {
     }
   },
   methods: {
+    AuthorityInfo(){
+      if(this.$route.path =="/plan" ||this.$route.path =="/craft"){
+        this.showAddPart=true
+        this.showSave=true
+        this.showDel=true
+      }
+    },
     // 获取父id
     getFidSucc(res) {
       // console.log(res.data)
@@ -269,6 +293,7 @@ export default {
         fd.append("standard",this.data.standard)
         fd.append("count",this.data.count)
         fd.append("remark",this.data.remark)
+        fd.append("radio",this.radio)
         axios.post(`${this.baseURL}/part.php`,fd).then((res)=>{
           // console.log(res)
           this.$message({

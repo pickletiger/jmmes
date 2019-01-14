@@ -1,27 +1,76 @@
 <template>
     <div class="main">
+        <!-- 明细表 start -->
+        <div v-if="isShowdetailList">
+            <table class="tabheader bigfontsize">
+                <tr>
+                    <td>焊接工艺及检验记录明细表</td>
+                </tr>
+            </table>
+
+            <table class="tabheader midfontsize">
+                <thead>
+                    <tr class="detailListHeader">
+                        <td style="width:10mm;padding-left:0;padding-right:0;">序号</td>
+                        <td>工艺卡号</td>
+                        <td>焊接件名称</td>
+                        <td>焊接图号</td>
+                        <td>页数</td>
+                        <td>特性等级</td>
+                        <td>备注</td>
+                    </tr>
+                </thead>
+                <tr class="detailList" v-for="(item,index) in detailList">
+                    <td>{{ item.serial }}</td>
+                    <td>{{ item.processnumber }}</td>
+                    <td>{{ item.partname }}</td>
+                    <td>{{ item.partdrawingnumber }}</td>
+                    <td>{{ item.pageNum }}</td>
+                    <td>{{ item.level }}</td>
+                    <td>&nbsp;</td>
+                </tr>
+            </table>
+
+            <table class="tabfooter">
+                <tr>
+                    <td colspan="6" class="bigfontsize">编制（日期）</td>
+                    <td colspan="6" class="bigfontsize">审核（日期）</td>
+                    <td rowspan="2" colspan="8" class="bigfontsize">中山市金马科技娱乐设备有限公司</td>
+                </tr>
+                <tr>
+                    <td colspan="6" style="height:10mm;">&nbsp;</td>
+                    <td colspan="6">&nbsp;</td>                   
+                </tr>
+            </table>
+        </div>
+        <!-- 明细表 end -->
+        <div class="page"></div>
+
+        <!-- 三页循环一次 start -->
+        <div v-if="isShowweldingInfo" v-for="(welding,indexheader) in weldingInfo">
+            <!-- 第一页 start -->
             <table class="tabheader midfontsize">
                 <tr>
                     <td>工艺卡号</td>
-                    <td>{{ weldingTableOne.processNumber }}</td>
+                    <td>{{ welding.weldingTableOne.processNumber }}</td>
                     <td>数量</td>
-                    <td>{{ weldingTableOne.quantity }}</td>
+                    <td>{{ welding.weldingTableOne.quantity }}</td>
                     <td>工件编号</td>
-                    <td>{{ weldingTableOne.workpieceNumber }}</td>
+                    <td>{{ welding.weldingTableOne.workpieceNumber }}</td>
                     <td>车间</td>
-                    <td>{{ weldingTableOne.workshop }}</td>
+                    <td>{{ welding.weldingTableOne.workshop }}</td>
                     <td>工单号</td>
-                    <td>{{ weldingTableOne.workOrderNumber }}</td>
+                    <td>{{ welding.weldingTableOne.workOrderNumber }}</td>
                 </tr>
                 <tr>
                     <td>产品名称</td>
-                    <td>{{ weldingTableOne.productName }}</td>
+                    <td>{{ welding.weldingTableOne.productName }}</td>
                     <td>产品代号</td>
-                    <td>{{ weldingTableOne.productCode }}</td>
+                    <td>{{ welding.weldingTableOne.productCode }}</td>
                     <td>部件名称</td>
-                    <td>{{ weldingTableOne.partName }}</td>
+                    <td>{{ welding.weldingTableOne.partName }}</td>
                     <td>部件图号</td>
-                    <td colspan="3">{{ weldingTableOne.partDrawingNumber }}</td>	          
+                    <td colspan="3">{{ welding.weldingTableOne.partDrawingNumber }}</td>	          
                 </tr>
             </table>
             <table class="pageOneFirst  minfontsize">
@@ -51,7 +100,7 @@
                     </tr>
                 </thead>
                 <tbody style="font-size:5pt;">
-                    <tr v-for="(item,index) in weldingTableTwo_1">
+                    <tr v-for="(item,index) in welding.weldingTableTwo_1">
                         <td  style="height:10mm;">{{ item.weldNumber }}&nbsp;</td>
                         <td>{{ returnValueMaterialAndSpecifications(item.materialAndSpecifications_1,item.materialAndSpecifications_1_thickness) }}</td>                        
                         <td>{{ returnValueMaterialAndSpecifications(item.materialAndSpecifications_2,item.materialAndSpecifications_2_thickness) }}</td>                        
@@ -88,7 +137,7 @@
                     <td colspan="4">检验员签名（日期）</td>
                 </tr>
                 <tbody style="font-size:5pt;">
-                    <tr v-for="(item,index) in weldingTableTwo_2">
+                    <tr v-for="(item,index) in welding.weldingTableTwo_2">
                         <td rowspan="6" v-if="index == 0">焊中检查</td>
                         <td rowspan="2" v-if="index == 6">焊后检查</td>
                         <td>{{ item.serialNumber }}</td>
@@ -117,25 +166,25 @@
             <table class="tabheader midfontsize">
                 <tr>
                     <td>工艺卡号</td>
-                    <td>{{ weldingTableOne.processNumber }}</td>
+                    <td>{{ welding.weldingTableOne.processNumber }}</td>
                     <td>数量</td>
-                    <td>{{ weldingTableOne.quantity }}</td>
+                    <td>{{ welding.weldingTableOne.quantity }}</td>
                     <td>工件编号</td>
-                    <td>{{ weldingTableOne.workpieceNumber }}</td>
+                    <td>{{ welding.weldingTableOne.workpieceNumber }}</td>
                     <td>车间</td>
-                    <td>{{ weldingTableOne.workshop }}</td>
+                    <td>{{ welding.weldingTableOne.workshop }}</td>
                     <td>工单号</td>
-                    <td>{{ weldingTableOne.workOrderNumber }}</td>
+                    <td>{{ welding.weldingTableOne.workOrderNumber }}</td>
                 </tr>
                 <tr>
                     <td>产品名称</td>
-                    <td>{{ weldingTableOne.productName }}</td>
+                    <td>{{ welding.weldingTableOne.productName }}</td>
                     <td>产品代号</td>
-                    <td>{{ weldingTableOne.productCode }}</td>
+                    <td>{{ welding.weldingTableOne.productCode }}</td>
                     <td>部件名称</td>
-                    <td>{{ weldingTableOne.partName }}</td>
+                    <td>{{ welding.weldingTableOne.partName }}</td>
                     <td>部件图号</td>
-                    <td colspan="3">{{ weldingTableOne.partDrawingNumber }}</td>	          
+                    <td colspan="3">{{ welding.weldingTableOne.partDrawingNumber }}</td>	          
                 </tr>
             </table>
             <table class="tabbodytwo">
@@ -157,7 +206,7 @@
                     <td>检验员签名（日期）</td>
                 </tr>
                 <tbody class="tabbodytwofont">
-                <tr v-for="(item,index) in weldingTableThree_1">
+                <tr v-for="(item,index) in welding.weldingTableThree_1">
                     <td>{{ item.weldNumber }}&nbsp;</td>
                     <td>{{ item.processRequirements_1 }}</td>
                     <td>{{ item.testResult_1 }}</td>
@@ -186,7 +235,7 @@
                     <td>检验结果</td>
                     <td>检验员签名（日期）</td>
                 </tr>
-                <tr v-for="(item,index) in weldingTableThree_2">
+                <tr v-for="(item,index) in welding.weldingTableThree_2">
                     <td>{{ item.weldNumber }}&nbsp;</td>
                     <td>{{ item.processRequirements_1 }}</td>
                     <td>{{ item.testResult_1 }}</td>
@@ -200,11 +249,11 @@
                 </tr>
                 <tr>
                     <td>终检结果</td>
-                    <td colspan="3">{{ weldingTableThree_3.finalInspectionResult }}</td>
+                    <td colspan="3">{{ welding.weldingTableThree_3.finalInspectionResult }}</td>
                     <td>检验员签名</td>
-                    <td colspan="3">{{ weldingTableThree_3.inspectorSingnature }}</td>
+                    <td colspan="3">{{ welding.weldingTableThree_3.inspectorSingnature }}</td>
                     <td>日期</td>
-                    <td>{{ weldingTableThree_3.date }}</td>
+                    <td>{{ welding.weldingTableThree_3.date }}</td>
                 </tr>
                 </tbody>
             </table>
@@ -225,34 +274,34 @@
             <table class="tabheader midfontsize">
                 <tr>
                     <td>工艺卡号</td>
-                    <td>{{ weldingTableOne.processNumber }}</td>
+                    <td>{{ welding.weldingTableOne.processNumber }}</td>
                     <td>数量</td>
-                    <td>{{ weldingTableOne.quantity }}</td>
+                    <td>{{ welding.weldingTableOne.quantity }}</td>
                     <td>工件编号</td>
-                    <td>{{ weldingTableOne.workpieceNumber }}</td>
+                    <td>{{ welding.weldingTableOne.workpieceNumber }}</td>
                     <td>车间</td>
-                    <td>{{ weldingTableOne.workshop }}</td>
+                    <td>{{ welding.weldingTableOne.workshop }}</td>
                     <td>工单号</td>
-                    <td>{{ weldingTableOne.workOrderNumber }}</td>
+                    <td>{{ welding.weldingTableOne.workOrderNumber }}</td>
                 </tr>
                 <tr>
                     <td>产品名称</td>
-                    <td>{{ weldingTableOne.productName }}</td>
+                    <td>{{ welding.weldingTableOne.productName }}</td>
                     <td>产品代号</td>
-                    <td>{{ weldingTableOne.productCode }}</td>
+                    <td>{{ welding.weldingTableOne.productCode }}</td>
                     <td>部件名称</td>
-                    <td>{{ weldingTableOne.partName }}</td>
+                    <td>{{ welding.weldingTableOne.partName }}</td>
                     <td>部件图号</td>
-                    <td colspan="3">{{ weldingTableOne.partDrawingNumber }}</td>	          
+                    <td colspan="3">{{ welding.weldingTableOne.partDrawingNumber }}</td>	          
                 </tr>
             </table>
             <table class="tabbodythree">
                 <tr>
                     <td class="weldingsequence" style="height:8mm;">焊接顺序</td>
-                    <td rowspan="2" id="imageBox" ref="imageBox" v-html="`<img  src='${baseURL}/${weldngTableFour.weldNumberMap}' style='max-width:100%;max-height:100%;pointer-events:none;display:${isEmpty(weldngTableFour.weldNumberMap)};' />`" style="width:80%;height:15cm;">&nbsp;</td>
+                    <td rowspan="2" id="imageBox" ref="imageBox" v-html="`<img  src='${baseURL}/${welding.weldngTableFour.weldNumberMap}' style='max-width:100%;max-height:100%;pointer-events:none;display:${isEmpty(welding.weldngTableFour.weldNumberMap)};' />`" style="width:80%;height:15cm;">&nbsp;</td>
                 </tr>
                 <tr>
-                    <td>{{ weldngTableFour.weldingSequence }}</td>
+                    <td>{{ welding.weldngTableFour.weldingSequence }}</td>
                 </tr>
             </table>
             <table class="tabfooter">
@@ -265,14 +314,18 @@
                     <td colspan="6" style="height:10mm;">&nbsp;</td>
                     <td colspan="6">&nbsp;</td>                   
                 </tr>
-            </table>           
+            </table>
+            <!-- 第三页 end -->
+            <div class="page"></div>
+        </div>
+        <!-- 三页循环一次 end -->
 	</div>
 </template>
 
 <script>
 import axios from 'axios'
 export default {
-    name: 'Weldingprinter',
+    name: 'WeldingprinterAll',
     data() {
         return {
             isShowdetailList:false,//是否创建首页列表
@@ -350,25 +403,40 @@ export default {
             document.getElementsByTagName("body")[0].style.overflow = "visible"
             document.getElementById("app").style.overflow = "visible"
             
-            let contactId = this.$route.query.contactId           
-            axios.get(`${this.baseURL}/basicdata/document.php?flag=getWeldingInfoData&contactID=${contactId}`)
+
+            let relateId = this.$route.query.relateId //获取URL的参数
+            axios.get(`${this.baseURL}/basicdata/document.php?flag=getWeldingPrintData&relateId=${relateId}`)
             .then((response) => {        
                 if(response.data.state == "success"){
-                    this.weldingTableOne = response.data.data.weldingTableOne
-                    this.weldingTableTwo_1 = response.data.data.weldingTableTwo_1
-                    this.weldingTableTwo_2 = response.data.data.weldingTableTwo_2
-                    this.weldingTableThree_1 = response.data.data.weldingTableThree_1
-                    this.weldingTableThree_2 = response.data.data.weldingTableThree_2
-                    this.weldingTableThree_3 = response.data.data.weldingTableThree_3
-                    this.weldngTableFour = response.data.data.weldngTableFour
-                    //图片显示
-                    // let imgsrc = '/jmmes/'+this.weldngTableFour.weldNumberMap
-                    // this.weldngTableFour.imgHtml = '<img src="'+imgsrc+'" style="max-width:100%;max-height:100%;pointer-events:none;">'
+                    //创建明细表
+                    this.detailList = response.data.data.detailList                    
+                    this.isShowdetailList = true
+                    //创建焊接信息详情
+                    this.weldingInfo = response.data.data.weldingInfo
+                    this.isShowweldingInfo = true
                 }
             })
             .catch(function(error){
-                console.log(error+"axios error!")
+                console.log(error)
             })
+            // axios.get(`${this.baseURL}/basicdata/document.php?flag=getWeldingInfoData&contactID=${contactId}`)
+            // .then((response) => {        
+            //     if(response.data.state == "success"){
+            //         this.weldingTableOne = response.data.data.weldingTableOne
+            //         this.weldingTableTwo_1 = response.data.data.weldingTableTwo_1
+            //         this.weldingTableTwo_2 = response.data.data.weldingTableTwo_2
+            //         this.weldingTableThree_1 = response.data.data.weldingTableThree_1
+            //         this.weldingTableThree_2 = response.data.data.weldingTableThree_2
+            //         this.weldingTableThree_3 = response.data.data.weldingTableThree_3
+            //         this.weldngTableFour = response.data.data.weldngTableFour
+            //         //图片显示
+            //         let imgsrc = '/jmmes/'+this.weldngTableFour.weldNumberMap
+            //         this.weldngTableFour.imgHtml = '<img src="'+imgsrc+'" style="max-width:100%;max-height:100%;pointer-events:none;">'
+            //     }
+            // })
+            // .catch(function(error){
+            //     console.log(error)
+            // })
         },
         //返回材质及规格
         returnValueMaterialAndSpecifications(v1,v2){

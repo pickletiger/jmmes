@@ -34,10 +34,10 @@
             </el-collapse>
           </el-form-item>
            <el-form-item>
-            <el-button type="primary" @click="handleSave(data.id)">保存</el-button>
-            <el-button type="primary" @click="handleAdd(data.id)">增加子部件</el-button>
-            <el-button type="primary" @click="dialogReviewVisible=true">审核</el-button>
-            <el-button type="danger" @click="handleDelClick(data.id)">删除</el-button>
+            <el-button type="primary" v-if="showSave" @click="handleSave(data.id)">保存</el-button>
+            <el-button type="primary" v-if="showAdd" @click="handleAdd(data.id)">增加子部件</el-button>
+            <el-button type="primary" v-if="showReview" @click="dialogReviewVisible=true">审核</el-button>
+            <el-button type="danger" v-if="showDel" @click="handleDelClick(data.id)">删除</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -154,6 +154,10 @@ export default {
       dialogReviewVisible:false,
       dialogTableVisible:false,
       innerVisible:false,
+      showSave:false,
+      showAdd:false,
+      showReview:false,
+      showDel:false,
       data: {},
       review: {},
       addpart:{},
@@ -208,7 +212,27 @@ export default {
       }  
     }
   },
+   created() {
+    this.AuthorityInfo()
+  },
   methods: {
+    AuthorityInfo(){
+      console.log(this.$route.path)//获取当前URL 
+      if(this.$route.path =="/plan"){
+        this.showSave=true
+        this.showAdd=true
+        this.showReview=true
+        this.showDel=true
+      }else if(this.$route.path =="/craft"){
+        this.showSave=true
+        this.showAdd=true
+        this.showReview=true
+        this.showDel=true
+      }else{
+
+      }
+
+    },
     selectionChanged(params) {
       console.log(params.columnFilters);
     },

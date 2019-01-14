@@ -186,6 +186,12 @@ export default new Router({
             meta: { title: '产品标识卡' }
         }, 
         {
+            path: '/userQRcode',
+            name: 'userQRcode',
+            component: resolve => require(['../components/page/userQRcode.vue'], resolve),
+            meta: { title: '用户二维码' }
+        },
+        {
             path: '/QrcodeList',
             name: 'QrcodeList',
             component: resolve => require(['../components/page/QrcodeList.vue'], resolve),
@@ -199,6 +205,16 @@ export default new Router({
         {
             path: '/craftsmanshipprinter',
             component: resolve => require(['../components/page/Craftsmanshipprinter.vue'], resolve),
+            meta: { title: '制造工艺打印' }
+        },
+        {
+            path: '/weldingprinterAll',
+            component: resolve => require(['../components/page/WeldingprinterAll.vue'], resolve),
+            meta: { title: '焊接信息打印' }
+        },
+        {
+            path: '/craftsmanshipprinterAll',
+            component: resolve => require(['../components/page/CraftsmanshipprinterAll.vue'], resolve),
             meta: { title: '制造工艺打印' }
         },
         {
