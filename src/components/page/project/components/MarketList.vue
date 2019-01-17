@@ -27,7 +27,7 @@
     </vue-good-table>
     <el-dialog title="信息详情" :visible.sync="dialogFormVisible">
         <el-form >
-          <el-form-item label="订单名称" :label-width="formLabelWidth">
+          <el-form-item label="订单编号" :label-width="formLabelWidth">
             <el-input v-model="formData.orderName"  auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="导入人员" :label-width="formLabelWidth">
@@ -47,20 +47,19 @@
     </el-dialog>
     <el-dialog title="新建" :visible.sync="canupload">
       <el-form >
-        <el-form-item label="订单名称" :label-width="formLabelWidth">
-          <el-input v-model="form.name"  auto-complete="off"></el-input>
+        <el-form-item label="订单编号" :label-width="formLabelWidth">
+          <el-input v-model="form.orderNumber"  auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="导入人员" :label-width="formLabelWidth">
-          <el-input v-model="form.number"  auto-complete="off"></el-input>
+          <el-input v-model="form.importPerson"  auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="审核人" :label-width="formLabelWidth">
-          <el-input v-model="form.type"  auto-complete="off"></el-input>
+          <el-input v-model="form.checkPerson"  auto-complete="off"></el-input>
         </el-form-item>
         <el-form-item label="导入时间" :label-width="formLabelWidth">
           <!-- value-format 参数为设置date的类型 -->
-          <el-date-picker type="date" value-format="yyyy-MM-dd"  placeholder="选择日期" v-model="form.date" ></el-date-picker>
+          <el-date-picker type="date" value-format="yyyy-MM-dd"  placeholder="选择日期" v-model="form.importTime" ></el-date-picker>
         </el-form-item>
-
         <el-upload
           class="upload-demo"
           :before-upload="beforeupload"
@@ -78,7 +77,7 @@
         </el-upload>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="canupload = false">取 消</el-button>
+        <el-button @click="canupload = false">取消</el-button>
         <el-button type="primary" @click="uploadFile" >保存</el-button>
       </div>
     </el-dialog>
@@ -100,15 +99,16 @@ export default {
     return {
       form:{},
       formData:{},
+      fileList:[],
       canupload: false,
       dialogFormVisible: false,
       formLabelWidth: "80px",
-      uploadUrl:`${this.baseURL}/market/upload.php`,
+      uploadUrl:`${this.baseURL}/market/market_upload.php`,
       multipleSelection: [],
       notCheckSelection: [], 
       columns: [
         {
-          label: "订单名称",
+          label: "订单编号",
           field: "orderName"
         },
         {
@@ -132,17 +132,21 @@ export default {
     };
   },
   mounted() {
-    this.getData();
+    this.getListData ();
   },
   methods: {
-    getData() {
-      axios.post(`${this.baseURL}/market/upload.php`).then(this.getDataSucc)
-    },
+    // getData() {
+    //   axios.post(`${this.baseURL}/market/market.php`).then(this.getDataSucc)
+    // },
     getDataSucc(res) {
       res = res.data;
       if(res.success && res.rows){
         this.rows = res.rows;
       }
+    },
+    creatRefresh(response) {
+      // console.log(response)
+      this.getListData()
     },
     handleTableData(e) {
       this.formData = e.row;
@@ -157,12 +161,20 @@ export default {
       });
     },
     showpdf() {
+      axios.post()
       // 查看pdf
       window.open("static/upload/MarketCheck/testPDF.pdf")
     },
       // 上传文件
     uploadFile(){
       this.$refs.upload.submit()
+      var fd = new FormData()
+      fd.append("orderNumber",this.form.orderNumber)//订单编号
+      fd.append("importPerson",this.form.importPerson)//导入人员
+      fd.append("importTime",this.form.importTime)//导入时间
+      fd.append("checkPerson",this.form.checkPerson)//审核人
+      // console.log(fd)
+      axios.post(`${this.baseURL}/market/market_reserve.php`,fd).then(this.creatRefresh)  
     },
       // 上传文件前的钩子
     beforeupload (file){
@@ -176,18 +188,26 @@ export default {
       // 文件上传成功时的钩子
     handleSuc(res,file, fileList) {
       // console.log(res)
-      if(res.success == 'success'){
-        this.dialogUpload = false
-        alert("文件上传成功")
-        this.updateTree = !this.updateTree
-        // 增加延时确保tree组件重新渲染
-        setTimeout(()=>{
-          this.updateTree = !this.updateTree
-        },50)
-      }else  {
-        alert("文件上传失败，文件格式错误或该项目已存在")
-      }
-      
+      // if(res.success == 'success'){
+      //   this.dialogUpload = false
+      //   alert("文件上传成功")
+      //   this.updateTree = !this.updateTree
+      //   // 增加延时确保tree组件重新渲染
+      //   setTimeout(()=>{
+      //     this.updateTree = !this.updateTree
+      //   },50)
+      // }else  {
+      //   alert("文件上传失败，文件格式错误或该项目已存在")
+      // }
+      this.getListData()
+    },
+    //获取后台数据
+    getListData () {
+        axios.post(`${this.baseURL}/market/market.php`).then((response) => {
+            this.rows = []
+            this.rows = response.data.data
+          //  console.log(response.data.data)
+        })
     },
     batchCheckComfirm() {
       let multipleSelection = this.multipleSelection;
