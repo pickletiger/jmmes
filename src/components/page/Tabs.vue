@@ -48,7 +48,7 @@
                         </div>
                     </template>
                 </el-tab-pane>
-                <el-tab-pane :label="`回收站(${recycle.length})`" name="third">
+                <el-tab-pane :label="`全部消息(${recycle.length})`" name="third">
                     <template v-if="message === 'third'">
                         <el-table :data="recycle" :show-header="false" style="width: 100%">
                             <el-table-column>
@@ -116,6 +116,8 @@ import axios from 'axios'
             getDataUnread () {
                 var fd = new FormData()
                 fd.append("flag","Unread")
+                var department = localStorage.getItem("ms_department")
+                fd.append("department",department)
                 axios.post(`${this.baseURL}/tabs.php`,fd).then((unread)=> {  //ES6写法
                     unread = unread.data;
                     // console.log(unread)
@@ -124,7 +126,7 @@ import axios from 'axios'
                     this.unread = unread.data;
                     }
 
-                });
+                }); 
             },
             getDataInfoSucc (res){
             // console.log(res.data.rows)

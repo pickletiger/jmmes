@@ -24,7 +24,8 @@
             return {
                 ruleForm: {
                     username: 'admin',
-                    password: '123123'
+                    password: '123123',
+                    department: 'test'
                 },
                 rules: {
                     username: [
@@ -41,6 +42,7 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         localStorage.setItem('ms_username',this.ruleForm.username);
+                        localStorage.setItem('ms_department',this.ruleForm.department);
                         this.$router.push('/');
                     } else {
                         console.log('error submit!!');
