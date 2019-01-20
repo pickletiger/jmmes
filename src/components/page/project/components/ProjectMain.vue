@@ -218,18 +218,11 @@ export default {
   methods: {
     AuthorityInfo(){
       console.log(this.$route.path)//获取当前URL 
-      if(this.$route.path =="/plan"){
+      if(this.$route.path =="/planunreview" || this.$route.path =="/plan" ||this.$route.path =="/craft" ||this.$route.path =="/craftunreview"){
         this.showSave=true
         this.showAdd=true
         this.showReview=true
         this.showDel=true
-      }else if(this.$route.path =="/craft"){
-        this.showSave=true
-        this.showAdd=true
-        this.showReview=true
-        this.showDel=true
-      }else{
-
       }
 
     },
