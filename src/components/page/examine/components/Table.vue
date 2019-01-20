@@ -21,7 +21,7 @@
         </span>
         <span v-else-if="props.column.field == 'result'">
           <a 
-            href="static/img/送检单.jpg" 
+            :href="`http://jmmes.oss-cn-shenzhen.aliyuncs.com/partUpload/${props.row.photourl}`" 
             target="_blank"
             class="show_img"
             :key="props.index"
@@ -148,14 +148,15 @@ export default {
 
     // 成功回调
     success (ret) {
+    
       this.$nextTick(() => { 
         this.loadingInstance.close();
       });
-
       if(ret.data.success == 'success'){
         this.item == '未检验'?
         this.rows = ret.data.data : 
         this.rows = ret.data.data
+        console.log(this.rows[0].photourl)
       }else {
 
       }

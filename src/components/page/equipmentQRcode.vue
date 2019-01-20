@@ -13,7 +13,7 @@
                 <tr style="text-align: center;">
                 <td colspan="2" rowspan="2">
                     <qrcode
-                    :value='`{"number":"${data.number}","flag":"${data.flag}","id":"${data.id}"}`'
+                    :value='`{"equNum":"${data.number}","flag":"${data.flag}","id":"${data.id}"}`'
                     :options="{ size: 95 }"
                     >
                     </qrcode>
