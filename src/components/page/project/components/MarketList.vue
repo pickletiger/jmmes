@@ -12,7 +12,7 @@
     >
     <template slot="table-row" slot-scope="props">
       <span v-if="props.column.field == 'operate'">
-        <el-button type="primary" @click="showpdf()" >查看</el-button>
+        <el-button type="primary" @click="handleTabledata(props.row)" >查看</el-button>
         <el-button type="primary" v-if="props.row.checkPerson == '' " @click="handleTableData(props)">审核</el-button>
         <el-button type="info" disabled v-else>审核</el-button>
       </span>
@@ -160,21 +160,35 @@ export default {
         type: 'success'
       });
     },
-    showpdf() {
-      axios.post()
+    handleTabledata(row) {
+      // console.log(row.id)
+      var fd = new FormData()
+      this.checkrows = []
+      fd.append("ordernumber",row.orderName)
+      axios.post(`${this.baseURL}/market/market_pdf.php`,fd)
+      .then((res) => {
+          console.log(res)
+          this.showpdf(res.data.data.pdf)
+      })
+    },
+    showpdf(res) {
       // 查看pdf
-      window.open("static/upload/MarketCheck/testPDF.pdf")
+      let myUrl = "http://"+res
+      // console.log(myUrl)
+      window.open(myUrl,'_blank')
     },
       // 上传文件
     uploadFile(){
       this.$refs.upload.submit()
-      var fd = new FormData()
-      fd.append("orderNumber",this.form.orderNumber)//订单编号
-      fd.append("importPerson",this.form.importPerson)//导入人员
-      fd.append("importTime",this.form.importTime)//导入时间
-      fd.append("checkPerson",this.form.checkPerson)//审核人
-      // console.log(fd)
-      axios.post(`${this.baseURL}/market/market_reserve.php`,fd).then(this.creatRefresh)  
+      
+      // console.log(1)
+      // var fd = new FormData()
+      // fd.append("orderNumber",this.form.orderNumber)//订单编号
+      // fd.append("importPerson",this.form.importPerson)//导入人员
+      // fd.append("importTime",this.form.importTime)//导入时间
+      // fd.append("checkPerson",this.form.checkPerson)//审核人
+      // // console.log(fd)
+      // axios.post(`${this.baseURL}/market/market_upload.php`,fd).then(this.creatRefresh)  
     },
       // 上传文件前的钩子
     beforeupload (file){
@@ -187,7 +201,7 @@ export default {
     },
       // 文件上传成功时的钩子
     handleSuc(res,file, fileList) {
-      // console.log(res)
+      console.log(res)
       // if(res.success == 'success'){
       //   this.dialogUpload = false
       //   alert("文件上传成功")
