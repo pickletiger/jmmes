@@ -113,12 +113,12 @@ export default new Router({
                     component: resolve => require(['../components/page/basicdata/Document.vue'], resolve),
                     meta: { title: '文档管理' }
                 },
-                {
-                    // 基础数据模块/原材料管理
-                    path: '/material',
-                    component: resolve => require(['../components/page/basicdata/Material.vue'], resolve),
-                    meta: { title: '原材料管理' }
-                },
+                // {
+                //     // 基础数据模块/原材料管理
+                //     path: '/material',
+                //     component: resolve => require(['../components/page/basicdata/Material.vue'], resolve),
+                //     meta: { title: '原材料管理' }
+                // },
                 {
                     // 车间模块/电子看板
                     path: '/electronic',
@@ -190,6 +190,18 @@ export default new Router({
             name: 'userQRcode',
             component: resolve => require(['../components/page/userQRcode.vue'], resolve),
             meta: { title: '用户二维码' }
+        },
+        {
+            path: '/equipmentQRcode',
+            name: 'equipmentQRcode',
+            component: resolve => require(['../components/page/equipmentQRcode.vue'], resolve),
+            meta: { title: '点检二维码' }
+        },
+        {
+            path: '/equipmentBar',
+            name: 'equipmentBar',
+            component: resolve => require(['../components/page/equipmentBar.vue'], resolve),
+            meta: { title: '点检条形码' }
         },
         {
             path: '/QrcodeList',

@@ -42,6 +42,16 @@
           <el-form-item label="部门" :label-width="formLabelWidth">
             <el-input v-model="dialogFormdata.department" auto-complete="off"></el-input>
           </el-form-item>
+          <el-form-item label="车间" :label-width="formLabelWidth">
+            <el-select v-model="dialogFormdata.workShop" placeholder="请选择">
+              <el-option
+                v-for="item in options1"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="终端" :label-width="formLabelWidth">
             <el-select v-model="dialogFormdata.terminal" placeholder="请选择">
               <el-option
@@ -166,6 +176,46 @@ export default {
           label: 'PDA端'
         }],
         value:'',
+        options1: [{
+          value: '0',
+          label: 'K'
+        }, {
+          value: '1',
+          label: 'T-焊前'
+        },
+        {
+          value: '2',
+          label: 'T-组焊'
+        },
+        {
+          value: '3',
+          label: 'T-装配'
+        },
+        {
+          value: '4',
+          label: 'F'
+        },
+        {
+          value: '5',
+          label: 'W'
+        },
+        {
+          value: '6',
+          label: 'D装配'
+        },
+        {
+          value: '7',
+          label: 'G'
+        },
+        {
+          value: '8',
+          label: 'L组焊'
+        },
+        {
+          value: '9',
+          label: 'I/L装配'
+        }
+        ],
       target: `${this.baseURL}/basicdata/components/tableUpload.php`
     };
   },
@@ -187,7 +237,7 @@ export default {
         .catch(_ => {});
     },
     creatRefresh(response) {
-      // console.log(response)
+      console.log(response)
       this.getStuffInfoData()
     },
     //新建人员及修改
@@ -195,7 +245,7 @@ export default {
       this.dialogFormVisible = false
       // 判断dialogFormdata.id是否存在，若存在说明是已有人员，若不存在则说明是新建人员
       if(this.dialogFormdata.id) {
-        // console.log(this.dialogFormdata.id)
+        // console.log(this.dialogFormdata.workShop)
         var fd = new FormData()
         fd.append("id",this.dialogFormdata.id)
         fd.append("gNum",this.dialogFormdata.gNum)//工号
@@ -203,6 +253,7 @@ export default {
         fd.append("phone",this.dialogFormdata.phone)//电话
         fd.append("position",this.dialogFormdata.position)//职位
         fd.append("department",this.dialogFormdata.department)//部门
+        fd.append("workShop",this.dialogFormdata.workShop)//车间
         fd.append("terminal",this.dialogFormdata.terminal)//终端
         // console.log(fd)
         axios.post(`${this.baseURL}/basicdata/components/tableList_reserve.php`,fd).then(this.creatRefresh)
@@ -218,6 +269,7 @@ export default {
         fd.append("phone",this.dialogFormdata.phone)//电话
         fd.append("position",this.dialogFormdata.position)//职位
         fd.append("department",this.dialogFormdata.department)//部门
+        fd.append("workShop",this.dialogFormdata.workShop)//车间
         fd.append("terminal",this.dialogFormdata.terminal)//终端
         // console.log(fd)
         axios.post(`${this.baseURL}/basicdata/components/tableList_reserve.php`,fd).then(this.creatRefresh)

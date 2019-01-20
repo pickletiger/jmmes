@@ -39,6 +39,12 @@
                     <td>填写日期</td>
                     <td>{{item.date}}</td>
                 </tr>
+                <tr style="text-align: center;">
+                    <td>焊接开始</td>
+                    <td><barcode :value='`${item.partid}`' :options="barcode_option"></barcode></td>
+                    <td>焊接结束</td>
+                    <td colspan="4"><barcode :value='`${item.partid}a`' :options="barcode_option"></barcode></td>
+                </tr>
             </table>
             <div class="page-break"></div>
         </div>	
@@ -56,7 +62,14 @@ export default {
     },
     data (){
         return {
-            data:[]
+            data:[],
+            barcode_option:{
+                displayValue: false, //是否默认显示条形码数据
+                //textPosition  :'top', //条形码数据显示的位置
+                background: '#fff', //条形码背景颜色
+                width:'2px',
+                height: '55px'
+            }
         }
     },
 	created () {

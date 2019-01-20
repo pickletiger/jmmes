@@ -4,7 +4,7 @@
     <div slot="table-actions" class="table-actions" >
       <el-button type="primary"  @click="exportExcel()">导出</el-button>
       <el-button type="primary" v-if="show_2btn"  @click="dialogVisible = true">排产</el-button>
-      <el-button type="primary" v-if="show_4btn"  @click="dialogBack = true">退产</el-button>
+      <el-button type="primary" v-if="show_4btn"  @click="dialogBack()">退产</el-button>
       <el-button type="primary" v-if="show_3btn" @click="print()"  >生产计划表</el-button>
       <el-button type="primary" v-if="show_3btn" @click="print2()"  >产品标志卡</el-button>
       <el-button type="primary" @click="clearFilter">清除过滤</el-button>
@@ -543,6 +543,7 @@ export default {
       activeName: 'first',
       show_2btn: true,
       show_3btn: false,
+      show_4btn:false,
       options: [{
         value: 'K',
         label: 'K车间'
@@ -594,7 +595,7 @@ export default {
         .then(this.getDataSucc);
     },
     
-    getData(fd) {
+    getData() {
 
       axios
         .post(`${this.baseURL}/productionplan/list.php`)
@@ -754,23 +755,26 @@ export default {
     },
     // 处理选中项
     handleSelectionChange(e) {
-      this.modid = [];
-      this.routeid = [];
+      this.modid = []
+      this.routeid = []
       // 存储勾选项所有信息
-      this.printVal = e;
-      let selectLength = e.length;
+      this.printVal = e
+      this.route_line = e
+      let selectLength = e.length
       if (selectLength) {
         // 存储已选值数据
         for (let i=0; i < selectLength; i++) {
-          this.modid.push(e[i].modid);
-          this.routeid.push(e[i].routeid);
+          this.modid.push(e[i].modid)
+          this.routeid.push(e[i].routeid)
         }
       }
       // 清空缓存
       sessionStorage.removeItem('table');
       sessionStorage.removeItem('checkList');
       sessionStorage.removeItem('schedule');
+      sessionStorage.removeItem('route');
       // 缓冲数据，作为打印页面传递数据
+      sessionStorage.setItem('route',JSON.stringify(this.route_line));
       sessionStorage.setItem('table',JSON.stringify(this.printVal));
       sessionStorage.setItem('checkList',JSON.stringify(this.checkList));
       sessionStorage.setItem('schedule',JSON.stringify(this.schedule));
@@ -787,17 +791,18 @@ export default {
     handleSchedule() {
       let that = this;
       if(this.modid.length && this.schedule && this.checkList.length){
-        var fd = new FormData();
-        fd.append('modid',this.modid);
-        fd.append('routeid',this.routeid);
-        fd.append('checkList',this.checkList);
-        fd.append('schedule',this.schedule);
+        var fd = new FormData()
+        fd.append('flag',"Schedule")
+        fd.append('modid',this.modid)
+        fd.append('routeid',this.routeid)
+        fd.append('checkList',this.checkList)
+        fd.append('schedule',this.schedule)
         axios.post(`${this.baseURL}/productionplan/schedule.php`,fd)
         .then(function(res){
           // 成功回调
           that.dialogVisible = false;
-          alert('操作成功!');
-          that.reload();
+          alert('操作成功!')
+          that.reload()
           // location.reload();
         })
       }else {
@@ -809,6 +814,23 @@ export default {
       
     },
 
+
+    //退产操作
+    dialogBack(){
+      let that = this
+      var fd = new FormData()
+      fd.append('flag',"Back")
+      fd.append('modid',this.modid)
+      axios.post(`${this.baseURL}/productionplan/schedule.php`,fd)
+      .then(function(res){
+        // 成功回调
+        that.dialogVisible = false;
+        alert('操作成功!')
+        that.reload()
+        // location.reload();
+      })
+    },
+
     // 选项卡切换
     tabClick(tab, event) {
       // console.log(tab.name)
@@ -816,6 +838,7 @@ export default {
       if (tab.name == 'second') {
         this.show_2btn = false;
         this.show_3btn = true;
+        this.show_4btn = true;
       }else if(tab.name == 'second'){
         this.show_2btn = false;
         this.show_3btn = false;

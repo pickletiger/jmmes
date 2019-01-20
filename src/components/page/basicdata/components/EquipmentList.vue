@@ -9,9 +9,12 @@
     >
       <template slot="table-row" slot-scope="props">
         <span v-if="props.column.field == 'operate'">
+          <el-button type="primary"   @click="equipmentQRcode(props.row)">点检二维码</el-button>
+          <el-button type="primary"   @click="equipmentBarcode(props.row)">条形码</el-button>
           <el-button type="primary"   @click="handleTabledata(props.row)">查看</el-button>
           <el-button type="primary" icon="el-icon-edit" circle @click="handleData(props.row)"></el-button>
           <el-button type="danger" icon="el-icon-delete" circle @click="deleteEquipment(props.row)" ></el-button>
+          
         </span>
         <span v-else>
           {{props.formattedRow[props.column.field]}}
@@ -45,6 +48,16 @@
           </el-form-item>
           <el-form-item label="点检周期" :label-width="formLabelWidth">
             <el-input v-model="dialogFormdata.tallycycle" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="设备" :label-width="formLabelWidth">
+            <el-select v-model="dialogFormdata.terminal" placeholder="请选择">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -127,6 +140,14 @@ export default {
           field: "operate"
         }
       ],
+      options: [{
+          value: '0',
+          label: '终端设备'
+        }, {
+          value: '1',
+          label: '非终端设备'
+        }],
+        value:'',
       rows: [],
       checkcolumns: [
         {
@@ -170,7 +191,7 @@ export default {
       // console.log(this.dialogFormdata)
       // 判断dialogFormdata.id是否存在，若存在说明是已有设备，若不存在则说明是新建设备
       if(this.dialogFormdata.id) {
-        // console.log(this.dialogFormdata.id)
+        // console.log(this.dialogFormdata.terminal)
         var fd = new FormData()
         fd.append("id",this.dialogFormdata.id)
         fd.append("number",this.dialogFormdata.number)
@@ -180,6 +201,7 @@ export default {
         fd.append("checkrequest",this.dialogFormdata.checkrequest)
         fd.append("tallyposition",this.dialogFormdata.tallyposition)
         fd.append("tallycycle",this.dialogFormdata.tallycycle)
+        fd.append("terminal",this.dialogFormdata.terminal)
         // console.log(fd)
         axios.post(`${this.baseURL}/basicdata/equipment_reserve.php`,fd).then(this.creatRefresh)
         this.$message({
@@ -188,25 +210,26 @@ export default {
       });
       }else {
         // console.log(this.dialogFormdata.id)
-      var fd = new FormData()
-      fd.append("number",this.dialogFormdata.number)
-      fd.append("name",this.dialogFormdata.name)
-      fd.append("state",this.dialogFormdata.state)
-      fd.append("workcenter",this.dialogFormdata.workcenter)
-      fd.append("checkrequest",this.dialogFormdata.checkrequest)
-      fd.append("tallyposition",this.dialogFormdata.tallyposition)
-      fd.append("tallycycle",this.dialogFormdata.tallycycle)
-      // console.log(fd)
-      axios.post(`${this.baseURL}/basicdata/equipment_reserve.php`,fd).then(this.creatRefresh)
-      this.$message({
-        type: 'success',
-        message: '新建成功!'
-      });
+        var fd = new FormData()
+        fd.append("number",this.dialogFormdata.number)
+        fd.append("name",this.dialogFormdata.name)
+        fd.append("state",this.dialogFormdata.state)
+        fd.append("workcenter",this.dialogFormdata.workcenter)
+        fd.append("checkrequest",this.dialogFormdata.checkrequest)
+        fd.append("tallyposition",this.dialogFormdata.tallyposition)
+        fd.append("tallycycle",this.dialogFormdata.tallycycle)
+        fd.append("terminal",this.dialogFormdata.terminal)
+        // console.log(fd)
+        axios.post(`${this.baseURL}/basicdata/equipment_reserve.php`,fd).then(this.creatRefresh)
+        this.$message({
+          type: 'success',
+          message: '新建成功!'
+        });
       }
       
     },
     creatRefresh(res) {
-      // console.log(res)
+      console.log(res)
       this.getDataInfo()
     },
     // 获取设备list
@@ -277,6 +300,32 @@ export default {
         this.checkrows = res.data
       }
     },
+    //点检二维码
+    equipmentQRcode(row){
+      // 清空缓存
+      sessionStorage.removeItem('id')
+      sessionStorage.removeItem('name')
+      sessionStorage.removeItem('number')
+      //缓存浏览器
+      sessionStorage.setItem('id',row.id)
+      sessionStorage.setItem('name',row.name)
+      sessionStorage.setItem('number',row.number)
+      //打开生成二维码页面
+      window.open('#/equipmentQRcode', '_blank');
+    },
+    //条形码
+    equipmentBarcode(row){
+      // 清空缓存
+      sessionStorage.removeItem('id')
+      sessionStorage.removeItem('name')
+      sessionStorage.removeItem('number')
+      //缓存浏览器
+      sessionStorage.setItem('id',row.id)
+      sessionStorage.setItem('name',row.name)
+      sessionStorage.setItem('number',row.number)
+      //打开生成二维码页面
+      window.open('#/equipmentBar', '_blank');
+    }
   }
 };
 </script>

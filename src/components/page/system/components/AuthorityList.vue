@@ -5,7 +5,7 @@
         <span v-if="props.column.field == 'operate'">
           <el-button type="primary" icon="el-icon-edit" circle @click="editTable(props.row)"></el-button>
           <el-button type="primary" icon="el-icon-tickets" circle @click="authority(props.row)"></el-button>
-          <el-button type="primary" icon="el-icon-message" circle @click="Msgmodule= true"></el-button>
+          <!-- <el-button type="primary" icon="el-icon-message" circle @click="Msgmodule= true"></el-button> -->
           <el-button type="danger" icon="el-icon-delete" circle @click="deleteStaff"></el-button>
         </span>
         <span v-else>{{props.formattedRow[props.column.field]}}</span>
@@ -230,10 +230,10 @@ export default {
               label: "数据备份与还原",
               value:"30"
             },
-            {
-              label: "车间管理",
-              value:"31"
-            },
+            // {
+            //   label: "车间管理",
+            //   value:"31"
+            // },
             {
               label: "权限管理",
               value:"32"
