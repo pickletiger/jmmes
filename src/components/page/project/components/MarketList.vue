@@ -192,12 +192,16 @@ export default {
     },
       // 上传文件前的钩子
     beforeupload (file){
-      // console.log(file)
+      console.log(file.type)
       this.form.ftype = file.type
     },
     selectionChanged(val) {
       // 存入选择项的值(数组)
       this.multipleSelection = val;
+    },
+       // 上传文件
+    uploadFile(){
+      this.$refs.upload.submit()
     },
       // 文件上传成功时的钩子
     handleSuc(res,file, fileList) {

@@ -4,9 +4,19 @@
     <div slot="table-actions" class="table-actions" >
       <el-button type="primary"  @click="exportExcel()">导出</el-button>
       <el-button type="primary" v-if="show_2btn"  @click="dialogVisible = true">排产</el-button>
+      <el-button type="primary" v-if="show_4btn"  @click="dialogBack = true">退产</el-button>
       <el-button type="primary" v-if="show_3btn" @click="print()"  >生产计划表</el-button>
       <el-button type="primary" v-if="show_3btn" @click="print2()"  >产品标志卡</el-button>
       <el-button type="primary" @click="clearFilter">清除过滤</el-button>
+      <el-select v-model="value" placeholder="请选择" @change="select_WS()">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+          size="">
+        </el-option>
+      </el-select>
     </div>
     <el-tabs v-model="activeName" @tab-click="tabClick">
       <!-- 未排产选项卡 -->
@@ -532,7 +542,39 @@ export default {
       printVal: [],
       activeName: 'first',
       show_2btn: true,
-      show_3btn: false
+      show_3btn: false,
+      options: [{
+        value: 'K',
+        label: 'K车间'
+      }, {
+        value: 'T-焊前',
+        label: 'T-焊前'
+      }, {
+        value: 'T阻焊',
+        label: 'T阻焊'
+      }, {
+        value: 'T装配',
+        label: 'T装配'
+      }, {
+        value: 'F',
+        label: 'F车间'
+      }, {
+        value: 'W',
+        label: 'W车间'
+      }, {
+        value: 'D装配',
+        label: 'D装配'
+      }, {
+        value: 'G',
+        label: 'G车间'
+      }, {
+        value: 'L组焊',
+        label: 'L组焊'
+      }, {
+        value: 'I/L装配',
+        label: 'I/L装配'
+      }],
+      value: ''
     };
   },
   components: {
@@ -542,13 +584,24 @@ export default {
     this.getData();
   },
   methods: {
+    select_WS(){
+      // console.log(this.value)
+      var fd = new FormData()
+      fd.append("flag",this.value)
+      
+      axios
+        .post(`${this.baseURL}/productionplan/list.php`,fd)
+        .then(this.getDataSucc);
+    },
     
-    getData() {
+    getData(fd) {
+
       axios
         .post(`${this.baseURL}/productionplan/list.php`)
         .then(this.getDataSucc);
     },
     getDataSucc(res) {
+      // console.log(res.data)
       res = res.data;
       if (res.success && res.rows) {
         // 未排产
@@ -619,7 +672,7 @@ export default {
     },
     // 导出
     exportExcel() {
-      console.log('导出');
+      // console.log('导出');
     },
     filterHandler(value, row, column) {
       const property = column["property"];
@@ -758,7 +811,7 @@ export default {
 
     // 选项卡切换
     tabClick(tab, event) {
-      console.log(tab.name)
+      // console.log(tab.name)
       // 已排产页面隐藏排产按钮
       if (tab.name == 'second') {
         this.show_2btn = false;
@@ -774,7 +827,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
- 
-</style>
