@@ -13,7 +13,7 @@
     >
     <template slot="table-row" slot-scope="props">
       <span v-if="props.column.field == 'operate'">
-        <el-button type="primary" @click="showpdf()" >查看</el-button>
+        <el-button type="primary" @click="handleTabledata(props.row)" >查看</el-button>
         <!-- <el-button type="primary" v-if="props.row.checkPerson == '' ">审核</el-button>
         <el-button type="info" disabled v-else>审核</el-button> -->
       </span>
@@ -68,20 +68,41 @@ export default {
     };
   },
   mounted() {
-    this.getData();
+     this.getListData ();
   },
   methods: {
-    getData() {
-      axios.post('https://www.easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/MarketCheck').then(this.getDataSucc)
-    },
+    // getData() {
+    //   axios.post('https://www.easy-mock.com/mock/5ba8a1d483dbde41b0055d83/jm/MarketCheck').then(this.getDataSucc)
+    // },
     getDataSucc(res) {
       res = res.data;
       if(res.success && res.rows){
         this.rows = res.rows;
       }
     },
-    showpdf() {
-      window.open("static/upload/MarketCheck/testPDF.pdf")
+    getListData () {
+    axios.post(`${this.baseURL}/market/market.php`).then((response) => {
+        this.rows = []
+        this.rows = response.data.data
+      //  console.log(response.data.data)
+    })
+},
+    handleTabledata(row) {
+      // console.log(row.id)
+      var fd = new FormData()
+      this.checkrows = []
+      fd.append("ordernumber",row.orderName)
+      axios.post(`${this.baseURL}/market/market_pdf.php`,fd)
+      .then((res) => {
+          console.log(res)
+          this.showpdf(res.data.data.pdf)
+      })
+    },
+    showpdf(res) {
+      // 查看pdf
+      let myUrl = "http://"+res
+      // console.log(myUrl)
+      window.open(myUrl,'_blank')
     },
     comfirm() {
 

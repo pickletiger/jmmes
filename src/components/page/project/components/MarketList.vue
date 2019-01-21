@@ -180,7 +180,6 @@ export default {
       // 上传文件
     uploadFile(){
       this.$refs.upload.submit()
-      
       // console.log(1)
       // var fd = new FormData()
       // fd.append("orderNumber",this.form.orderNumber)//订单编号
