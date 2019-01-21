@@ -10,7 +10,7 @@
                     <el-input type="password" placeholder="password" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')"></el-input>
                 </el-form-item>
                 <div class="login-btn">
-                    <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
+                    <el-button type="primary" @click="submitForm()">登录</el-button>
                 </div>
                 <!-- <p style="font-size:12px;line-height:30px;color:#999;">Tips : 用户名和密码随便填。</p> -->
             </el-form>
@@ -19,13 +19,14 @@
 </template>
 
 <script>
+    import axios from "axios"
     export default {
         data: function(){
             return {
                 ruleForm: {
-                    username: 'admin',
-                    password: '123123',
-                    department: 'test'
+                    username: '',
+                    password: '',
+                    department: ''
                 },
                 rules: {
                     username: [
@@ -38,17 +39,24 @@
             }
         },
         methods: {
-            submitForm(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
+            submitForm() {
+                 var fd = new FormData()
+                    fd.append("flag","Login")
+                    fd.append("username",this.ruleForm.username)
+                    fd.append("password",this.ruleForm.password)
+                    axios.post(`${this.baseURL}/login.php`,fd).then((res)=> {
+                        console.log(res.data)
                         localStorage.setItem('ms_username',this.ruleForm.username);
                         localStorage.setItem('ms_department',this.ruleForm.department);
-                        this.$router.push('/');
-                    } else {
-                        console.log('error submit!!');
-                        return false;
-                    }
-                });
+                        if(res.data == "success"){
+                            this.$router.push('/dashboard');
+                        }else{
+                            alert("登录失败")
+                        }
+                        
+                    })
+               
+               
             }
         }
     }
