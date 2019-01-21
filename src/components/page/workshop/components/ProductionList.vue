@@ -491,6 +491,16 @@
           >
           </el-date-picker>
         </el-form-item>
+        <el-form-item label="交付日期" :label-width="formLabelWidth">
+          <el-date-picker
+            v-model="overdata"
+            type="date"
+            placeholder="选择日期"
+            format="yyyy 年 MM 月 dd 日"
+            value-format="yyyy-MM-dd"
+          >
+          </el-date-picker>
+        </el-form-item>
         <el-form-item label="工位" :label-width="formLabelWidth">
           <el-checkbox-group v-model="checkList">
             <el-checkbox label="切管"></el-checkbox>
@@ -524,6 +534,7 @@ export default {
       formLabelWidth: "120px",
       dialogVisible: false,
       schedule: "",
+      overdata:"",
       checkList: [],
       tableData: [],
       tableData2: [],
@@ -797,6 +808,7 @@ export default {
         fd.append('routeid',this.routeid)
         fd.append('checkList',this.checkList)
         fd.append('schedule',this.schedule)
+        fd.append('overdata',this.overdata)
         axios.post(`${this.baseURL}/productionplan/schedule.php`,fd)
         .then(function(res){
           // 成功回调
