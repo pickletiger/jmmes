@@ -2,13 +2,25 @@
   <div>
     <!-- table上部按钮 -->
     <div slot="table-actions" class="table-actions" >
+      <el-button type="primary" value = 'W'  @click="select_WS('W')">W车间</el-button>
+      <el-button type="primary" value = 'F'  @click="select_WS('F')">F车间</el-button>
+      <el-button type="primary" value = 'G'  @click="select_WS('G')">G车间</el-button>
+      <el-button type="primary" value = 'I'  @click="select_WS('I')">I车间</el-button>
+      <el-button type="primary" value = 'K'  @click="select_WS('K')">K车间</el-button>
+      <el-button type="primary" value = 'S'  @click="select_WS('S')">S车间</el-button>
+      <el-button type="primary" value = 'T'  @click="select_WS('T')">T车间</el-button>
+      <el-button type="primary" value = 'J'  @click="select_WS('J')">J车间</el-button>
+      <el-button type="primary" value = 'L'  @click="select_WS('L')">L车间</el-button>
+    </div>
+    <br/>
+    <div slot="table-actions" class="table-actions" >
       <el-button type="primary"  @click="exportExcel()">导出</el-button>
       <el-button type="primary" v-if="show_2btn"  @click="dialogVisible = true">排产</el-button>
       <el-button type="primary" v-if="show_4btn"  @click="dialogBack()">退产</el-button>
       <el-button type="primary" v-if="show_3btn" @click="print()"  >生产计划表</el-button>
       <el-button type="primary" v-if="show_3btn" @click="print2()"  >产品标志卡</el-button>
       <el-button type="primary" @click="clearFilter">清除过滤</el-button>
-      <el-select v-model="value" placeholder="请选择" @change="select_WS()">
+      <!-- <el-select v-model="value" placeholder="请选择" @change="select_WS()">
         <el-option
           v-for="item in options"
           :key="item.value"
@@ -16,7 +28,7 @@
           :value="item.value"
           size="">
         </el-option>
-      </el-select>
+      </el-select> -->
     </div>
     <el-tabs v-model="activeName" @tab-click="tabClick">
       <!-- 未排产选项卡 -->
@@ -555,37 +567,37 @@ export default {
       show_2btn: true,
       show_3btn: false,
       show_4btn:false,
-      options: [{
-        value: 'K',
-        label: 'K车间'
-      }, {
-        value: 'T-焊前',
-        label: 'T-焊前'
-      }, {
-        value: 'T阻焊',
-        label: 'T阻焊'
-      }, {
-        value: 'T装配',
-        label: 'T装配'
-      }, {
-        value: 'F',
-        label: 'F车间'
-      }, {
-        value: 'W',
-        label: 'W车间'
-      }, {
-        value: 'D装配',
-        label: 'D装配'
-      }, {
-        value: 'G',
-        label: 'G车间'
-      }, {
-        value: 'L组焊',
-        label: 'L组焊'
-      }, {
-        value: 'I/L装配',
-        label: 'I/L装配'
-      }],
+      // options: [{
+      //   value: 'K',
+      //   label: 'K车间'
+      // }, {
+      //   value: 'T-焊前',
+      //   label: 'T-焊前'
+      // }, {
+      //   value: 'T阻焊',
+      //   label: 'T阻焊'
+      // }, {
+      //   value: 'T装配',
+      //   label: 'T装配'
+      // }, {
+      //   value: 'F',
+      //   label: 'F车间'
+      // }, {
+      //   value: 'W',
+      //   label: 'W车间'
+      // }, {
+      //   value: 'D装配',
+      //   label: 'D装配'
+      // }, {
+      //   value: 'G',
+      //   label: 'G车间'
+      // }, {
+      //   value: 'L组焊',
+      //   label: 'L组焊'
+      // }, {
+      //   value: 'I/L装配',
+      //   label: 'I/L装配'
+      // }],
       value: ''
     };
   },
@@ -596,10 +608,11 @@ export default {
     this.getData();
   },
   methods: {
-    select_WS(){
+    select_WS(value){
+      // alert(value)
       // console.log(this.value)
       var fd = new FormData()
-      fd.append("flag",this.value)
+      fd.append("flag",value)
       
       axios
         .post(`${this.baseURL}/productionplan/list.php`,fd)
