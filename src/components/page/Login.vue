@@ -47,8 +47,8 @@
                     axios.post(`${this.baseURL}/login.php`,fd).then((res)=> {
                         console.log(res.data)
                         localStorage.setItem('ms_username',this.ruleForm.username);
-                        localStorage.setItem('ms_department',this.ruleForm.department);
-                        if(res.data == "success"){
+                        localStorage.setItem('ms_department',res.data.department);
+                        if(res.data.status == "success"){
                             this.$router.push('/dashboard');
                         }else{
                             alert("登录失败")
