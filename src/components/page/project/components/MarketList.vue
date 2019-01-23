@@ -204,6 +204,7 @@ export default {
     },
       // 文件上传成功时的钩子
     handleSuc(res,file, fileList) {
+      this.canupload = false
       console.log(res)
       // if(res.success == 'success'){
       //   this.dialogUpload = false
