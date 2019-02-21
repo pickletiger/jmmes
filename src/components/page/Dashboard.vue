@@ -31,6 +31,7 @@
                                 </el-form-item>
                             </el-form>
                             <el-button type="danger" style="float: right; margin-bottom:10px" @click="person_save()">保存</el-button>
+                            <el-button type="danger" style="float: right; margin-bottom:10px" @click="test()">ceshi</el-button>
                         </el-card>
                     </el-col>
                 </el-row>
@@ -202,6 +203,11 @@
                  fd.append("postword",this.postword)
                  axios.post(`${this.baseURL}/dashboard.php`,fd).then(function(res){
                      console.log(res)
+                 })
+            },
+            test(){
+                 axios.post(`${this.baseURL}/Test.php`).then(function(res){
+                     console.log(res.data)
                  })
             }
         },

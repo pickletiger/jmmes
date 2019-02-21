@@ -2,15 +2,15 @@
   <div>
     <!-- table上部按钮 -->
     <div slot="table-actions" class="table-actions" >
-      <el-button type="primary" value = 'W'  @click="select_WS('W')">W车间</el-button>
-      <el-button type="primary" value = 'F'  @click="select_WS('F')">F车间</el-button>
-      <el-button type="primary" value = 'G'  @click="select_WS('G')">G车间</el-button>
-      <el-button type="primary" value = 'I'  @click="select_WS('I')">I车间</el-button>
-      <el-button type="primary" value = 'K'  @click="select_WS('K')">K车间</el-button>
-      <el-button type="primary" value = 'S'  @click="select_WS('S')">S车间</el-button>
-      <el-button type="primary" value = 'T'  @click="select_WS('T')">T车间</el-button>
-      <el-button type="primary" value = 'J'  @click="select_WS('J')">J车间</el-button>
-      <el-button type="primary" value = 'L'  @click="select_WS('L')">L车间</el-button>
+      <el-button type="primary" class="btn" value = 'W'  @click="select_WS('W')">W车间</el-button>
+      <el-button type="primary" class="btn" value = 'F'  @click="select_WS('F')">F车间</el-button>
+      <el-button type="primary" class="btn" value = 'G'  @click="select_WS('G')">G车间</el-button>
+      <el-button type="primary" class="btn" value = 'I'  @click="select_WS('I')">I车间</el-button>
+      <el-button type="primary" class="btn" value = 'K'  @click="select_WS('K')">K车间</el-button>
+      <el-button type="primary" class="btn" value = 'S'  @click="select_WS('S')">S车间</el-button>
+      <el-button type="primary" class="btn" value = 'T'  @click="select_WS('T')">T车间</el-button>
+      <el-button type="primary" class="btn" value = 'J'  @click="select_WS('J')">J车间</el-button>
+      <el-button type="primary" class="btn" value = 'L'  @click="select_WS('L')">L车间</el-button>
     </div>
     <br/>
     <div slot="table-actions" class="table-actions" >
@@ -875,3 +875,9 @@ export default {
   }
 };
 </script>
+<style>
+  .btn{
+    background: 	#00DD00;
+
+  }
+</style>

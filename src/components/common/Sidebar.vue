@@ -276,15 +276,15 @@
         display: block;
         position: absolute;
         left: 0;
-        top: 70px;
+        top: 60px;
         bottom:0;
-        overflow-y: scroll;
+         overflow-y: scroll;  /*裁剪内容 - 提供滚动机制。 */
     }
     .sidebar::-webkit-scrollbar{
         width: 0;
     }
     .sidebar-el-menu:not(.el-menu--collapse){
-        width: 250px;
+        width: 150px;
     }
     .sidebar > ul {
         height:100%;
