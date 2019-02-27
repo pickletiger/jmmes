@@ -878,6 +878,5 @@ export default {
 <style>
   .btn{
     background: 	#00DD00;
-
   }
 </style>
