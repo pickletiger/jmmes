@@ -86,7 +86,7 @@
                     <el-checkbox label="销售部"></el-checkbox>
                 </el-checkbox-group>
             </el-dialog>
-        </div>
+        </div> 
     </div>
 </template>
 
@@ -180,15 +180,13 @@ import axios from 'axios'
             },
             //全部标记已读
             allRead: function(index){
-                const item = this.unread.splice(index);
-                console.log(item);
-                this.read = item.concat(this.read);
+                const item = this.unread.splice(index)
+                this.read = item.concat(this.read)
             },
             //删除
             handleDel(row) {
-                console.log(row.id);
-                const item = this.read.splice(row, 1);
-                this.recycle = item.concat(this.recycle);
+                const item = this.read.splice(row, 1)
+                this.recycle = item.concat(this.recycle)
                 var fd = new FormData()
                 fd.append("flag","RecycleIn")
                 fd.append("id",row.id)
@@ -200,30 +198,29 @@ import axios from 'axios'
             //删除全部
             allDel(index) {
                 alert(index)
-                const item = this.read.splice(index);
-                this.recycle = item.concat(this.recycle);
+                const item = this.read.splice(index)
+                this.recycle = item.concat(this.recycle)
             },
             //还原
             handleRestore(row) {
-                console.log(row.id);
-                const item = this.recycle.splice(row, 1);
-                this.read = item.concat(this.read);
+                const item = this.recycle.splice(row, 1)
+                this.read = item.concat(this.read)
                 var fd = new FormData()
                 fd.append("flag","Reduction")
                 fd.append("id",row.id)
                 axios.post(`${this.baseURL}/tabs.php`,fd).then((reduction)=> {  //ES6写法
-                reduction = reduction.data;
+                reduction = reduction.data
 
                 });
             },
             //清空回收站
             emptyTrash(index) {
-                this.recycle.splice(index);
+                this.recycle.splice(index)
             }
         },
         computed: {
             unreadNum(){
-                return this.unread.length;
+                return this.unread.length
             }
         }
     }

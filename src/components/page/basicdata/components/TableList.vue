@@ -145,29 +145,7 @@ export default {
           field: "operate"
         }
       ],
-      rows: [
-/*        {
-          id: 1,
-          specification: "1",
-          size: "张三",
-          place: "13854215475",
-          date: "车间主任"
-        },
-        {
-          id: 2,
-          specification: "2",
-          size: "李四",
-          place: "13555215485",
-          date: "工人"
-        },
-        {
-          id: 3,
-          specification: "3",
-          size: "某某",
-          place: "13545215785",
-          date: "经理"
-        }*/
-      ],
+      rows: [],
       options: [{
           value: '0',
           label: 'PC端'
@@ -255,7 +233,8 @@ export default {
         fd.append("department",this.dialogFormdata.department)//部门
         fd.append("workShop",this.dialogFormdata.workShop)//车间
         fd.append("terminal",this.dialogFormdata.terminal)//终端
-        // console.log(fd)
+        fd.append("uusername",localStorage.ms_username)//修改者账号
+        console.log(fd.append)
         axios.post(`${this.baseURL}/basicdata/components/tableList_reserve.php`,fd).then(this.creatRefresh)
           this.$message({
           type: 'success',
@@ -271,6 +250,7 @@ export default {
         fd.append("department",this.dialogFormdata.department)//部门
         fd.append("workShop",this.dialogFormdata.workShop)//车间
         fd.append("terminal",this.dialogFormdata.terminal)//终端
+        fd.append("uusername",localStorage.ms_username)//修改者账号
         // console.log(fd)
         axios.post(`${this.baseURL}/basicdata/components/tableList_reserve.php`,fd).then(this.creatRefresh)
         this.$message({
@@ -370,6 +350,7 @@ export default {
         }).then(() => {
           var fd = new FormData()
           fd.append("id",row.id)
+          fd.append("uusername",localStorage.ms_username)//修改者账号
           axios.post(`${this.baseURL}/basicdata/components/tableList_del.php`,fd).then(this.creatRefresh)
           this.$message({
             type: 'success',

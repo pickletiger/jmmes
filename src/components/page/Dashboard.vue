@@ -31,7 +31,6 @@
                                 </el-form-item>
                             </el-form>
                             <el-button type="danger" style="float: right; margin-bottom:10px" @click="person_save()">保存</el-button>
-                            <el-button type="danger" style="float: right; margin-bottom:10px" @click="test()">ceshi</el-button>
                         </el-card>
                     </el-col>
                 </el-row>
@@ -41,88 +40,7 @@
                     <div slot="header" class="clearfix">
                         <span>消息通知</span>
                     </div>
-                    <div class="container">
-                        <el-header style="text-align: right; font-size: 12px; height: 10px">
-                            <el-button type="primary" style="z-index:99" @click="canupload = true" icon="el-icon-edit" circle></el-button>
-                        </el-header>
-                        <el-tabs v-model="message">
-                            <el-tab-pane :label="`未读消息(${unread.length})`" name="first">
-                                <el-table :data="unread" :show-header="false" style="width: 100%">
-                                    <el-table-column>
-                                        <template slot-scope="scope">
-                                            <span class="message-title">{{scope.row.title}}</span>
-                                        </template>  
-                                    </el-table-column>
-                                    <el-table-column prop="date" width="180"></el-table-column>
-                                    <el-table-column width="120">
-                                        <template slot-scope="scope">
-                                            <el-button size="small" @click="handleRead(scope.$index)">标为已读</el-button>
-                                        </template>
-                                    </el-table-column>
-                                </el-table>
-                                <div class="handle-row">
-                                    <el-button type="danger" style="margin-top:10px" @click="allRead($index)">全部标为已读</el-button>
-                                </div>
-                            </el-tab-pane>
-                            <el-tab-pane :label="`已读消息(${read.length})`" name="second">
-                                <template v-if="message === 'second'">
-                                    <el-table :data="read" :show-header="false" style="width: 100%">
-                                        <el-table-column>
-                                            <template slot-scope="scope">
-                                                <span class="message-title">{{scope.row.title}}</span>
-                                            </template>
-                                        </el-table-column>
-                                        <el-table-column prop="date" width="150"></el-table-column>
-                                        <el-table-column width="120">
-                                            <template slot-scope="scope">
-                                                <el-button type="danger" @click="handleDel(scope.$index)">删除</el-button>
-                                            </template>
-                                        </el-table-column>
-                                    </el-table>
-                                    <div class="handle-row">
-                                        <el-button type="danger" style="margin-top:10px" @click="allDel($index)">删除全部</el-button>
-                                    </div>
-                                </template>
-                            </el-tab-pane>
-                            <el-tab-pane :label="`回收站(${recycle.length})`" name="third">
-                                <template v-if="message === 'third'">
-                                    <el-table :data="recycle" :show-header="false" style="width: 100%">
-                                        <el-table-column>
-                                            <template slot-scope="scope">
-                                                <span class="message-title">{{scope.row.title}}</span>
-                                            </template>
-                                        </el-table-column>
-                                        <el-table-column prop="date" width="150"></el-table-column>
-                                        <el-table-column width="120">
-                                            <template slot-scope="scope">
-                                                <el-button @click="handleRestore(scope.$index)">还原</el-button>
-                                            </template>
-                                        </el-table-column>
-                                    </el-table>
-                                    <div class="handle-row">
-                                        <el-button type="danger" style="margin-top:10px" @click="emptyTrash($index)">清空回收站</el-button>
-                                    </div>
-                                </template>
-                            </el-tab-pane>
-                        </el-tabs>
-                        <el-dialog title="消息编辑" :visible.sync="canupload">
-                            <h4>消息编辑人：admin</h4>
-                        <el-input
-                            type="textarea"
-                            :rows="5"
-                            placeholder="请输入内容"
-                            v-model="textarea">
-                            </el-input>
-                            <el-checkbox-group v-model="checkList">
-                                <el-checkbox label="全部"></el-checkbox>
-                                <el-checkbox label="车间"></el-checkbox>
-                                <el-checkbox label="质保部"></el-checkbox>
-                                <el-checkbox label="工艺部"></el-checkbox>
-                                <el-checkbox label="计划部"></el-checkbox>
-                                <el-checkbox label="销售部"></el-checkbox>
-                            </el-checkbox-group>
-                        </el-dialog>
-                    </div>
+                    <tabs></tabs>
                 </el-card>
 
             </el-col>
@@ -134,6 +52,9 @@
     import axios from 'axios'
     export default {
         name: 'dashboard',
+        components: {
+            Tabs:require('./Tabs.vue').default
+        },
         data() {
             return {
                 name: localStorage.getItem('ms_username'),
@@ -141,18 +62,7 @@
                 message: 'first',
                 textarea: '',
                 showHeader: false,
-                labelPosition: 'right',
-                checkList: ['全部','车间'],  
-                unread: [{
-                    date: '2018-04-19 20:00:00',
-                    title: 'XX项目出现新的节点变更',
-                },{
-                    date: '2018-04-19 21:00:00',
-                    title: 'XX车间焊机温度过高',
-                },{
-                    date: '2018-04-19 20:00:00',
-                    title: 'XX项目即将到达截止日期',
-                }],
+                labelPosition: 'right', 
                 read: [
 
                 ],
@@ -203,11 +113,6 @@
                  fd.append("postword",this.postword)
                  axios.post(`${this.baseURL}/dashboard.php`,fd).then(function(res){
                      console.log(res)
-                 })
-            },
-            test(){
-                 axios.post(`${this.baseURL}/Test.php`).then(function(res){
-                     console.log(res.data)
                  })
             }
         },

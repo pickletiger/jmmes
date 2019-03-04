@@ -32,53 +32,42 @@ export default {
     return {
       columns: [
        {
-          label: "账号",
-          field: "account"
-        },
-        {
-          label: "操作内容",
-          field: "content"
+          label: "操作账号",
+          field: "username"
         },
         {
           label: "操作日期",
-          field: "data",
-          type:"date",
-          dateInputFormat: 'YYYY-MM-DD',
-          dateOutputFormat: 'YYYY-MM-Do'
+          field: "time"
+          // type:"date",
+          // dateInputFormat: 'YYYY-MM-DD HH:mm:ss',
+          // dateOutputFormat: 'YYYY-MM-DD HH:mm:ss'
         },
         {
-          label: "操作时间",
-          field: "time",
-          type:"date",
-          dateInputFormat: 'HH:mm:ss',
-          dateOutputFormat: 'HH:mm:ss'
+          label: "操作内容",
+          field: "thing"
         },
         {
-          label: "操作人员",
-          field: "man"
+          label: "操作类型",
+          field: "type"
         }
       ],
-      rows: [],
-      account:'admin'
+      rows: []
     };
   },
   mounted(){
   	this.getDataInfo()
   },
   methods:{
-  	getDataInfo () {
-  		axios.get(`${this.baseURL}/operationloglist.php`,{
-  		  params:{
-  			  account:this.account
-  		  }
-  		}).then(this.getDataInfoSucc)
-   },
-  	 getDataInfoSucc(res){
-	 	let success=res.data.pop()
-    	res=res.data
-    	if(success){
-        this.rows = res
-     }
+
+    getDataInfo() {
+      axios.post(`${this.baseURL}/system/operationloglist.php`).then((res)=> {  //ES6写法
+        res = res.data
+        // if (res.success && res.data) {
+        this.rows = []
+        this.rows = res.data
+        // }
+
+      });
     }
   }
 };
