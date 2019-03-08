@@ -245,6 +245,12 @@ export default new Router({
             path:'/personal_settings',
             component: resolve => require(['../components/page/Personal_settings.vue'], resolve),
             meta: { title: '个人设置' }
+        },
+        {
+            path:'/PartsQuality',
+            name: 'PartsQuality',
+            component: resolve => require(['../components/page/PartsQuality.vue'], resolve),
+            meta: { title: '零件' }
         }
         // ,
         // {
