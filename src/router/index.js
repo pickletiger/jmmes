@@ -210,6 +210,12 @@ export default new Router({
             meta: { title: '排产产品标识卡' }
         },
         {
+            path: '/Circulation',
+            name: 'Circulation',
+            component: resolve => require(['../components/page/Circulation.vue'], resolve),
+            meta: { title: '流转单' }
+        },
+        {
             path: '/weldingprinter',
             component: resolve => require(['../components/page/Weldingprinter.vue'], resolve),
             meta: { title: '焊接信息打印' }

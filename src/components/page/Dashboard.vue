@@ -123,7 +123,7 @@
         },
         computed: {
             role() {
-                return this.name === 'admin' ? '超级管理员' : '普通用户';
+                return this.account === 'admin' ? '超级管理员' : '普通用户';
             }
         }
     }

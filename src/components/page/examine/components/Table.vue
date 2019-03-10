@@ -27,6 +27,14 @@
             :key="props.index"
           >点击查看</a>
         </span>
+        <span v-if="props.column.field == 'checkSituation'">
+          <el-button 
+            type="primary"
+            @click="print()"
+          >
+            打印
+          </el-button>
+        </span>
         <span v-else>
           {{props.formattedRow[props.column.field]}}
         </span>
@@ -83,10 +91,6 @@ export default {
               field: 'processName',
               filterable: true,
             },
-            // {
-            //   label: '目标车间',
-            //   field: 'targetRoom',
-            // },
             {
               label: '检验部件',
               field: 'check',
@@ -105,22 +109,17 @@ export default {
               filterable: true,
             },
             {
-              label: '检验情况',
-              field: 'checkSituation',
-              filterable: true,
-            },
-            {
               label: '检验日期',
               field: 'checkDate',
             },
-            // {
-            //   label: '检验车间',
-            //   field: 'checkRoom',
-            //   filterable: true,
-            // },
             {
               label: '检验详情',
               field: 'result',
+            },
+            {
+              label: '流转单打印',
+              field: 'checkSituation',
+              filterable: true,
             }
           ]);
 
@@ -138,6 +137,16 @@ export default {
     }
   },
   methods: {
+    // 打印流转单
+    print() {
+      let routeData = this.$router.resolve({
+        name: "Circulation"
+      });
+      window.open(routeData.href, '_blank');
+    },
+
+
+
     // 检验按钮
     check (e) {
       this.dialog.centerDialogVisible = true;
@@ -195,7 +204,6 @@ export default {
       .catch(this.error)
     }
   },
-
   mounted () {
 
     this.loadingInstance = Loading.service(this.options)

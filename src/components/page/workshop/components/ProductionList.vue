@@ -827,6 +827,7 @@ export default {
         fd.append('flag',"Schedule")
         fd.append('modid',this.modid)
         fd.append('routeid',this.routeid)
+        fd.append('cuser',localStorage.getItem("ms_username"))
         fd.append('checkList',this.checkList)
         fd.append('schedule',this.schedule)
         fd.append('overdata',this.overdata)

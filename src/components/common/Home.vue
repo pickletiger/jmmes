@@ -46,3 +46,12 @@
         }
     }
 </script>
+<style>
+.content {
+padding: 10px !important;
+}
+.content-box {
+left: 150px !important;
+top: 60px !important;
+}
+</style>
