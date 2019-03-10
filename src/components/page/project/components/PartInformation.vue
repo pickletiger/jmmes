@@ -31,8 +31,8 @@
           </el-form-item>
           <el-form-item label="关键部件">
             <template>
-              <el-radio v-model="radio" label="1">是</el-radio>
-              <el-radio v-model="radio" label="2">否</el-radio>
+              <el-radio v-model="data.radio" label="1">是</el-radio>
+              <el-radio v-model="data.radio" label="2">否</el-radio>
             </template>
           </el-form-item>
           <el-form-item label="子物料">
@@ -172,7 +172,6 @@ export default {
       fid:'',
       addpart:[],
       data: [],
-      radio: '2',
       showAddPart:false,
       showSave:false,
       showQrcode:true,
@@ -293,7 +292,7 @@ export default {
         fd.append("standard",this.data.standard)
         fd.append("count",this.data.count)
         fd.append("remark",this.data.remark)
-        fd.append("radio",this.radio)
+        fd.append("radio",this.data.radio)
         axios.post(`${this.baseURL}/part.php`,fd).then((res)=>{
           // console.log(res)
           this.$message({

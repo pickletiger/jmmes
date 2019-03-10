@@ -14,7 +14,7 @@
     </div>
     <br/>
     <div slot="table-actions" class="table-actions" >
-      <el-button type="primary"  @click="exportExcel()">导出</el-button>
+      <el-button type="primary"  @click="dialogFormExport=true">导出</el-button>
       <el-button type="primary" v-if="show_2btn"  @click="dialogVisible = true">排产</el-button>
       <el-button type="primary" v-if="show_4btn"  @click="dialogBack()">退产</el-button>
       <el-button type="primary" v-if="show_3btn" @click="print()"  >生产计划表</el-button>
@@ -528,6 +528,24 @@
         <el-button type="primary" @click="handleSchedule">确 定</el-button>
       </span>
     </el-dialog>
+     <!-- 导出Excel条件对话框 -->
+    <el-dialog title="导出" :visible.sync="dialogFormExport">
+      <el-form :model="form">
+        <el-form-item label="产品名称" :label-width="formLabelWidth">
+          <el-input v-model="form.productName" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="车间" :label-width="formLabelWidth">
+          <el-select v-model="form.workShop" placeholder="请选择车间">
+            <el-option label="全部" value="0"></el-option>
+            <!-- <el-option label="W车间" value="1"></el-option> -->
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormExport = false">取 消</el-button>
+        <el-button type="primary" @click="exportExcel">确 定</el-button>
+      </div>
+    </el-dialog>
     
   </div>
   
@@ -546,6 +564,7 @@ export default {
       form: {},
       formLabelWidth: "120px",
       dialogVisible: false,
+      dialogFormExport: false,
       schedule: "",
       overdata:"",
       checkList: [],
@@ -568,37 +587,6 @@ export default {
       show_2btn: true,
       show_3btn: false,
       show_4btn:false,
-      // options: [{
-      //   value: 'K',
-      //   label: 'K车间'
-      // }, {
-      //   value: 'T-焊前',
-      //   label: 'T-焊前'
-      // }, {
-      //   value: 'T阻焊',
-      //   label: 'T阻焊'
-      // }, {
-      //   value: 'T装配',
-      //   label: 'T装配'
-      // }, {
-      //   value: 'F',
-      //   label: 'F车间'
-      // }, {
-      //   value: 'W',
-      //   label: 'W车间'
-      // }, {
-      //   value: 'D装配',
-      //   label: 'D装配'
-      // }, {
-      //   value: 'G',
-      //   label: 'G车间'
-      // }, {
-      //   value: 'L组焊',
-      //   label: 'L组焊'
-      // }, {
-      //   value: 'I/L装配',
-      //   label: 'I/L装配'
-      // }],
       value: ''
     };
   },
@@ -706,6 +694,21 @@ export default {
     // 导出
     exportExcel() {
       // console.log('导出');
+      // console.log(this.form.productName)
+      let that = this
+      if(this.form.productName){
+        var fd = new FormData()
+        fd.append('flag',"0")
+        fd.append('name',this.form.productName)
+        axios.post(`${this.baseURL}/productionplan/export.php`,fd)
+        .then(function(res){
+          // 成功回调
+          window.open(`${that.baseURL}`+"/productionplan/"+res.data)
+          that.dialogFormExport = false
+        })
+      }else{
+        alert('产品名称不能为空！')
+      }
     },
     filterHandler(value, row, column) {
       const property = column["property"];

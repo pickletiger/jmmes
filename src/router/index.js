@@ -216,6 +216,12 @@ export default new Router({
             meta: { title: '流转单' }
         },
         {
+            path: '/HotSheep',
+            name: 'HotSheep',
+            component: resolve => require(['../components/page/HotSheep.vue'], resolve),
+            meta: { title: '热处理施工单' }
+        },
+        {
             path: '/weldingprinter',
             component: resolve => require(['../components/page/Weldingprinter.vue'], resolve),
             meta: { title: '焊接信息打印' }

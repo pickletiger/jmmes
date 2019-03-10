@@ -5,6 +5,10 @@
                 <el-breadcrumb-item><i class="el-icon-tickets"></i> 未审核项目</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
+        <el-tabs v-model="tabName" @tab-click="handleClick">
+          <el-tab-pane label="普通零部件" name="ordinary"></el-tab-pane>
+          <el-tab-pane label="关键零部件" name="momentous"></el-tab-pane>
+        </el-tabs>
         <div class="container">
           <el-container style="height: 600px;">
               <el-aside width="250px">
@@ -45,15 +49,17 @@
 import axios from 'axios'
 import Project from '../components/Project'
 import Part from '../components/Part'
-
+var key = '2'
 export default {
   name: "PlanUnreview",
+  inject:["reload"],
   components:{
     Project,
     Part
   },
   data() {
       return {
+        tabName:'ordinary',
         lx:'',
         lxid:'',
         filterText: '',
@@ -67,7 +73,25 @@ export default {
         }
       };
     },
+    mounted:function(){
+      if(key=='1'){
+        this.tabName = 'momentous'
+      }
+    },
     methods: {
+      //头部标签页切换，2普通部件，1关键部件
+      handleClick(tab,e){
+        this.tabName=tab.name
+        switch (tab.name){
+          case 'ordinary':
+          key = 2
+          break
+          case 'momentous':
+          key = 1
+          break
+        }
+        this.reload()
+      },
       // 过滤查询
       handleFifter() {
         // console.log(this.filterText)
@@ -132,6 +156,7 @@ export default {
             // console.log(node.data.id) 
             var fd = new FormData()
             fd.append('flag','mpart')
+            fd.append('key',key) //关键零部件判断
             fd.append('id',node.data.id) //node.data 父节点所带参数
             fd.append('name',node.data.zhname) //node.data 父节点所带参数
             fd.append('number',node.data.number) //node.data 父节点所带参数
@@ -149,6 +174,7 @@ export default {
             // console.log(node.data.id) 
             var fd = new FormData()
             fd.append('flag','part')
+            fd.append('key',key) //关键零部件判断
             fd.append('pid',node.data.pid) //node.data 父节点所带参数
             fd.append('modid',node.data.modid) //node.data 父节点所带参数
             fd.append('name',node.data.name) //node.data 父节点所带参数
