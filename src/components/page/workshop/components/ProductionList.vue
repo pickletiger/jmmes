@@ -615,7 +615,7 @@ export default {
         .then(this.getDataSucc);
     },
     getDataSucc(res) {
-      // console.log(res.data)
+      console.log(res.data)
       res = res.data;
       if (res.success && res.rows) {
         // 未排产
@@ -887,7 +887,7 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
   .btn{
     background: 	#00DD00;
   }

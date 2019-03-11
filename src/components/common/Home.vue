@@ -46,7 +46,7 @@
         }
     }
 </script>
-<style>
+<style scoped>
 .content {
 padding: 10px !important;
 }

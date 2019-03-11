@@ -89,8 +89,7 @@
 
 </script>
 
-
-<style>
+<style scoped>
     .tags {
         position: relative;
         height: 30px;
