@@ -24,7 +24,7 @@
                                     <el-input v-model="name"></el-input>
                                 </el-form-item>
                                 <el-form-item label="账号">
-                                    <el-input v-model="account"></el-input>
+                                    <el-input v-model="account" readonly="readonly"></el-input>
                                 </el-form-item>
                                 <el-form-item label="密码">
                                     <el-input v-model="postword"></el-input>
@@ -79,7 +79,21 @@
                 postword: ''
             }
         },
+        created() {
+            this.getDataInfo()
+        },
         methods: {
+            getDataInfo(){
+                var account = localStorage.getItem("ms_username")
+                var fd = new FormData
+                    fd.append("flag","Select")
+                    fd.append("account",account)
+                    axios.post(`${this.baseURL}/dashboard.php`,fd).then((res)=>{
+                        res = res.data
+                        this.name = res.name
+                        this.account = res.account
+                    });
+            },
             handleRead(index) {
                 const item = this.unread.splice(index, 1);
                 console.log(item);
@@ -107,13 +121,20 @@
             },
             person_save(){
                 var fd = new FormData()
-                 fd.append("flag","Save")
-                 fd.append("name",this.name)
-                 fd.append("account",this.account)
-                 fd.append("postword",this.postword)
-                 axios.post(`${this.baseURL}/dashboard.php`,fd).then(function(res){
-                     console.log(res)
-                 })
+                fd.append("flag","Save")
+                fd.append("name",this.name)
+                fd.append("account",this.account)
+                fd.append("postword",this.postword)
+
+                axios.post(`${this.baseURL}/dashboard.php`,fd).then(function(res){
+                    console.log(res)
+                    res = res.data
+                    if(res.success= "success"){
+                        alert("修改成功")
+                    }else{
+                        alert("修改失败")
+                    }
+                });
             }
         },
         computed: {
