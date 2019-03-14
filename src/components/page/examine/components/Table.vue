@@ -9,7 +9,7 @@
     >
       <template slot="table-row" slot-scope="props">
         <span v-if="props.column.field == 'check'">
-          <div style="text-align: center;">
+          <div>
             <el-button 
               type="primary"
               @click.native="check"
@@ -19,6 +19,17 @@
             </el-button>
           </div>
         </span>
+                <span v-if="props.column.field == 'finish'">
+          <div>
+            <a 
+            :href="`http://jmmes.oss-cn-shenzhen.aliyuncs.com/partUpload/${props.row.photourl}`" 
+            target="_blank"
+            class="show_img"
+            :key="props.index"
+          >点击查看</a>
+          </div>
+        </span>
+        
         <span v-else-if="props.column.field == 'result'">
           <a 
             :href="`http://jmmes.oss-cn-shenzhen.aliyuncs.com/partUpload/${props.row.photourl}`" 
@@ -87,6 +98,27 @@ export default {
               filterable: true,
             },
             {
+              label: '部件图号',
+              field: 'figure_number',
+              filterable: true,
+            },
+            
+            {
+              label: '关键零部件',
+              field: 'radio',
+              filterable: true,
+            },
+            {
+              label: '工艺路线',
+              field: 'route',
+              filterable: true,
+            },
+            {
+              label: '数量',
+              field: 'count',
+              filterable: true,
+            },
+            {
               label: '工序名称',
               field: 'processName',
               filterable: true,
@@ -95,7 +127,11 @@ export default {
               label: '检验部件',
               field: 'check',
               filterable: true,
-            },
+            },{
+              label: '完工附件',
+              field: 'finish',
+              filterable: true,
+            }
           ])
         : (head = [
             {
@@ -106,6 +142,32 @@ export default {
             {
               label: '部件名称',
               field: 'partName',
+              filterable: true,
+            },
+            {
+              label: '部件图号',
+              field: 'figure_number',
+              filterable: true,
+            },
+            
+            {
+              label: '关键零部件',
+              field: 'radio',
+              filterable: true,
+            },
+            {
+              label: '工艺路线',
+              field: 'route',
+              filterable: true,
+            },
+            {
+              label: '数量',
+              field: 'count',
+              filterable: true,
+            },
+            {
+              label: '工序名称',
+              field: 'processName',
               filterable: true,
             },
             {
@@ -157,6 +219,7 @@ export default {
 
     // 成功回调
     success (ret) {
+      console.log(ret)
     
       this.$nextTick(() => { 
         this.loadingInstance.close();
@@ -165,7 +228,7 @@ export default {
         this.item == '未检验'?
         this.rows = ret.data.data : 
         this.rows = ret.data.data
-        console.log(this.rows[0].photourl)
+        console.log(ret.data.data[0])
       }else {
 
       }
