@@ -1,9 +1,9 @@
 <template>
     <div class="">
         <div class="crumbs">
-            <el-breadcrumb separator="/">
+            <!-- <el-breadcrumb separator="/">
                 <el-breadcrumb-item><i class="el-icon-message"></i> 消息通知</el-breadcrumb-item>
-            </el-breadcrumb>
+            </el-breadcrumb> -->
         </div>
         <div class="container">
             <el-header style="text-align: right; font-size: 12px; height: 20px">
@@ -25,7 +25,7 @@
                         </el-table-column>
                     </el-table>
                     <div class="handle-row">
-                        <el-button type="danger" @click="allRead($index)">全部标为已读</el-button>
+                        <el-button type="danger" @click="allRead()">全部标为已读</el-button>
                     </div>
                 </el-tab-pane>
                 <el-tab-pane :label="`已读消息(${read.length})`" name="second">
@@ -43,9 +43,9 @@
                                 </template>
                             </el-table-column>
                         </el-table>
-                        <div class="handle-row">
-                            <el-button type="danger" @click="allDel($index)">删除全部</el-button>
-                        </div>
+                        <!-- <div class="handle-row">
+                            <el-button type="danger" @click="allDel()">删除全部</el-button>
+                        </div> -->
                     </template>
                 </el-tab-pane>
                 <el-tab-pane :label="`全部消息(${recycle.length})`" name="third">
@@ -57,15 +57,15 @@
                                 </template>
                             </el-table-column>
                             <el-table-column prop="date" width="150"></el-table-column>
-                            <el-table-column width="120">
-                                <template slot-scope="scope">
-                                    <el-button @click="handleRestore(scope.row)">还原</el-button>
-                                </template>
-                            </el-table-column>
+                            <!-- <el-table-column width="120"> -->
+                                <!-- <template slot-scope="scope"> -->
+                                    <!-- <el-button @click="handleRestore(scope.row)">还原</el-button> -->
+                                <!-- </template> -->
+                            <!-- </el-table-column> -->
                         </el-table>
-                        <div class="handle-row">
-                            <el-button type="danger" @click="emptyTrash($index)">清空回收站</el-button>
-                        </div>
+                        <!-- <div class="handle-row">
+                            <el-button type="danger" @click="emptyTrash()">清空消息</el-button>
+                        </div> -->
                     </template>
                 </el-tab-pane>
             </el-tabs>
@@ -140,6 +140,8 @@ import axios from 'axios'
             getDataRead () {
                 var fd = new FormData()
                 fd.append("flag","Read")
+                var department = localStorage.getItem("ms_department")
+                fd.append("department",department)
                 axios.post(`${this.baseURL}/tabs.php`,fd).then((read)=> {  //ES6写法
                     read = read.data;
                     // console.log(read)
@@ -179,14 +181,23 @@ import axios from 'axios'
                 });
             },
             //全部标记已读
-            allRead: function(index){
-                const item = this.unread.splice(index)
-                this.read = item.concat(this.read)
+            allRead(row){
+                for(let i=0;i<this.unread.length;i++){
+                    console.log(this.unread[i].id)
+                    var fd = new FormData()
+                    fd.append("flag","allRead")
+                    fd.append("id",this.unread[i].id)
+                    axios.post(`${this.baseURL}/tabs.php`,fd).then((recycle)=> {  //ES6写法
+                    recycle = recycle.data;
+                    });
+                }
+                const item = this.unread.splice(row);
+                this.read = item.concat(this.read);
             },
             //删除
             handleDel(row) {
                 const item = this.read.splice(row, 1)
-                this.recycle = item.concat(this.recycle)
+                // this.recycle = item.concat(this.recycle)
                 var fd = new FormData()
                 fd.append("flag","RecycleIn")
                 fd.append("id",row.id)
@@ -196,10 +207,17 @@ import axios from 'axios'
                 });
             },
             //删除全部
-            allDel(index) {
-                alert(index)
-                const item = this.read.splice(index)
-                this.recycle = item.concat(this.recycle)
+            allDel(row) {
+                for(let i=0;i<this.read.length;i++){
+                    console.log(this.read[i].id)
+                    var fd = new FormData()
+                    fd.append("flag","allDel")
+                    fd.append("id",this.read[i].id)
+                    axios.post(`${this.baseURL}/tabs.php`,fd).then((recycle)=> {  //ES6写法
+                    recycle = recycle.data;
+                    });
+                }
+                const item = this.read.splice(row)
             },
             //还原
             handleRestore(row) {
