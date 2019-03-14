@@ -204,6 +204,7 @@ export default {
       if(res.result) {
         this.options.text = '上传成功，正在加载...';
         this.getData();
+        this.showUpload = false
       }else {
         console.log('上传失败')
       }

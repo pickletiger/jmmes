@@ -1,59 +1,35 @@
 <template>
     <div>
-        <el-row :gutter="20">
-            <el-col :span="8">
-                <el-row>
-                    <el-col>
-                        <el-card shadow="hover" class="mgb20">
-                            <div class="user-info">
-                                <img src="static/img/img.jpg" class="user-avator" alt="">
-                                <div class="user-info-cont">
-                                    <div class="user-info-name">{{name}}</div>
-                                    <div>{{role}}</div>
-                                </div>
-                            </div>
-                            <div class="user-info-list">上次登录时间：<span>2018-01-01</span></div>
-                            <div class="user-info-list">上次登录地点：<span>东莞</span></div>
-                        </el-card>
-                        <el-card shadow="hover" >
-                            <div slot="header" class="clearfix">
-                                <span>个人信息</span>
-                            </div>
-                            <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign">
-                                <el-form-item label="姓名">
-                                    <el-input v-model="name"></el-input>
-                                </el-form-item>
-                                <el-form-item label="账号">
-                                    <el-input v-model="account" readonly="readonly"></el-input>
-                                </el-form-item>
-                                <el-form-item label="密码">
-                                    <el-input v-model="postword"></el-input>
-                                </el-form-item>
-                            </el-form>
-                            <el-button type="danger" style="float: right; margin-bottom:10px" @click="person_save()">保存</el-button>
-                        </el-card>
-                    </el-col>
-                </el-row>
-            </el-col>
+        <el-row :gutter="16">
             <el-col :span="16">
                 <el-card shadow="hover" >
-                    <div slot="header" class="clearfix">
-                        <span>消息通知</span>
-                    </div>
+                    
                     <tabs></tabs>
                 </el-card>
-
+                
+            </el-col>
+            <el-col :span="8">
+                <el-card shadow="hover" >
+                <div class="schart-box">
+                    <!-- <div class="content-title">零部件不合格次数统计图</div> -->
+                    <schart class="schart" canvasId="pie" :data="data2" type="pie" :options="options3"></schart>
+                </div>
+                </el-card>
+                
             </el-col>
         </el-row>
     </div>
+    
 </template>
 
 <script>
+    import Schart from 'vue-schart';
     import axios from 'axios'
     export default {
         name: 'dashboard',
         components: {
-            Tabs:require('./Tabs.vue').default
+            Tabs:require('./Tabs.vue').default,
+            Schart
         },
         data() {
             return {
@@ -76,11 +52,22 @@
                 },
                 name: '',
                 account: '',
-                postword: ''
+                postword: '',
+                data2 : [],
+                options3: {
+                    title: '零部件不合格次数比例',
+                    bgColor: '#FFFFFF',
+                    titleColor: '#000000',
+                    legendColor: '#000000',
+                    radius: 120
+                }
             }
         },
         created() {
             this.getDataInfo()
+            axios.post(`${this.baseURL}/echarts.php`).then((response) => {
+                this.data2 = response.data
+            })
         },
         methods: {
             getDataInfo(){
@@ -93,31 +80,6 @@
                         this.name = res.name
                         this.account = res.account
                     });
-            },
-            handleRead(index) {
-                const item = this.unread.splice(index, 1);
-                console.log(item);
-                this.read = item.concat(this.read);
-            },
-            allRead: function(index){
-                const item = this.unread.splice(index);
-                console.log(item);
-                this.read = item.concat(this.read);
-            },
-            handleDel(index) {
-                const item = this.read.splice(index, 1);
-                this.recycle = item.concat(this.recycle);
-            },
-            allDel(index) {
-                const item = this.read.splice(index);
-                this.recycle = item.concat(this.recycle);
-            },
-            handleRestore(index) {
-                const item = this.recycle.splice(index, 1);
-                this.read = item.concat(this.read);
-            },
-            emptyTrash(index) {
-                this.recycle.splice(index);
             },
             person_save(){
                 var fd = new FormData()
@@ -134,12 +96,7 @@
                     }else{
                         alert("修改失败")
                     }
-                });
-            }
-        },
-        computed: {
-            unreadNum(){
-                return this.unread.length;
+                })
             }
         },
         computed: {
@@ -153,9 +110,9 @@
 
 
 <style scoped>
-    .el-row {
+    /* .el-row {
         margin-bottom: 20px;
-    }
+    } */
 
     .grid-content {
         display: flex;
@@ -256,5 +213,20 @@
         text-decoration: line-through;
         color: #999;
     }
-
+    .schart-box{
+        display: inline-block;
+        margin: 20px;
+        }
+        .schart{
+        width: 500px;
+        height: 400px;
+        }
+        .content-title{
+        clear: both;
+        font-weight: 400;
+        line-height: 50px;
+        margin: 10px 0;
+        font-size: 22px;
+        color: #1f2f3d;
+    }
 </style>

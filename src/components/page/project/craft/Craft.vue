@@ -54,13 +54,13 @@
          <el-dialog title="项目导入" :visible.sync="dialogUpload">
           <el-form >
             <el-form-item label="项目名称" :label-width="formLabelWidth">
-              <el-input v-model="form.name"  auto-complete="off"></el-input>
+              <el-input v-model="form.name" placeholder="请输入项目名称,如：过山车" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="项目编号" :label-width="formLabelWidth">
-              <el-input v-model="form.number"  auto-complete="off"></el-input>
+              <el-input v-model="form.number" placeholder="请输入项目编号，如:37#KSC-16A" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="项目类型" :label-width="formLabelWidth">
-              <el-input v-model="form.type"  auto-complete="off"></el-input>
+              <el-input v-model="form.type" placeholder="请输入项目类型，如：过山车" auto-complete="off"></el-input>
             </el-form-item>
             <el-form-item label="项目交付时间" :label-width="formLabelWidth">
               <!-- value-format 参数为设置date的类型 -->

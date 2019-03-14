@@ -6,6 +6,7 @@
         <part-information :partdata="this.partdata" @change="handleChange"></part-information>
       </el-tab-pane>
       <el-tab-pane name="second" label="子部件进度">
+        <p>黑色为正在进行中状态；绿色为已完成状态；灰色为未开工状态</p>
         <part-sch :partschdata="this.partschdata" @change="handleChange"></part-sch>
       </el-tab-pane>
     </el-tabs>

@@ -5,6 +5,7 @@
       <project-main :prodata="this.prodata"></project-main>
     </el-tab-pane>    
     <el-tab-pane label="子部件进度">
+      <p>黑色为正在进行中状态；绿色为已完成状态；灰色为未开工状态</p>
       <project-sch :proschdata="this.proschdata"></project-sch>
     </el-tab-pane>
   </el-tabs>

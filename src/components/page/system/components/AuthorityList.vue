@@ -110,137 +110,119 @@ export default {
           value:"1" 
         },
         {
-          label: "基础数据管理",
+          label: "销售模块",
           value:"2",
           children: [
             {
-              label: "员工信息管理",
+              label: "订单管理",
               value:"3"
             },
             {
-              label: "设备管理",
+              label: "未审核项目",
               value:"4"
             },
             {
-              label: "文档管理",
+              label: "在建项目",
               value:"5"
             },
             {
-              label: "原材料管理",
+              label: "已完成项目",
               value:"6"
             }
           ]
         },
         {
-          label:"消息通知",
-          value:"7"
-        },
-        {
-          label: "销售模块",
-          value:"8",
+          label: "计划模块",
+          value:"7",
           children: [
             {
-              label: "未审核项目",
+              label: "订单查看",
+              value:"8"
+            },
+            {
+              label: "计划总表",
               value:"9"
             },
             {
-              label: "在建项目",
+              label: "未审核项目",
               value:"10"
             },
             {
-              label: "已完成项目",
+              label: "在建项目",
               value:"11"
-            },
-            {
-              label: "订单管理",
+            },{
+              label: "已完成项目",
               value:"12"
             }
           ]
         },
         {
-          label: "计划模块",
+          label: "工艺模块",
           value:"13",
           children: [
             {
-              label: "未审核项目",
+              label: "工艺卡管理",
               value:"14"
             },{
-              label: "在建项目",
+              label: "未审核项目",
               value:"15"
             },{
-              label: "已完成项目",
+              label: "在建项目",
               value:"16"
             },{
-              label: "订单查看",
+              label: "已完成项目",
               value:"17"
-            },{
-              label: "计划总表",
-              value:"18"
             }
           ]
         },
         {
-          label: "工艺模块",
-          value:"19",
+          label: "制造模块",
+          value:"18",
           children: [
             {
-              label: "未审核项目",
+              label: "设备安全点检",
+              value:"19"
+            },
+            {
+              label: "电子看板",
               value:"20"
             },
             {
-              label: "在建项目",
+              label: "车间计划",
               value:"21"
-            },
-            {
-              label: "已完成项目",
-              value:"22"
             }
           ]
         },{
-          label: "制作模块",
-          value:"23",
-          children: [
-            {
-              label: "电子看板",
-              value:"24"
-            },
-            {
-              label: "车间计划",
-              value:"25"
-            }
-          ]
-        },
-        {
           label: "检验模块",
-          value:"26"
+          value:"22"
         },
         {
           label: "统计分析",
-          value:"27"
+          value:"23"
         },
         {
           label: "系统设置",
-          value:"28",
+          value:"24",
           children: [
             {
+              label: "员工信息管理",
+              value:"25"
+            },
+            {
               label: "操作日志",
-              value:"29"
+              value:"26"
+            },
+            {
+              label: "权限管理",
+              value:"27"
             },
             {
               label: "数据备份与还原",
-              value:"30"
-            },
-            // {
-            //   label: "车间管理",
-            //   value:"31"
-            // },
-            {
-              label: "权限管理",
-              value:"32"
+              value:"28"
             },
             {
               label: "云平台交互",
-              value:"33"
+              value:"29"
             }
           ]
         }
