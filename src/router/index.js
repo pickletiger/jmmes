@@ -216,6 +216,12 @@ export default new Router({
             meta: { title: '流转单' }
         },
         {
+            path: '/Sending_check',
+            name: 'Sending_check',
+            component: resolve => require(['../components/page/Sending_check.vue'], resolve),
+            meta: { title: '送检单' }
+        },
+        {
             path: '/HotSheep',
             name: 'HotSheep',
             component: resolve => require(['../components/page/HotSheep.vue'], resolve),
