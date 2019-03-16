@@ -19,15 +19,13 @@
             </el-button>
           </div>
         </span>
-                <span v-if="props.column.field == 'finish'">
-          <div>
-            <a 
-            :href="`http://jmmes.oss-cn-shenzhen.aliyuncs.com/partUpload/${props.row.photourl}`" 
-            target="_blank"
-            class="show_img"
-            :key="props.index"
-          >点击查看</a>
-          </div>
+        <span v-if="props.column.field == 'finish'">
+          <el-button 
+            type="primary"
+            @click="print1(props.row)"
+          >
+            查看
+          </el-button>
         </span>
         
         <span v-else-if="props.column.field == 'result'">
@@ -206,6 +204,14 @@ export default {
       });
       window.open(routeData.href, '_blank');
     },
+    print1(row) {
+      localStorage.removeItem("number")
+      localStorage.setItem("number",row.number)
+      let routeData = this.$router.resolve({
+        name: "Sending_check"
+      });
+      window.open(routeData.href, '_blank');
+    },
 
 
 
@@ -219,8 +225,6 @@ export default {
 
     // 成功回调
     success (ret) {
-      console.log(ret)
-    
       this.$nextTick(() => { 
         this.loadingInstance.close();
       });
@@ -228,7 +232,6 @@ export default {
         this.item == '未检验'?
         this.rows = ret.data.data : 
         this.rows = ret.data.data
-        console.log(ret.data.data[0])
       }else {
 
       }
