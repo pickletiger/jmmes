@@ -53,7 +53,7 @@
                 name: '',
                 account: '',
                 postword: '',
-                data2 : [],
+                data2 : [{name:"-",value:1}],
                 options3: {
                     title: '零部件不合格次数比例',
                     bgColor: '#FFFFFF',

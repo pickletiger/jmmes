@@ -1,5 +1,6 @@
 <template>
-<div class="main">
+    <div class="main">
+        <div class="pageOneFirst">
         <div style="width: 840px;text-align: center;">
             <p style="font-size: 18px;">中山市金马科技娱乐设备股份有限公司</p>
             <p style="font-size: 30px;margin-bottom:0">送&nbsp;检&nbsp;单</p>
@@ -41,8 +42,15 @@
                 </td>
             </tr>
         </table>
+        </div>
+
+        <img v-for="i in item"  :src="i" class="img"/>
+        
+
+
+        
         <!-- <div class="page-break"></div> -->
-</div>
+    </div>
 </template>
 
 <script>
@@ -51,13 +59,15 @@ export default {
     name: 'Sending_check',
     data (){
         return {
-            data:[{
-                figure_number:""
-            }]
+            data:[],
+            item:[{}]
         }
     },  
     created() {
         this.getData()
+        document.getElementsByTagName('html')[0].style.overflow='visible'
+        document.getElementsByTagName('body')[0].style.overflow='visible'
+        document.getElementById('app').style.overflow='visible'
         
     },
 	methods: {
@@ -70,6 +80,9 @@ export default {
             let that = this
             axios.post(`${this.baseURL}/sending_check.php`,fd).then(function(res){
                 that.data = res.data.data[0]
+                that.data.photourl.length
+                that.item = that.data.photourl
+
             })
 		}
 	}
@@ -93,5 +106,22 @@ export default {
     .main {
         width: 100%;
         align-content: center;
+    }
+    *{
+        padding: 0;
+        margin: 0;
+    }
+    .img{
+        width: 840px;
+        margin-left: 1%;
+    }
+    .A4page {
+        width: 277mm;
+        height: 190mm;       
+    }
+        /*第一页的第一个表格*/
+    .pageOneFirst {
+        width: 277mm;
+        text-align: center;
     }
 </style>
