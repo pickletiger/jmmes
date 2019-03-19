@@ -1,5 +1,5 @@
 <template>
-  <div class>
+  <div class="crumbs">
     <!-- <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item><i class="el-icon-message"></i> 消息通知</el-breadcrumb-item>
@@ -78,6 +78,9 @@
     </div>-->
     <el-tabs v-model="activeName" type="card">
       <el-tab-pane :label="`未读消息(${unread.length})`" name="first">
+        <div class="handle-row">
+          <el-button type="danger" @click="allRead()">全部标为已读</el-button>
+        </div>
         <!-- <el-button @click="resetDateFilter">清除日期过滤器</el-button>
         <el-button @click="clearFilter">清除所有过滤器</el-button>-->
         <el-table ref="filterTable" :data="unread" style="width: 100%">
@@ -103,23 +106,26 @@
             prop="state"
             label="状态"
             width="100"
-            :filters="[ { text: '就工', value: '0' },{ text: '完工', value: '1' }]"
+            :filters="[ { text: '就工', value: '就工' },{ text: '完工', value: '完工' },{ text: '逾期', value: '逾期' }]"
             :filter-method="filterState"
             filter-placement="bottom-end"
           ></el-table-column>
           <el-table-column prop="date" label="日期" sortable width="180"></el-table-column>
+          <!-- <div class="handle-row">
+            <el-button type="danger" @click="allRead()">全部标为已读</el-button>
+          </div> -->
           <el-table-column width="120">
             <template slot-scope="scope">
               <el-button size="big" type="primary" @click="handleRead(scope.row)">标为已读</el-button>
             </template>
           </el-table-column>
         </el-table>
-        <div class="handle-row">
-          <el-button type="danger" @click="allRead()">全部标为已读</el-button>
-        </div>
       </el-tab-pane>
 
       <el-tab-pane :label="`已读消息(${read.length})`" name="second">
+        <div class="handle-row">
+          <el-button type="danger" @click="allDel()">删除全部消息</el-button>
+        </div>
         <el-table ref="filterTable" :data="read" style="width: 100%">
           <!-- <el-table-column prop="name" label="" width="180"></el-table-column> -->
           <el-table-column prop="address" label="部件信息" :formatter="formatter"></el-table-column>
@@ -154,9 +160,9 @@
             </template>
           </el-table-column>
         </el-table>
-        <div class="handle-row">
+        <!-- <div class="handle-row">
           <el-button type="danger" @click="allDel()">删除全部消息</el-button>
-        </div>
+        </div> -->
       </el-tab-pane>
 
       <el-tab-pane :label="`全部消息(${recycle.length})`" name="third">
@@ -197,6 +203,7 @@
 <script>
 import axios from "axios";
 export default {
+  inject: ["reload"],
   name: "tabs",
   data() {
     return {
@@ -215,6 +222,7 @@ export default {
     this.getDataUnread();
     this.getDataRead();
     this.getDataRecycle();
+    setInterval(this.timer, 600000);
   },
   methods: {
     resetDateFilter() {
@@ -243,6 +251,26 @@ export default {
       return row[property] === value;
     },
 
+    // 动态获取逾期消息
+    timer: function() {
+      console.log("time");
+      var fd = new FormData();
+      fd.append("flag", "Overdue");
+      // console.log("flag");
+      // var department = localStorage.getItem("ms_department");
+      // fd.append("department", department);
+      axios.post(`${this.baseURL}/tabs.php`, fd).then(Overdue => {
+        //ES6写法
+        Overdue = Overdue.data;
+        // console.log(unread.data.length);
+        if (Overdue.success && Overdue.data) {
+          this.Overdue = [];
+          this.Overdue = Overdue.data;
+        }
+      });
+      this.reload();
+    },
+
     // 获取未读
     getDataUnread() {
       var fd = new FormData();
@@ -260,11 +288,11 @@ export default {
       });
     },
     getDataInfoSucc(res) {
-      console.log(res.data.rows)
+      console.log(res.data.rows);
       res = res.data;
       if (res.success && res.rows) {
         this.rows = res.rows;
-        console.log(this.rows)
+        console.log(this.rows);
       }
     },
     //获取已读
@@ -353,6 +381,9 @@ export default {
       const item = this.read.splice(row);
     }
   },
+  destroyed() {
+    clearTimeout(this.timer);
+  },
   computed: {
     unreadNum() {
       return this.unread.length;
@@ -362,14 +393,12 @@ export default {
 </script>
 
 <style scoped>
-/* div {
-  font-size: 16px;
-} */
 .message-title {
   cursor: pointer;
 }
-.handle-row {
-  margin-top: 30px;
+.el-tabs--card {
+  height: 420px;
+  overflow: scroll;
 }
 </style>
 
