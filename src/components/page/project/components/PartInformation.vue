@@ -215,7 +215,6 @@ export default {
         // console.log(val)
         this.data = {}
         this.data = val
-        console.log(val);
         var fd = new FormData()
         fd.append("id",val.id)
         fd.append("flag","back")
@@ -309,7 +308,7 @@ export default {
       // console.log(id)
     },
     selectionChanged(params) {
-      console.log(params.columnFilters);
+      // console.log(params.columnFilters);
     },
     handleDelClick(id) {
       this.$confirm('是否删除部件?', '提示', {

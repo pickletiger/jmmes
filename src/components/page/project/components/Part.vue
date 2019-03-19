@@ -9,6 +9,36 @@
         <p>黑色为正在进行中状态；绿色为已完成状态；灰色为未开工状态</p>
         <part-sch :partschdata="this.partschdata" @change="handleChange"></part-sch>
       </el-tab-pane>
+      <el-tab-pane name="third" label="信息汇总">
+        <el-form ref="form"  label-width="100px">
+          <el-form-item label="不合格次数">
+            <el-col :span="10">
+              <el-input v-model="partfile.notNum"></el-input>
+            </el-col>
+          </el-form-item>
+          <el-form-item label="不合格原因">
+            <el-col :span="10">
+              <el-input v-model="partfile.remark"></el-input>
+            </el-col>
+          </el-form-item>
+          <el-form-item label="退产记录">
+            <el-col :span="10">
+              <el-input v-model="partfile.backMark"></el-input>
+            </el-col>
+          </el-form-item>
+          <el-form-item label="退产原因">
+            <el-col :span="10">
+              <el-input v-model="partfile.reason"></el-input>
+            </el-col>
+          </el-form-item>
+          <el-form-item label="工位">
+            <el-col :span="10">
+              <el-input v-model="partfile.station"></el-input>
+            </el-col>
+          </el-form-item>
+          <img v-for="i in item"  :src="i" class="img"/>
+        </el-form>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -30,7 +60,9 @@ export default {
     return {
       partdata:{},
       partschdata: {},
+      partfile:{},
       mylxid: '',
+      item:{},
       activeName: 'first'
     }
   },// 监听数据的变化
@@ -55,6 +87,11 @@ export default {
         sch.append('id',val)
         sch.append('flag','partsch')
         axios.post(`${this.baseURL}/part.php`,sch).then(this.getPartschdataSucc)
+
+        var file = new FormData() //定义获取partschdata的传值
+        file.append('id',val)
+        file.append('flag','partfile')
+        axios.post(`${this.baseURL}/part.php`,file).then(this.getPartfiledataSucc)
       }  
     }
   },
@@ -65,6 +102,15 @@ export default {
       if(res.data.success =='success'){
         this.partdata = res.data
         this.activeName = 'first'
+      }
+    },
+    getPartfiledataSucc(res) {
+      console.log(res.data)
+      this.partfile = {}
+      this.item = {}
+      if(res.data.success =='success'){
+        this.partfile = res.data
+        this.item = res.data.photourl
       }
     },
     getPartschdataSucc(res) {
@@ -87,5 +133,9 @@ export default {
 }
 </script>
 <style scoped>
- 
+  .img{
+    padding-left:7.5% ;
+    height: 600px;
+    width: 600px;
+  }
 </style>

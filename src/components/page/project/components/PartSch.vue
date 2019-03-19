@@ -133,7 +133,7 @@ export default {
       this.$emit("change",lxid)
     },
     selectionChanged(params) {
-      console.log(params.columnFilters);
+      // console.log(params.columnFilters);
     },
     // 车间节点点击事件
     handleStep(id) {
