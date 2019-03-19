@@ -2,7 +2,9 @@
   <div>
     <!-- table上部按钮 -->
     <div slot="table-actions" class="table-actions" >
+      <el-button type="danger" value = 'ALL'  @click="select_WS('ALL')">全部车间</el-button>
       <el-button type="primary" class="btn" value = 'W'  @click="select_WS('W')">W车间</el-button>
+      <el-button type="primary" class="btn" value = 'M'  @click="select_WS('M')">M车间</el-button>
       <el-button type="primary" class="btn" value = 'F'  @click="select_WS('F')">F车间</el-button>
       <el-button type="primary" class="btn" value = 'G'  @click="select_WS('G')">G车间</el-button>
       <el-button type="primary" class="btn" value = 'I'  @click="select_WS('I')">I车间</el-button>
@@ -16,7 +18,7 @@
     <div slot="table-actions" class="table-actions" >
       <el-button type="primary"  @click="dialogFormExport=true">导出</el-button>
       <el-button type="primary" v-if="show_2btn"  @click="dialogVisible = true">排产</el-button>
-      <el-button type="primary" v-if="show_4btn"  @click="dialogBack()">退产</el-button>
+      <el-button type="primary" v-if="show_4btn"  @click="dialogFormBack = true">退产</el-button>
       <el-button type="primary" v-if="show_3btn" @click="print()"  >生产计划表</el-button>
       <el-button type="primary" v-if="show_3btn" @click="print2()"  >产品标志卡</el-button>
       <el-button type="primary" v-if="show_2btn" @click="print3()"  >零件质量记录表</el-button>
@@ -120,8 +122,8 @@
           >
           </el-table-column>
           <el-table-column
-            prop="demand_area"
-            label="需求区"
+            prop="backMark"
+            label="退产"
             sortable
           >
           </el-table-column>
@@ -483,6 +485,9 @@
         <el-form-item label="备注" :label-width="formLabelWidth">
           <el-input v-model="form.remark" auto-complete="off"></el-input>
         </el-form-item>
+        <el-form-item label="退产原因" :label-width="formLabelWidth">
+          <el-input v-model="form.reason" auto-complete="off"></el-input>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="hasInfoDialog = false">取 消</el-button>
@@ -546,7 +551,18 @@
         <el-button type="primary" @click="exportExcel">确 定</el-button>
       </div>
     </el-dialog>
-    
+    <!-- 退产模态框 -->
+    <el-dialog title="导出" :visible.sync="dialogFormBack">
+      <el-form :model="form">
+        <el-form-item label="退产原因" :label-width="formLabelWidth">
+          <el-input v-model="form.backReason" auto-complete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormBack = false">取 消</el-button>
+        <el-button type="primary" @click="dialogBack">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
   
 </template>
@@ -565,6 +581,7 @@ export default {
       formLabelWidth: "120px",
       dialogVisible: false,
       dialogFormExport: false,
+      dialogFormBack: false,
       schedule: "",
       overdata:"",
       checkList: [],
@@ -597,15 +614,17 @@ export default {
     this.getData();
   },
   methods: {
+    // 车间按钮
     select_WS(value){
-      // alert(value)
-      // console.log(this.value)
-      var fd = new FormData()
-      fd.append("flag",value)
-      
-      axios
-        .post(`${this.baseURL}/productionplan/list.php`,fd)
-        .then(this.getDataSucc);
+      if(value=="ALL"){
+        this.getData();
+      }else{
+        var fd = new FormData()
+        fd.append("flag",value)
+        axios
+          .post(`${this.baseURL}/productionplan/list.php`,fd)
+          .then(this.getDataSucc);
+      }
     },
     
     getData() {
@@ -615,7 +634,7 @@ export default {
         .then(this.getDataSucc);
     },
     getDataSucc(res) {
-      console.log(res.data)
+      // console.log(res.data)
       res = res.data;
       if (res.success && res.rows) {
         // 未排产
@@ -838,9 +857,12 @@ export default {
         .then(function(res){
           // 成功回调
           that.dialogVisible = false;
-          alert('操作成功!')
-          that.reload()
-          // location.reload();
+          if(res.data=="1"){
+            alert("操作成功")
+            that.reload()
+          }else{
+            alert("含有不能排产的零件，请重新选择进行排产！")
+          }
         })
       }else {
         // 操作失败
@@ -858,13 +880,14 @@ export default {
       var fd = new FormData()
       fd.append('flag',"Back")
       fd.append('modid',this.modid)
+      fd.append('reason',this.form.backReason)
+      fd.append('routeid',this.routeid)
       axios.post(`${this.baseURL}/productionplan/schedule.php`,fd)
       .then(function(res){
         // 成功回调
         that.dialogVisible = false;
         alert('操作成功!')
         that.reload()
-        // location.reload();
       })
     },
 

@@ -26,6 +26,23 @@
         <th class="th1">原因</th>
         <th class="th1">签名</th>
       </tr>
+      <tbody>
+        <tr v-for="(item,key,index) in table" :key="index">
+          <td>{{item.name}}</td>
+          <td>{{item.figure_number}}</td>
+          <td>{{item.count}}</td>
+          <td>√</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
     </table>
   </div>
 </template>
@@ -50,9 +67,6 @@ export default {
   mounted() {
     // 获取缓存数据
     this.table = JSON.parse(sessionStorage.getItem("table"));
-    this.checkList = JSON.parse(sessionStorage.getItem("checkList"));
-    this.schedule = JSON.parse(sessionStorage.getItem("schedule"));
-    this.route = JSON.parse(sessionStorage.getItem("route"));
     // 使数据打印分页
     document.getElementsByTagName("html")[0].style.overflow = "visible";
     document.getElementsByTagName("body")[0].style.overflow = "visible";
@@ -71,7 +85,9 @@ tr {
   border-collapse: collapse;
   text-align: center;
 }
-td,
+td {
+  height: 50px;
+}
 th {
   /* 强制不换行 */
   white-space: nowrap;

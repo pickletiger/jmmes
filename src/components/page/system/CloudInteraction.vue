@@ -6,21 +6,9 @@
             </el-breadcrumb>
         </div>
         <div class="container" style="600px">
-            <el-input
-                placeholder="输入关键字进行过滤"
-                v-model="filterText">
-            </el-input>
+            <el-button type="primary" @click="dowmload">下载</el-button>
 
-            <el-tree
-                class="filter-tree"
-                :data="data"
-                :props="defaultProps"
-                @node-click='handleNodeclick'
-                node-key="id"
-                default-expand-all
-                :filter-node-method="filterNode"
-                ref="tree">
-            </el-tree>
+            
         </div>
     </div>
 </template>
@@ -108,8 +96,11 @@ export default {
                         message: '已取消删除'
                     });          
             });
+        },
+        //下载
+        dowmload(){
+             window.open(`${this.baseURL}`+"/Test.php")
         }
-        
     }
 }
 </script>
