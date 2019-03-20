@@ -41,42 +41,7 @@
                 </td>
             </tr>
         </table>
-        <table style="width: 800px;margin-top:0px;">
-            <tr style="text-align: center; height: 80px;">
-                <td style="width: 180px;">产品、零部件名</td>
-                <td colspan="2">{{data.name}}</td>
-                <td>产品编号</td>
-                <td colspan="2">{{data.number}}</td>
-            </tr>
-            <tr style="text-align: center;">
-                <td style="width: 180px;">型号（图号）</td>
-                <td>{{data.figure_number}}</td>
-                <td>工单号</td>
-                <td>{{data.belong_part}}</td>
-                <td>数量</td>
-                <td>{{data.count}}</td>
-            </tr>
-            <tr style="text-align: center;">
-                <td style="width: 180px;">送检项目</td>
-                <td colspan="5">□外购 &nbsp;&nbsp;&nbsp;□外协 &nbsp;&nbsp;&nbsp;□化验 &nbsp;&nbsp;&nbsp;□过程产品 &nbsp;&nbsp;&nbsp;□探伤 &nbsp;&nbsp;&nbsp;□整机</td>
-            </tr>
-            <tr style="text-align: center;height: 150px;">
-                <td style="width: 180px;">自检结果</td>
-                <td colspan="5">
-                    <div style="height:25px;margin-top: 120px;">
-                        <p style="text-align: right;">签名：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日期：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                    </div>
-                </td>
-            </tr>
-            <tr style="text-align: center;height: 150px;">
-                <td style="width: 180px;">检验结论</td>
-                <td colspan="5">
-                    <div style="height:25px;margin-top: 120px;">
-                        <p style="text-align: right;">签名：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日期：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                    </div>
-                </td>
-            </tr>
-        </table>
+        <img v-for="i in item"  :src="i" class="img"/>
         <!-- <div class="page-break"></div> -->
 </div>
 </template>
@@ -87,13 +52,15 @@ export default {
     name: 'Sending_check',
     data (){
         return {
-            data:[{
-                figure_number:""
-            }]
+            data:[],
+            item:[{}]
         }
     },  
     created() {
         this.getData()
+        document.getElementsByTagName('html')[0].style.overflow='visible'
+        document.getElementsByTagName('body')[0].style.overflow='visible'
+        document.getElementById('app').style.overflow='visible'
         
     },
 	methods: {
@@ -130,5 +97,23 @@ export default {
     .main {
         width: 100%;
         align-content: center;
+    }
+
+     *{
+        padding: 0;
+        margin: 0;
+    }
+    .img{
+        width: 840px;
+        margin-left: 1%;
+    }
+    .A4page {
+        width: 277mm;
+        height: 190mm;       
+    }
+        /*第一页的第一个表格*/
+    .pageOneFirst {
+        width: 277mm;
+        text-align: center;
     }
 </style>
