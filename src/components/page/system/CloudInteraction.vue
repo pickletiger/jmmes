@@ -1,11 +1,11 @@
 <template>
   <div class="table">
-        <div class="crumbs">
+        <!-- <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item><i class="el-icon-tickets"></i> 云平台交互</el-breadcrumb-item>
             </el-breadcrumb>
-        </div>
-        <div class="container" style="600px">
+        </div> -->
+        <div class="container">
             <el-button type="primary" @click="dowmload">下载</el-button>
 
             
@@ -203,5 +203,7 @@ export default {
 }
 </script>
 <style scoped>
-  
+  .container{
+    padding: 10px !important;
+  }
 </style>
