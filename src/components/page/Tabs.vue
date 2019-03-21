@@ -78,13 +78,14 @@
     </div>-->
     <el-tabs v-model="activeName" type="card">
       <el-tab-pane :label="`未读消息(${unread.length})`" name="first">
-        <div class="handle-row">
-          <el-button type="danger" @click="allRead()">全部标为已读</el-button>
-        </div>
-        <!-- <el-button @click="resetDateFilter">清除日期过滤器</el-button>
-        <el-button @click="clearFilter">清除所有过滤器</el-button>-->
+        <el-form :inline="true" class="el-form1">
+          <el-form-item>
+            <el-input placeholder="输入关键字" v-model="filterText" style="width:250px;height:35px"></el-input>
+            <el-button type="primary" @click="handleFifter()">查询</el-button>
+            <el-button type="danger" @click="allRead()">全部标为已读</el-button>
+          </el-form-item>
+        </el-form>
         <el-table ref="filterTable" :data="unread" style="width: 100%">
-          <!-- <el-table-column prop="name" label="" width="180"></el-table-column> -->
           <el-table-column prop="address" label="部件信息" :formatter="formatter"></el-table-column>
           <el-table-column
             prop="route"
@@ -111,21 +112,18 @@
             filter-placement="bottom-end"
           ></el-table-column>
           <el-table-column prop="date" label="日期" sortable width="180"></el-table-column>
-          <!-- <div class="handle-row">
-            <el-button type="danger" @click="allRead()">全部标为已读</el-button>
-          </div> -->
           <el-table-column width="120">
             <template slot-scope="scope">
-              <el-button size="big" type="primary" @click="handleRead(scope.row)">标为已读</el-button>
+              <el-button size="small" type="primary" @click="handleRead(scope.row)">标为已读</el-button>
             </template>
           </el-table-column>
         </el-table>
+        <div class="handle-row">
+          
+        </div>
       </el-tab-pane>
 
       <el-tab-pane :label="`已读消息(${read.length})`" name="second">
-        <div class="handle-row">
-          <el-button type="danger" @click="allDel()">删除全部消息</el-button>
-        </div>
         <el-table ref="filterTable" :data="read" style="width: 100%">
           <!-- <el-table-column prop="name" label="" width="180"></el-table-column> -->
           <el-table-column prop="address" label="部件信息" :formatter="formatter"></el-table-column>
@@ -160,9 +158,9 @@
             </template>
           </el-table-column>
         </el-table>
-        <!-- <div class="handle-row">
+        <div class="handle-row">
           <el-button type="danger" @click="allDel()">删除全部消息</el-button>
-        </div> -->
+        </div>
       </el-tab-pane>
 
       <el-tab-pane :label="`全部消息(${recycle.length})`" name="third">
@@ -210,6 +208,7 @@ export default {
       activeName: "first",
       canupload: false,
       //   message: "first",
+      filterText: "",
       showHeader: false,
       checkList: ["全部", "车间"],
       textarea: [],
@@ -225,6 +224,31 @@ export default {
     setInterval(this.timer, 600000);
   },
   methods: {
+    // 过滤查询
+    handleFifter() {
+      console.log(this.filterText);
+      var fd = new FormData();
+      fd.append("flag", "Search");
+      fd.append("modid", this.filterText);
+      var department = localStorage.getItem("ms_department");
+      fd.append("department", department);
+      axios.post(`${this.baseURL}/tabs.php`, fd).then(unread => {
+        //ES6写法
+        unread = unread.data;
+        console.log(unread.data);
+        if (unread.success && unread.data) {
+          this.unread = [];
+          this.unread = unread.data;
+        }
+      });
+      // return unread;
+      // this.unread = !this.unread;
+      // // 增加延时确保tree组件重新渲染
+      // setTimeout(() => {
+      //   this.unread = !this.unread;
+      // }, 500);
+    },
+
     resetDateFilter() {
       this.$refs.filterTable.clearFilter("date");
     },
@@ -393,12 +417,23 @@ export default {
 </script>
 
 <style scoped>
+/* * {
+  margin: 0;
+  padding: 0;
+} */
 .message-title {
   cursor: pointer;
 }
 .el-tabs--card {
   height: 420px;
   overflow: scroll;
+}
+.el-card__body {
+  padding-bottom: 0 !important;
+}
+form {
+  height: 34px !important;
+  padding: 0;
 }
 </style>
 
