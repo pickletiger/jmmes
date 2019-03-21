@@ -16,6 +16,12 @@
     </div>
     <br/>
     <div slot="table-actions" class="table-actions" >
+      <!-- <el-form :inline="false" class="el-form1">
+          <el-form-item> -->
+            <el-input placeholder="输入关键字" v-model="filterText" style="width:250px;height:35px"></el-input>
+            <el-button type="primary" @click="handleFifter()">查询</el-button>
+          <!-- </el-form-item>
+        </el-form> -->
       <el-button type="primary"  @click="dialogFormExport=true">导出</el-button>
       <el-button type="primary" v-if="show_2btn"  @click="dialogVisible = true">排产</el-button>
       <el-button type="primary" v-if="show_4btn"  @click="dialogFormBack = true">退产</el-button>

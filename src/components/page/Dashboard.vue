@@ -15,6 +15,20 @@
         </el-card>
       </el-col>
     </el-row>
+    <el-row :gutter="24">
+      <div class="container">
+        <div class="schart-box">
+         
+          <schart class="schart" canvasId="bar" :data="data1" type="bar" :options="options1"></schart>
+        </div>
+        <div class="schart-box">
+          <schart class="schart" canvasId="line" :data="data1" type="line" :options="options2"></schart>
+        </div>
+        <div class="schart-box">
+          <schart class="schart" canvasId="ring" :data="data2" type="ring" :options="options4"></schart>
+        </div>
+      </div>
+    </el-row>
   </div>
 </template>
 
@@ -45,6 +59,43 @@ export default {
       name: "",
       account: "",
       postword: "",
+      data1: [
+        { name: "电流安全上限", value: 220 },
+        { name: "电流实际最大值", value: 200 },
+        { name: "电流实际最小值", value: 120 },
+        { name: "电流安全下限", value: 100 }
+      ],
+      options1: {
+        title: "某零件电流品控参数",
+        autoWidth: true, // 设置宽高自适应
+        showValue: true,
+        bgColor: "#F9EFCC",
+        fillColor: "#00887C",
+        contentColor: "rgba(46,199,201,0.3)",
+        yEqual: 7
+      },
+      options2: {
+        title: "某商店近年营业总额",
+        bgColor: "#D5E4EB",
+        titleColor: "#00887C",
+        fillColor: "red",
+        contentColor: "rgba(46,199,201,0.3)"
+      },
+      options3: {
+        title: "某部件年度统计",
+        bgColor: "#eeeeee",
+        titleColor: "#ffffff",
+        legendColor: "#ffffff",
+        radius: 120
+      },
+      options4: {
+        title: "某商店各商品年度销量",
+        bgColor: "#829daa",
+        titleColor: "#ffffff",
+        legendColor: "#ffffff",
+        radius: 120,
+        innerRadius: 80
+      },
       data2: [{ name: "-", value: 1 }],
       options3: {
         title: "零部件不合格次数比例",

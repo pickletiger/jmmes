@@ -261,7 +261,7 @@ export default {
             fd.append('modid',this.filterText)
             fd.append('state',1)
             axios.post(`${this.baseURL}/tree.php`,fd).then((res)=>{
-              // console.log(res.data.data)
+              console.log(res.data.data)
               if(res.data.success == "success"){
                 return resolve(res.data.data)
               }else {
