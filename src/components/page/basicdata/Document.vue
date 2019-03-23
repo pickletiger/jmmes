@@ -1,10 +1,10 @@
 <template>
   <div class="table">
-        <div class="crumbs">
+        <!-- <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item><i class="el-icon-tickets"></i> 文档管理</el-breadcrumb-item>
             </el-breadcrumb>
-        </div>
+        </div> -->
         <div class="container">
            <el-container style="height: 600px;">
                 <el-aside width="250px">  

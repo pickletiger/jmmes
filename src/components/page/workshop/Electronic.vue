@@ -1,10 +1,10 @@
 <template>
   <div class="table">
-        <div class="crumbs">
+        <!-- <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item><i class="el-icon-tickets"></i> 电子看板</el-breadcrumb-item>
             </el-breadcrumb>
-        </div>
+        </div> -->
         <div class="container">
         	<el-tabs v-model="activeName2" type="card">
 				    <el-tab-pane label="车间任务" name="first"><workshop-task></workshop-task></el-tab-pane>

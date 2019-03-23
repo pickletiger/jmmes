@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="crumbs">
+    <!-- <div class="crumbs">
       <el-breadcrumb separator="/">
           <el-breadcrumb-item><i class="el-icon-tickets"></i> 计划总表</el-breadcrumb-item>
       </el-breadcrumb>
-    </div>
+    </div> -->
     <div class="btn">
       <el-button type="primary" @click.native="upload">导入
       <i class="el-icon-upload el-icon--left"></i>

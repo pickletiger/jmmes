@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="crumbs">
+    <!-- <div class="crumbs">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item><i class="el-icon-search"></i> 检验模块</el-breadcrumb-item>
       </el-breadcrumb>
-    </div>
+    </div> -->
     <div class="examine">
       <el-tabs 
         v-model="activeName"

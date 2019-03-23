@@ -18,8 +18,8 @@
     <div slot="table-actions" class="table-actions" >
       <!-- <el-form :inline="false" class="el-form1">
           <el-form-item> -->
-            <el-input placeholder="输入关键字" v-model="filterText" style="width:250px;height:35px"></el-input>
-            <el-button type="primary" @click="handleFifter()">查询</el-button>
+            <!-- <el-input placeholder="输入关键字" v-model="filterText" style="width:250px;height:35px"></el-input>
+            <el-button type="primary" @click="handleFifter()">查询</el-button> -->
           <!-- </el-form-item>
         </el-form> -->
       <el-button type="primary"  @click="dialogFormExport=true">导出</el-button>

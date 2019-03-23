@@ -1,10 +1,10 @@
 <template>
   <div class="table">
-        <div class="crumbs">
+        <!-- <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item><i class="el-icon-tickets"></i> 未审核项目</el-breadcrumb-item>
             </el-breadcrumb>
-        </div>
+        </div> -->
         <el-tabs v-model="tabName" @tab-click="handleClick">
           <el-tab-pane label="普通零部件" name="ordinary"></el-tab-pane>
           <el-tab-pane label="关键零部件" name="momentous"></el-tab-pane>
