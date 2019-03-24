@@ -207,6 +207,7 @@ export default {
     print1(row) {
       localStorage.removeItem("number")
       localStorage.setItem("number",row.number)
+      localStorage.setItem("route",row.route)
       let routeData = this.$router.resolve({
         name: "Sending_check"
       });
