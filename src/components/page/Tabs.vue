@@ -76,7 +76,7 @@
                 </el-checkbox-group>
             </el-dialog>
     </div>-->
-    <el-tabs v-model="activeName" type="card">
+    <el-tabs v-loading="loading" v-model="activeName" type="card">
       <el-tab-pane :label="`未读消息(${unread.length})`" name="first">
         <el-form :inline="true" class="el-form1">
           <el-form-item>
@@ -118,9 +118,7 @@
             </template>
           </el-table-column>
         </el-table>
-        <div class="handle-row">
-          
-        </div>
+        <div class="handle-row"></div>
       </el-tab-pane>
 
       <el-tab-pane :label="`已读消息(${read.length})`" name="second">
@@ -199,15 +197,16 @@
 </template>
 
 <script>
+import { Loading } from 'element-ui';
 import axios from "axios";
 export default {
   inject: ["reload"],
   name: "tabs",
   data() {
     return {
+      loading: true,
       activeName: "first",
       canupload: false,
-      //   message: "first",
       filterText: "",
       showHeader: false,
       checkList: ["全部", "车间"],
@@ -218,10 +217,13 @@ export default {
     };
   },
   created() {
-    this.getDataUnread();
+    this.getDataTime();
+    setTimeout(() => {
+      this.getDataUnread();
+    }, 1500);
+
     this.getDataRead();
     this.getDataRecycle();
-    setInterval(this.timer, 600000);
   },
   methods: {
     // 过滤查询
@@ -241,12 +243,6 @@ export default {
           this.unread = unread.data;
         }
       });
-      // return unread;
-      // this.unread = !this.unread;
-      // // 增加延时确保tree组件重新渲染
-      // setTimeout(() => {
-      //   this.unread = !this.unread;
-      // }, 500);
     },
 
     resetDateFilter() {
@@ -275,8 +271,8 @@ export default {
       return row[property] === value;
     },
 
-    // 动态获取逾期消息
-    timer: function() {
+    // 获取逾期消息
+    getDataTime() {
       console.log("time");
       var fd = new FormData();
       fd.append("flag", "Overdue");
@@ -292,7 +288,6 @@ export default {
           this.Overdue = Overdue.data;
         }
       });
-      this.reload();
     },
 
     // 获取未读
@@ -308,6 +303,7 @@ export default {
         if (unread.success && unread.data) {
           this.unread = [];
           this.unread = unread.data;
+          this.loading = false;
         }
       });
     },
