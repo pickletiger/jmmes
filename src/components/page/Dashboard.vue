@@ -66,7 +66,7 @@ export default {
         { name: "电流安全下限", value: 100 }
       ],
       options1: {
-        title: "某零件电流品控参数",
+        title: "关键零部件电压品控参数",
         autoWidth: true, // 设置宽高自适应
         showValue: true,
         bgColor: "#F9EFCC",
@@ -75,21 +75,21 @@ export default {
         yEqual: 7
       },
       options2: {
-        title: "某商店近年营业总额",
+        title: "关键零部件电流品控参数",
         bgColor: "#D5E4EB",
         titleColor: "#00887C",
         fillColor: "red",
         contentColor: "rgba(46,199,201,0.3)"
       },
       options3: {
-        title: "某部件年度统计",
+        title: "轴部件年度统计",
         bgColor: "#eeeeee",
         titleColor: "#ffffff",
         legendColor: "#ffffff",
         radius: 120
       },
       options4: {
-        title: "某商店各商品年度销量",
+        title: "关键零部件年度退产统计",
         bgColor: "#829daa",
         titleColor: "#ffffff",
         legendColor: "#ffffff",

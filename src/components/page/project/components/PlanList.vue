@@ -22,7 +22,7 @@
       </span>
     </template>
    <div slot="table-actions">
-      <el-button type="primary" @click="Comfirm()">审核</el-button>
+      <!-- <el-button type="primary" @click="Comfirm()">审核</el-button> -->
     </div>
     </vue-good-table>
     
@@ -104,9 +104,9 @@ export default {
       // console.log(myUrl)
       window.open(myUrl,'_blank')
     },
-    comfirm() {
+    // comfirm() {
 
-    }
+    // }
   }
 };
 </script>

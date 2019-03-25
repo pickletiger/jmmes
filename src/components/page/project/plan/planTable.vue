@@ -151,7 +151,7 @@ export default {
         }, // 弹出框配置
         searchOptions: [{value: '0',label: '全部'},{value: 'serial_number',label: '序号'},{value: 'product_name',label: '产品名称'},{value: 'numbering',label: '编号'},{value: 'work_order',label: '工单'},{value: 'installation_site',label: '安装场地'},{value: 'exterior',label: '外观'},{value: 'colour',label: '颜色'},{value: 'barrage',label: '拦河'},{value: 'control_room',label: '控制室'},{value: 'basic_embedded_parts',label: '基础预埋件'},{value: 'platform_automatic_door',label: '站台/自动门'},{value: 'car_body_cockpit',label: '车体/座舱'},{value: 'remarks',label: '备注'},{value: 'priority',label: '优先级'},{value: 'frp_embedded_parts',label: '玻璃钢预埋件状态'},{value: 'scheduling_process_list',label: '排产工艺清单'},{value: 'important_product',label: '重点产品'},{value: 'important_material_information',label: '重要材料信息'},{value: 'due_time',label: '交付时间'},{value: 'arrival_time',label: '进厂时间'},{value: 'initial_planning_start_time',label: '初始计划开始时间'},{value: 'initial_plan_completion_time',label: '初始计划完成时间'},{value: 'actual_planned_start_time',label: '实际计划开始时间'},{value: 'actual_planned_completion_time',label: '实际计划完成时间'},{value: 'planned_scheduling_time',label: '计划排产时间'},{value: 'K',label: 'K'},{value: 'T_before_welding',label: 'T-焊前'},{value: 'T_welding',label: 'T组焊'},{value: 'T_assembly',label: 'T装配'},{value: 'F',label: 'F'},{value: 'W',label: 'W'},{value: 'D_assembly',label: 'D装配'},{value: 'G',label: 'G'},{value: 'L_welding',label: 'L组焊'},{value: 'IL_assembly',label: 'I/L装配'},{value: 'outer_track_column',label: '外协轨道立柱/塔架/金字架架/转盘'},{value: 'in_plant_track_column',label: '厂内轨道立柱/塔架'},{value: 'cockpit',label: '座舱/车体/船体'}], // 搜索下拉选项
         searchCondition: '',
-        searchValue: '',
+        searchValue: ''
     }
   },
   methods: {

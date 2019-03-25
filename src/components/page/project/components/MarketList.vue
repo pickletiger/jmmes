@@ -22,7 +22,7 @@
     </template>
     <div slot="table-actions">
       <el-button type="primary" @click="canupload = true">新建</el-button>
-      <el-button type="primary" @click="batchCheckComfirm()">审核</el-button>
+      <!-- <el-button type="primary" @click="batchCheckComfirm()">审核</el-button> -->
     </div>
     </vue-good-table>
     <el-dialog title="信息详情" :visible.sync="dialogFormVisible">
@@ -153,17 +153,34 @@ export default {
       this.dialogFormVisible = true;
     },
     checkComfirm() {
-      this.dialogFormVisible = false;
-      this.formData.checkPerson = "管理员";
-      this.$message({
-        message: '审核成功！',
-        type: 'success'
-      });
+      this.dialogFormVisible = false
+      var fd = new FormData()
+      fd.append("flag","updata")
+      fd.append("ordernumber",this.formData.orderName)
+      fd.append("checkPerson",this.formData.checkPerson)
+      axios.post(`${this.baseURL}/market/market_pdf.php`,fd)
+      .then((res) => {
+        console.log(res)
+        if(res.data.success=='success'){
+          this.$message({
+            message: '审核成功！',
+            type: 'success'
+          })
+        }else{
+           this.$message({
+            message: '审核失败！',
+            type: 'error'
+          })
+        }
+          
+      })
+      
     },
     handleTabledata(row) {
-      // console.log(row.id)
+      console.log(row.orderName)
       var fd = new FormData()
       this.checkrows = []
+      fd.append("flag","pdf")
       fd.append("ordernumber",row.orderName)
       axios.post(`${this.baseURL}/market/market_pdf.php`,fd)
       .then((res) => {
@@ -227,35 +244,36 @@ export default {
           //  console.log(response.data.data)
         })
     },
-    batchCheckComfirm() {
-      let multipleSelection = this.multipleSelection;
-      // 判断是否有选中未审核订单
-      if(multipleSelection.selectedRows.length == 0){
-        this.$message({
-          message: '请先选择未审核的订单~',
-          type: 'warning'
-        });
-      }else{
-        let selectedOptions = multipleSelection.selectedRows.length;
+    // batchCheckComfirm() {
+    //   console.log(this.multipleSelection)
+    //   let multipleSelection = this.multipleSelection
+    //   // 判断是否有选中未审核订单
+    //   if(multipleSelection.selectedRows.length == 0){
+    //     this.$message({
+    //       message: '请先选择未审核的订单~',
+    //       type: 'warning'
+    //     });
+    //   }else{
+    //     let selectedOptions = multipleSelection.selectedRows.length;
 
-        for(let i=0;i < selectedOptions; i++) {
-          if(multipleSelection.selectedRows[i].checkPerson == '') {
-            this.notCheckSelection.push(multipleSelection.selectedRows[i]);
-          }
-        }
+    //     for(let i=0;i < selectedOptions; i++) {
+    //       if(multipleSelection.selectedRows[i].checkPerson == '') {
+    //         this.notCheckSelection.push(multipleSelection.selectedRows[i]);
+    //       }
+    //     }
 
-        let checkNums = this.notCheckSelection.length;
-        for(let i=0;i < checkNums; i++) {
-          this.notCheckSelection[i].checkPerson = '管理员';
-        }
-        this.$message({
-          message: '成功审核'+ this.notCheckSelection.length +'项订单！',
-          type: 'success'
-        });
-        multipleSelection.selectedRows = [];
-        this.notCheckSelection = [];
-      }
-    }
+    //     let checkNums = this.notCheckSelection.length;
+    //     for(let i=0;i < checkNums; i++) {
+    //       this.notCheckSelection[i].checkPerson = '管理员';
+    //     }
+    //     this.$message({
+    //       message: '成功审核'+ this.notCheckSelection.length +'项订单！',
+    //       type: 'success'
+    //     });
+    //     multipleSelection.selectedRows = [];
+    //     this.notCheckSelection = [];
+    //   }
+    // }
   }
 };
 </script>
