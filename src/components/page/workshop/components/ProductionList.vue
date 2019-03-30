@@ -3,25 +3,31 @@
     <!-- table上部按钮 -->
     <div slot="table-actions" class="table-actions" >
       <el-button type="danger" value = 'ALL'  @click="select_WS('ALL')">全部车间</el-button>
-      <el-button type="primary" class="btn" value = 'W'  @click="select_WS('W')">W车间</el-button>
-      <el-button type="primary" class="btn" value = 'M'  @click="select_WS('M')">M车间</el-button>
-      <el-button type="primary" class="btn" value = 'F'  @click="select_WS('F')">F车间</el-button>
-      <el-button type="primary" class="btn" value = 'G'  @click="select_WS('G')">G车间</el-button>
-      <el-button type="primary" class="btn" value = 'I'  @click="select_WS('I')">I车间</el-button>
-      <el-button type="primary" class="btn" value = 'K'  @click="select_WS('K')">K车间</el-button>
-      <el-button type="primary" class="btn" value = 'S'  @click="select_WS('S')">S车间</el-button>
-      <el-button type="primary" class="btn" value = 'T'  @click="select_WS('T')">T车间</el-button>
-      <el-button type="primary" class="btn" value = 'J'  @click="select_WS('J')">J车间</el-button>
-      <el-button type="primary" class="btn" value = 'L'  @click="select_WS('L')">L车间</el-button>
+      <el-button type="primary" class="btn" value = 'K'  @click="select_WS('K')">K开料车间</el-button>
+      <el-button type="primary" class="btn" value = 'TK'  @click="select_WS('TK')">TK开料车间</el-button>
+      <el-button type="primary" class="btn" value = 'S'  @click="select_WS('S')">安装S</el-button>
+      <el-button type="primary" class="btn" value = 'F'  @click="select_WS('F')">玻璃钢F</el-button>
+      <el-button type="primary" class="btn" value = 'G'  @click="select_WS('G')">电气G</el-button>
+      <el-button type="primary" class="btn" value = 'T'  @click="select_WS('T')">机加T</el-button>
+      <el-button type="primary" class="btn" value = 'I'  @click="select_WS('I')">机械车间</el-button>
+      <el-button type="primary" class="btn" value = 'L'  @click="select_WS('L')">结构L</el-button>
+      <el-button type="primary" class="btn" value = 'J'  @click="select_WS('J')">探伤</el-button>
+      <el-button type="primary" class="btn" value = 'W'  @click="select_WS('W')">外协W</el-button>
     </div>
     <br/>
     <div slot="table-actions" class="table-actions" >
-      <!-- <el-form :inline="false" class="el-form1">
-          <el-form-item> -->
-            <!-- <el-input placeholder="输入关键字" v-model="filterText" style="width:250px;height:35px"></el-input>
-            <el-button type="primary" @click="handleFifter()">查询</el-button> -->
-          <!-- </el-form-item>
-        </el-form> -->
+      <el-input v-model="searchValue" placeholder="请输入关键词" style="width: 200px;"></el-input>
+      <el-select v-model="searchCondition" placeholder="请选择要搜索的内容" style="margin-left: 16px">
+        <el-option
+          v-for="item in searchOptions"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
+      <el-button type="primary" @click.native="search" style="margin-left: 16px">搜索
+        <i class="el-icon-search el-icon--right"></i>
+      </el-button>
       <el-button type="primary"  @click="dialogFormExport=true">导出</el-button>
       <el-button type="primary" v-if="show_2btn"  @click="dialogVisible = true">排产</el-button>
       <el-button type="primary" v-if="show_4btn"  @click="dialogFormBack = true">退产</el-button>
@@ -29,22 +35,10 @@
       <el-button type="primary" v-if="show_3btn" @click="print2()"  >产品标志卡</el-button>
       <el-button type="primary" v-if="show_2btn" @click="print3()"  >零件质量记录表</el-button>
       <el-button type="primary" @click="clearFilter">清除过滤</el-button>
-      <!-- <el-select v-model="value" placeholder="请选择" @change="select_WS()">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-          size="">
-        </el-option>
-      </el-select> -->
     </div>
     <el-tabs v-model="activeName" @tab-click="tabClick">
       <!-- 未排产选项卡 -->
       <el-tab-pane label="未排产" name="first">
-        <!-- element table 
-            arrayObject.slice(start,end)方法使数据分页显示
-        -->
         <el-table
           ref="filterTable"
           :data="tableData.slice( (currentPage-1)*pageSize, currentPage*pageSize)"
@@ -610,84 +604,158 @@ export default {
       show_2btn: true,
       show_3btn: false,
       show_4btn:false,
-      value: ''
+      searchOptions: [
+        {
+          value: 'product_name',
+          label: '产品名称'
+        },{
+          value: 'number',
+          label: '工单'
+        },{
+          value: 'figure_number',
+          label: '零件图号'
+        },{
+          value: 'name',
+          label: '名称'
+        },{
+          value: 'child_material',
+          label: '规格'
+        },{
+          value: 'standard',
+          label: '开料尺寸'
+        },{
+          value: 'route',
+          label: '加工工艺路线'
+        },{
+          value: 'count',
+          label: '数量'
+        }], // 搜索下拉选项
+      value: '',
+      searchValue:'',
+      searchCondition:''
     };
   },
   components: {
     VueGoodTable
   },
   mounted() {
-    this.getData();
+    var flag = "Undelivered"
+    this.getData(flag)
   },
   methods: {
     // 车间按钮
     select_WS(value){
-      if(value=="ALL"){
-        this.getData();
+      let isfinish = ''
+      let arr = ''
+      if(this.activeName=='first'){
+        isfinish = '3'
+      }else if(this.activeName=='second'){
+        isfinish = '0'
       }else{
-        var fd = new FormData()
-        fd.append("flag",value)
-        axios
-          .post(`${this.baseURL}/productionplan/list.php`,fd)
-          .then(this.getDataSucc);
+        isfinish = '2'
+      }
+      if(value=='K'){
+        arr ='("K","K坡")'
+      }else if(value == 'S'){
+        arr ='("S安装补贴","S玻璃钢","S厂检","S电气","S调试","S钢结构","S国（省）检","S派人维修","S移交客户","S座舱")'
+      }else if(value == 'F'){
+        arr ='("F成型","F翻模","F模具","F喷涂","F装配","M木工")'
+      }else if(value == 'G'){
+        arr ='("GS","G接线","G装灯","G装箱")'
+      }else if(value == 'T'){
+        arr ='("T粗","T淬","T调","T发黑","T焊","T划线","T坡","T退","T线","T正火","T装")'
+      }else if(value == "TK"){
+        arr ='("TK")'
+      }else if(value == 'I'){
+        arr ='("IA","IA1","IB","ID","IG","IS","I钻")'
+      }else if(value == 'L'){
+        arr ='("LK","L焊","L转","L装")'
+      }else if(value == "J"){
+        arr ='("J探")'
+      }else if(value == 'W'){
+        arr ='("FW成型","FW成型底漆","FW底漆","FW面漆","FW模具","TW半精车","TW插","TW粗车","TW调质","TW高频","TW滚","TW精车","TW拉","TW磨","TW刨","TW镗","TW铣","TW线割","W彩锌","W冲压","W镀铬","W镀锌","W发黑","W发泡","W改制","W回火","W机","W浸","W卷","W喷塑","W漆","W渗氮","W折","W退火")'
+      }
+      var fd = new FormData()
+          fd.append("flag","Select")
+          fd.append("isfinish",isfinish)
+          fd.append("list",arr)
+          axios.post(`${this.baseURL}/productionplan/select.php`,fd).then(this.getDataSucc)
+      if(value=='ALL'){
+          window.location.reload()
       }
     },
     
-    getData() {
-
+    getData(flag) {
+      var flag = flag
+      var fd = new FormData()
+          fd.append("flag",flag)
       axios
-        .post(`${this.baseURL}/productionplan/list.php`)
+        .post(`${this.baseURL}/productionplan/list.php`,fd)
         .then(this.getDataSucc);
     },
     getDataSucc(res) {
-      // console.log(res.data)
-      res = res.data;
-      if (res.success && res.rows) {
+      if(res.data.success=="error"){
+        alert("暂无数据")
+      }
+      res = res.data
+      if (res.rows) {
         // 未排产
-        this.tableData = res.rows;
-        let columns = this.columns;
-        let data_length = res.rows.length;
-        // checkbox 开料尺寸赋值
-        let length1 = res.fStandard.length;
-        for(let i=0; i < length1; i++) {
-          this.fStandard.push({text:res.fStandard[i].f6,value:res.fStandard[i].f6});
+        this.tableData = res.rows
+        if(res.fStandard&&res.fChild_material){
+          let columns = this.columns
+          let data_length = res.rows.length
+          // checkbox 开料尺寸赋值
+          let length1 = res.fStandard.length
+          for(let i=0; i < length1; i++) {
+            this.fStandard.push({text:res.fStandard[i].f6,value:res.fStandard[i].f6})
+          }
+          // checkbox 规格赋值
+          let length2 = res.fChild_material.length
+          for(let i=0; i < length2; i++) {
+            this.fChild_material.push({text:res.fChild_material[i].f5,value:res.fChild_material[i].f5})
+          }
         }
-        // checkbox 规格赋值
-        let length2 = res.fChild_material.length;
-        for(let i=0; i < length2; i++) {
-          this.fChild_material.push({text:res.fChild_material[i].f5,value:res.fChild_material[i].f5});
-        }
+        
       }
 
       if(res.rows2) {
         // 已排产
-        this.tableData2 = res.rows2;
+        this.tableData2 = res.rows2
         // checkbox 规格赋值
-        let length3 = res.FChild_material.length;
-        for(let i=0; i < length3; i++) {
-          this.FChild_material.push({text:res.FChild_material[i].F5,value:res.FChild_material[i].F5});
+        if(res.FStandard&&res.FChild_material){
+           let length3 = res.FChild_material.length
+          for(let i=0; i < length3; i++) {
+            this.FChild_material.push({text:res.FChild_material[i].F5,value:res.FChild_material[i].F5})
+          }
+          // checkbox 开料尺寸规格赋值
+          let length4 = res.FStandard.length
+          for(let i=0; i < length4; i++) {
+            this.FStandard.push({text:res.FStandard[i].F6,value:res.FStandard[i].F6})
+          }
         }
-        // checkbox 开料尺寸规格赋值
-        let length4 = res.FStandard.length;
-        for(let i=0; i < length4; i++) {
-          this.FStandard.push({text:res.FStandard[i].F6,value:res.FStandard[i].F6});
-        }
+       
       }
 
       if(res.rows3) {
         // 生产中
-        this.tableData3 = res.rows3;
-        // // checkbox 规格赋值
-        // let length3 = res.FChild_material.length;
-        // for(let i=0; i < length3; i++) {
-        //   this.FChild_material.push({text:res.FChild_material[i].F5,value:res.FChild_material[i].F5});
-        // }
-        // // checkbox 开料尺寸规格赋值
-        // let length4 = res.FStandard.length;
-        // for(let i=0; i < length4; i++) {
-        //   this.FStandard.push({text:res.FStandard[i].F6,value:res.FStandard[i].F6});
-        // }
+        this.tableData3 = res.rows3
       }
+    },
+    search(){
+      var isfinish = ''
+      if(this.activeName=='first'){
+        isfinish = '3'
+      }else if(this.activeName=='second'){
+        isfinish = '0'
+      }else{
+        isfinish = '2'
+      }
+      var fd = new FormData()
+          fd.append("flag","screen")
+          fd.append("searchValue",this.searchValue)
+          fd.append("searchCondition",this.searchCondition)
+          fd.append("isfinish",isfinish)
+          axios.post(`${this.baseURL}/productionplan/select.php`,fd).then(this.getDataSucc)
     },
     handleClose(done) {
       done();
@@ -718,8 +786,6 @@ export default {
     },
     // 导出
     exportExcel() {
-      // console.log('导出');
-      // console.log(this.form.productName)
       let that = this
       if(this.form.productName){
         var fd = new FormData()
@@ -902,15 +968,20 @@ export default {
       // console.log(tab.name)
       // 已排产页面隐藏排产按钮
       if (tab.name == 'second') {
-        this.show_2btn = false;
-        this.show_3btn = true;
-        this.show_4btn = true;
-      }else if(tab.name == 'second'){
-        this.show_2btn = false;
-        this.show_3btn = false;
+        
+        this.show_2btn = false
+        this.show_3btn = true
+        this.show_4btn = true
+        var flag = "Delivered"
+            this.getData(flag)
+      }else if(tab.name == 'third'){
+        this.show_2btn = false
+        this.show_3btn = false
+        var flag = "Production"
+            this.getData(flag)
       }else {
-        this.show_2btn = true;
-        this.show_3btn = false;
+        this.show_2btn = true
+        this.show_3btn = false
       }
     }
   }
