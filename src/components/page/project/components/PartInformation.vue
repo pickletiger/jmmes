@@ -390,10 +390,10 @@ export default {
     },
     // 打开内层diog
     handleOpeninner(state) {
-      if(state==0){
+      if(state==1){
         alert("该部件已经完成,不允许再继续增加节点")
         this.dialogTableVisible = false
-      }else if(state==1){
+      }else if(state==2){
         alert("该节点的下一节点已经在进行,不允许再进行增加节点！")
         this.dialogTableVisible = false
       }else{

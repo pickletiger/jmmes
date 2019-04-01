@@ -519,14 +519,14 @@
           >
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="工位" :label-width="formLabelWidth">
+        <!-- <el-form-item label="工位" :label-width="formLabelWidth">
           <el-checkbox-group v-model="checkList">
             <el-checkbox label="切管"></el-checkbox>
             <el-checkbox label="锯床"></el-checkbox>
           </el-checkbox-group>
         </el-form-item>
         <el-form-item label="开料尺寸定额" :label-width="formLabelWidth">
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -584,7 +584,7 @@ export default {
       dialogFormBack: false,
       schedule: "",
       overdata:"",
-      checkList: [],
+      checkList: ["切管"],
       tableData: [],
       tableData2: [],
       tableData3: [],
@@ -697,6 +697,7 @@ export default {
       if(res.data.success=="error"){
         alert("暂无数据")
       }
+      console.log(res.data)
       res = res.data
       if (res.rows) {
         // 未排产

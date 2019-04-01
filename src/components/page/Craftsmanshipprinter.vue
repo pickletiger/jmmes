@@ -54,7 +54,7 @@
                 <td>15#</td>
                 <td>16#</td>
             </tr>
-            <tr v-for="(item,index) in craftsmanshipTableBody_1">
+            <tr v-for="(item,index) in craftsmanshipTableBody_1.rowsData">
                 <td>{{ item.serialNumber }}</td>
                 <td>{{ item.processFlow }}</td>
                 <td>{{ item.inspectionContent }}</td>
@@ -77,6 +77,9 @@
             <tr>
                 <td colspan="4">不符合确认</td>
                 <td colspan="10">{{ craftsmanshipTableBodyResult.inconsistentConfirmation }}</td>
+            </tr>
+            <tr>
+                <td colspan="14" ref="firstone" id="firstone" class="craftsmanshipTableBody_1_img" @drop="drop($event,'5')" @dragover="allowDrop($event)" v-html="`<img  src='${baseURL}/${craftsmanshipTableBody_1.fileOne}' style='width:100%;max-height:100%;pointer-events:none;display:${isEmpty(craftsmanshipTableBody_1.fileOne)};' />`">&nbsp;</td>
             </tr>
         </table>
         <!-- 模板一 end -->
@@ -180,20 +183,24 @@ export default {
                 "partsDrawingNumber": "",
                 "quantity": ""
             },
-            craftsmanshipTableBody_1: [
-                {"serialNumber": "*","processFlow": "","inspectionContent": "","skillsRequirement": "","selfTest_13": "","selfTest_14": "","selfTest_15": "","selfTest_16": "","signature_1": "","qualityInspection_13": "","qualityInspection_14": "","qualityInspection_15": "","qualityInspection_16": "","signatture_2": ""},
-                {"serialNumber": "*","processFlow": "","inspectionContent": "","skillsRequirement": "","selfTest_13": "","selfTest_14": "","selfTest_15": "","selfTest_16": "","signature_1": "","qualityInspection_13": "","qualityInspection_14": "","qualityInspection_15": "","qualityInspection_16": "","signatture_2": ""},
-                {"serialNumber": "*","processFlow": "","inspectionContent": "","skillsRequirement": "","selfTest_13": "","selfTest_14": "","selfTest_15": "","selfTest_16": "","signature_1": "","qualityInspection_13": "","qualityInspection_14": "","qualityInspection_15": "","qualityInspection_16": "","signatture_2": ""},
-                {"serialNumber": "*","processFlow": "","inspectionContent": "","skillsRequirement": "","selfTest_13": "","selfTest_14": "","selfTest_15": "","selfTest_16": "","signature_1": "","qualityInspection_13": "","qualityInspection_14": "","qualityInspection_15": "","qualityInspection_16": "","signatture_2": ""},
-                {"serialNumber": "*","processFlow": "","inspectionContent": "","skillsRequirement": "","selfTest_13": "","selfTest_14": "","selfTest_15": "","selfTest_16": "","signature_1": "","qualityInspection_13": "","qualityInspection_14": "","qualityInspection_15": "","qualityInspection_16": "","signatture_2": ""},
-                {"serialNumber": "*","processFlow": "","inspectionContent": "","skillsRequirement": "","selfTest_13": "","selfTest_14": "","selfTest_15": "","selfTest_16": "","signature_1": "","qualityInspection_13": "","qualityInspection_14": "","qualityInspection_15": "","qualityInspection_16": "","signatture_2": ""},
-                {"serialNumber": "*","processFlow": "","inspectionContent": "","skillsRequirement": "","selfTest_13": "","selfTest_14": "","selfTest_15": "","selfTest_16": "","signature_1": "","qualityInspection_13": "","qualityInspection_14": "","qualityInspection_15": "","qualityInspection_16": "","signatture_2": ""},
-                {"serialNumber": "*","processFlow": "","inspectionContent": "","skillsRequirement": "","selfTest_13": "","selfTest_14": "","selfTest_15": "","selfTest_16": "","signature_1": "","qualityInspection_13": "","qualityInspection_14": "","qualityInspection_15": "","qualityInspection_16": "","signatture_2": ""},
-                {"serialNumber": "*","processFlow": "","inspectionContent": "","skillsRequirement": "","selfTest_13": "","selfTest_14": "","selfTest_15": "","selfTest_16": "","signature_1": "","qualityInspection_13": "","qualityInspection_14": "","qualityInspection_15": "","qualityInspection_16": "","signatture_2": ""},
-                {"serialNumber": "*","processFlow": "","inspectionContent": "","skillsRequirement": "","selfTest_13": "","selfTest_14": "","selfTest_15": "","selfTest_16": "","signature_1": "","qualityInspection_13": "","qualityInspection_14": "","qualityInspection_15": "","qualityInspection_16": "","signatture_2": ""},
-                {"serialNumber": "*","processFlow": "","inspectionContent": "","skillsRequirement": "","selfTest_13": "","selfTest_14": "","selfTest_15": "","selfTest_16": "","signature_1": "","qualityInspection_13": "","qualityInspection_14": "","qualityInspection_15": "","qualityInspection_16": "","signatture_2": ""},
-                {"serialNumber": "*","processFlow": "","inspectionContent": "","skillsRequirement": "","selfTest_13": "","selfTest_14": "","selfTest_15": "","selfTest_16": "","signature_1": "","qualityInspection_13": "","qualityInspection_14": "","qualityInspection_15": "","qualityInspection_16": "","signatture_2": ""}
-            ],
+            craftsmanshipTableBody_1: {
+                rowsData:[
+                    {"serialNumber": "*","processFlow": "","inspectionContent": "","skillsRequirement": "","selfTest_13": "","selfTest_14": "","selfTest_15": "","selfTest_16": "","signature_1": "","qualityInspection_13": "","qualityInspection_14": "","qualityInspection_15": "","qualityInspection_16": "","signatture_2": ""},
+                    {"serialNumber": "*","processFlow": "","inspectionContent": "","skillsRequirement": "","selfTest_13": "","selfTest_14": "","selfTest_15": "","selfTest_16": "","signature_1": "","qualityInspection_13": "","qualityInspection_14": "","qualityInspection_15": "","qualityInspection_16": "","signatture_2": ""},
+                    {"serialNumber": "*","processFlow": "","inspectionContent": "","skillsRequirement": "","selfTest_13": "","selfTest_14": "","selfTest_15": "","selfTest_16": "","signature_1": "","qualityInspection_13": "","qualityInspection_14": "","qualityInspection_15": "","qualityInspection_16": "","signatture_2": ""},
+                    {"serialNumber": "*","processFlow": "","inspectionContent": "","skillsRequirement": "","selfTest_13": "","selfTest_14": "","selfTest_15": "","selfTest_16": "","signature_1": "","qualityInspection_13": "","qualityInspection_14": "","qualityInspection_15": "","qualityInspection_16": "","signatture_2": ""},
+                    {"serialNumber": "*","processFlow": "","inspectionContent": "","skillsRequirement": "","selfTest_13": "","selfTest_14": "","selfTest_15": "","selfTest_16": "","signature_1": "","qualityInspection_13": "","qualityInspection_14": "","qualityInspection_15": "","qualityInspection_16": "","signatture_2": ""},
+                    {"serialNumber": "*","processFlow": "","inspectionContent": "","skillsRequirement": "","selfTest_13": "","selfTest_14": "","selfTest_15": "","selfTest_16": "","signature_1": "","qualityInspection_13": "","qualityInspection_14": "","qualityInspection_15": "","qualityInspection_16": "","signatture_2": ""},
+                    {"serialNumber": "*","processFlow": "","inspectionContent": "","skillsRequirement": "","selfTest_13": "","selfTest_14": "","selfTest_15": "","selfTest_16": "","signature_1": "","qualityInspection_13": "","qualityInspection_14": "","qualityInspection_15": "","qualityInspection_16": "","signatture_2": ""},
+                    {"serialNumber": "*","processFlow": "","inspectionContent": "","skillsRequirement": "","selfTest_13": "","selfTest_14": "","selfTest_15": "","selfTest_16": "","signature_1": "","qualityInspection_13": "","qualityInspection_14": "","qualityInspection_15": "","qualityInspection_16": "","signatture_2": ""},
+                    {"serialNumber": "*","processFlow": "","inspectionContent": "","skillsRequirement": "","selfTest_13": "","selfTest_14": "","selfTest_15": "","selfTest_16": "","signature_1": "","qualityInspection_13": "","qualityInspection_14": "","qualityInspection_15": "","qualityInspection_16": "","signatture_2": ""},
+                    {"serialNumber": "*","processFlow": "","inspectionContent": "","skillsRequirement": "","selfTest_13": "","selfTest_14": "","selfTest_15": "","selfTest_16": "","signature_1": "","qualityInspection_13": "","qualityInspection_14": "","qualityInspection_15": "","qualityInspection_16": "","signatture_2": ""},
+                    {"serialNumber": "*","processFlow": "","inspectionContent": "","skillsRequirement": "","selfTest_13": "","selfTest_14": "","selfTest_15": "","selfTest_16": "","signature_1": "","qualityInspection_13": "","qualityInspection_14": "","qualityInspection_15": "","qualityInspection_16": "","signatture_2": ""},
+                    {"serialNumber": "*","processFlow": "","inspectionContent": "","skillsRequirement": "","selfTest_13": "","selfTest_14": "","selfTest_15": "","selfTest_16": "","signature_1": "","qualityInspection_13": "","qualityInspection_14": "","qualityInspection_15": "","qualityInspection_16": "","signatture_2": ""}
+                ],
+                fileOne:"",
+                imgHtml:""
+            },
             craftsmanshipTableBody_2: {
                 rowsData:[
                 {"serialNumber":"","processFlow":"","inspectionContent":"","skillsRequirement":"","selfTest":"","signature":""},
@@ -342,6 +349,10 @@ export default {
         width: 277mm;
         text-align: center;
         font-size: 10.5pt;
+    }
+    .craftsmanshipTableBody_1_img{
+        width: 100%;
+        height: 280px;
     }
     /* 模板二 */
     .tableSecondModel {
