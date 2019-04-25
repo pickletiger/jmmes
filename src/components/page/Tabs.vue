@@ -88,26 +88,30 @@
         <el-table ref="filterTable" :data="unread" style="width: 100%">
           <el-table-column prop="address" label="部件信息" :formatter="formatter"></el-table-column>
           <el-table-column
-            prop="route"
+            prop="workshop"
             label="车间"
             width="100"
-            :filters="[{ text: 'W车间', value: 'W' }, { text: 'F车间', value: 'F' }, { text: 'G车间', value: 'G' }, { text: 'I车间', value: 'I' }, { text: 'K车间', value: 'K' }, { text: 'S车间', value: 'S' }, { text: 'T车间', value: 'T' }, { text: 'J车间', value: 'J' }, { text: 'L车间', value: 'L' }]"
+            :filters="[{ text: 'K开料车间', value: 'K开料车间' }, { text: 'TK开料车间', value: 'TK开料车间' }, { text: '安装S', value: '安装S' }, { text: '玻璃钢F', value: '玻璃钢F' }, { text: '电气G', value: '电气G' }, { text: '机加T', value: '机加T' }, { text: '结构L', value: '结构L' }, { text: '探伤', value: '探伤' }, { text: '外协W', value: '外协W' }]"
             :filter-method="filterRoute"
             filter-placement="bottom-end"
           ></el-table-column>
           <el-table-column
-            prop="tag"
+            prop="route"
             label="工序"
             width="100"
-            :filters="[{ text: '切管', value: '切管' }, { text: '锯床', value: '锯床' }]"
-            :filter-method="filterTag"
+            filter-placement="bottom-end"
+          ></el-table-column>
+          <el-table-column
+            prop="cuser"
+            label="负责人"
+            width="100"
             filter-placement="bottom-end"
           ></el-table-column>
           <el-table-column
             prop="state"
             label="状态"
             width="100"
-            :filters="[ { text: '就工', value: '就工' },{ text: '完工', value: '完工' },{ text: '逾期', value: '逾期' }]"
+            :filters="[{ text: '就工', value: '就工' },{ text: '完工', value: '完工' },{ text: '逾期', value: '逾期' }]"
             :filter-method="filterState"
             filter-placement="bottom-end"
           ></el-table-column>
@@ -129,16 +133,14 @@
             prop="route"
             label="车间"
             width="100"
-            :filters="[{ text: 'W车间', value: 'W' }, { text: 'F车间', value: 'F' }, { text: 'G车间', value: 'G' }, { text: 'I车间', value: 'I' }, { text: 'K车间', value: 'K' }, { text: 'S车间', value: 'S' }, { text: 'T车间', value: 'T' }, { text: 'J车间', value: 'J' }, { text: 'L车间', value: 'L' }]"
+            :filters="[{ text: 'K开料车间', value: 'K开料车间' }, { text: 'TK开料车间', value: 'TK开料车间' }, { text: '安装S', value: '安装S' }, { text: '玻璃钢F', value: '玻璃钢F' }, { text: '电气G', value: '电气G' }, { text: '机加T', value: '机加T' }, { text: '结构L', value: '结构L' }, { text: '探伤', value: '探伤' }, { text: '外协W', value: '外协W' }]"
             :filter-method="filterRoute"
             filter-placement="bottom-end"
           ></el-table-column>
           <el-table-column
-            prop="tag"
+            prop="route"
             label="工序"
             width="100"
-            :filters="[{ text: '切管', value: '切管' }, { text: '锯床', value: '锯床' }]"
-            :filter-method="filterTag"
             filter-placement="bottom-end"
           ></el-table-column>
           <el-table-column
@@ -169,7 +171,7 @@
             prop="route"
             label="车间"
             width="100"
-            :filters="[{ text: 'W车间', value: 'W' }, { text: 'F车间', value: 'F' }, { text: 'G车间', value: 'G' }, { text: 'I车间', value: 'I' }, { text: 'K车间', value: 'K' }, { text: 'S车间', value: 'S' }, { text: 'T车间', value: 'T' }, { text: 'J车间', value: 'J' }, { text: 'L车间', value: 'L' }]"
+            :filters="[{ text: 'K开料车间', value: 'K开料车间' }, { text: 'TK开料车间', value: 'TK开料车间' }, { text: '安装S', value: '安装S' }, { text: '玻璃钢F', value: '玻璃钢F' }, { text: '电气G', value: '电气G' }, { text: '机加T', value: '机加T' }, { text: '结构L', value: '结构L' }, { text: '探伤', value: '探伤' }, { text: '外协W', value: '外协W' }]"
             :filter-method="filterRoute"
             filter-placement="bottom-end"
           ></el-table-column>

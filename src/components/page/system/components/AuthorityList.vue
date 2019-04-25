@@ -5,8 +5,7 @@
         <span v-if="props.column.field == 'operate'">
           <el-button type="primary" icon="el-icon-edit" circle @click="editTable(props.row)"></el-button>
           <el-button type="primary" icon="el-icon-tickets" circle @click="authority(props.row)"></el-button>
-          <!-- <el-button type="primary" icon="el-icon-message" circle @click="Msgmodule= true"></el-button> -->
-          <el-button type="danger" icon="el-icon-delete" circle @click="deleteStaff"></el-button>
+          <el-button type="danger" icon="el-icon-delete" circle @click="deleteStaff(props.row)"></el-button>
         </span>
         <span v-else>{{props.formattedRow[props.column.field]}}</span>
       </template>
@@ -318,16 +317,20 @@ export default {
         this.rows = res.data
         // }
 
-      });
+      })
     },
     // 删除员工
-    deleteStaff() {
+    deleteStaff(row) {
       this.$confirm("将删除该员工, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
+          let fd = new FormData()
+              fd.append("flag","del")
+              fd.append("gNum",row.specification)
+          axios.post(`${this.baseURL}/system/authoritylist.php`,fd).then(this.getDataInfo)
           this.$message({
             type: "success",
             message: "删除成功!"
