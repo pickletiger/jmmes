@@ -18,8 +18,15 @@
     <el-row :gutter="24">
       <div class="container">
         <div class="schart-box">
-         
-          <schart class="schart" canvasId="bar" :data="data1" type="bar" :options="options1"></schart>
+          <el-select v-model="value" placeholder="请选择" @change="seld()">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :value="item.value"
+              :label="item.lable">
+            </el-option>
+          </el-select>
+          <schart class="schart" canvasId="bar" :data="data3" type="pie" :options="options1"></schart>
         </div>
         <div class="schart-box">
           <schart class="schart" canvasId="line" :data="data1" type="line" :options="options2"></schart>
@@ -43,22 +50,8 @@ export default {
   },
   data() {
     return {
-      name: localStorage.getItem("ms_username"),
-      canupload: false,
-      message: "first",
-      textarea: "",
-      showHeader: false,
-      labelPosition: "right",
-      read: [],
-      recycle: [],
-      formLabelAlign: {
-        name: "",
-        region: "admin",
-        type: ""
-      },
-      name: "",
-      account: "",
-      postword: "",
+       options: [],
+        value: '',
       data1: [
         { name: "电流安全上限", value: 220 },
         { name: "电流实际最大值", value: 200 },
@@ -66,13 +59,11 @@ export default {
         { name: "电流安全下限", value: 100 }
       ],
       options1: {
-        title: "关键零部件电压品控参数",
-        autoWidth: true, // 设置宽高自适应
-        showValue: true,
-        bgColor: "#F9EFCC",
-        fillColor: "#00887C",
-        contentColor: "rgba(46,199,201,0.3)",
-        yEqual: 7
+        title: "项目零件完成情况",
+        bgColor: "#FFFFFF",
+        titleColor: "#000000",
+        legendColor: "#000000",
+        radius: 120
       },
       options2: {
         title: "关键零部件电流品控参数",
@@ -80,13 +71,6 @@ export default {
         titleColor: "#00887C",
         fillColor: "red",
         contentColor: "rgba(46,199,201,0.3)"
-      },
-      options3: {
-        title: "轴部件年度统计",
-        bgColor: "#eeeeee",
-        titleColor: "#ffffff",
-        legendColor: "#ffffff",
-        radius: 120
       },
       options4: {
         title: "关键零部件年度退产统计",
@@ -97,6 +81,7 @@ export default {
         innerRadius: 80
       },
       data2: [{ name: "-", value: 1 }],
+      data3: [{ name: "-", value: 1 }],
       options3: {
         title: "零部件不合格次数比例",
         bgColor: "#FFFFFF",
@@ -107,45 +92,25 @@ export default {
     };
   },
   created() {
-    this.getDataInfo();
+    axios.post(`${this.baseURL}/dashboard.php`).then(res => {
+      this.options = res.data.data
+    });
+
     axios.post(`${this.baseURL}/echarts.php`).then(response => {
       this.data2 = response.data;
     });
   },
   methods: {
-    getDataInfo() {
-      var account = localStorage.getItem("ms_username");
-      var fd = new FormData();
-      fd.append("flag", "Select");
-      fd.append("account", account);
-      axios.post(`${this.baseURL}/dashboard.php`, fd).then(res => {
-        res = res.data;
-        this.name = res.name;
-        this.account = res.account;
-      });
-    },
-    person_save() {
-      var fd = new FormData();
-      fd.append("flag", "Save");
-      fd.append("name", this.name);
-      fd.append("account", this.account);
-      fd.append("postword", this.postword);
-
-      axios.post(`${this.baseURL}/dashboard.php`, fd).then(function(res) {
-        console.log(res);
-        res = res.data;
-        if ((res.success = "success")) {
-          alert("修改成功");
-        } else {
-          alert("修改失败");
-        }
-      });
+   seld(){
+     var fd = new FormData()
+         fd.append("fid",this.value)
+     axios.post(`${this.baseURL}/partisfinish.php`,fd).then(res => {
+      this.data3 = res.data
+      console.log(res.data)
+    });
     }
   },
   computed: {
-    role() {
-      return this.account === "admin" ? "超级管理员" : "普通用户";
-    }
   }
 };
 </script>

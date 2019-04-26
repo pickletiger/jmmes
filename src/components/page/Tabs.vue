@@ -129,8 +129,8 @@
         <el-table ref="filterTable" :data="read" style="width: 100%">
           <!-- <el-table-column prop="name" label="" width="180"></el-table-column> -->
           <el-table-column prop="address" label="部件信息" :formatter="formatter"></el-table-column>
-          <el-table-column
-            prop="route"
+           <el-table-column
+            prop="workshop"
             label="车间"
             width="100"
             :filters="[{ text: 'K开料车间', value: 'K开料车间' }, { text: 'TK开料车间', value: 'TK开料车间' }, { text: '安装S', value: '安装S' }, { text: '玻璃钢F', value: '玻璃钢F' }, { text: '电气G', value: '电气G' }, { text: '机加T', value: '机加T' }, { text: '结构L', value: '结构L' }, { text: '探伤', value: '探伤' }, { text: '外协W', value: '外协W' }]"
@@ -140,6 +140,12 @@
           <el-table-column
             prop="route"
             label="工序"
+            width="100"
+            filter-placement="bottom-end"
+          ></el-table-column>
+          <el-table-column
+            prop="cuser"
+            label="负责人"
             width="100"
             filter-placement="bottom-end"
           ></el-table-column>
@@ -168,7 +174,7 @@
           <!-- <el-table-column prop="name" label="" width="180"></el-table-column> -->
           <el-table-column prop="address" label="部件信息" :formatter="formatter"></el-table-column>
           <el-table-column
-            prop="route"
+            prop="workshop"
             label="车间"
             width="100"
             :filters="[{ text: 'K开料车间', value: 'K开料车间' }, { text: 'TK开料车间', value: 'TK开料车间' }, { text: '安装S', value: '安装S' }, { text: '玻璃钢F', value: '玻璃钢F' }, { text: '电气G', value: '电气G' }, { text: '机加T', value: '机加T' }, { text: '结构L', value: '结构L' }, { text: '探伤', value: '探伤' }, { text: '外协W', value: '外协W' }]"
@@ -176,11 +182,15 @@
             filter-placement="bottom-end"
           ></el-table-column>
           <el-table-column
-            prop="tag"
+            prop="route"
             label="工序"
             width="100"
-            :filters="[{ text: '切管', value: '切管' }, { text: '锯床', value: '锯床' }]"
-            :filter-method="filterTag"
+            filter-placement="bottom-end"
+          ></el-table-column>
+          <el-table-column
+            prop="cuser"
+            label="负责人"
+            width="100"
             filter-placement="bottom-end"
           ></el-table-column>
           <el-table-column
@@ -230,7 +240,7 @@ export default {
   methods: {
     // 过滤查询
     handleFifter() {
-      console.log(this.filterText);
+      // console.log(this.filterText);
       var fd = new FormData();
       fd.append("flag", "Search");
       fd.append("modid", this.filterText);
