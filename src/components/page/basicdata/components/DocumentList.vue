@@ -18,6 +18,7 @@
           <el-button type="primary" icon="el-icon-edit" circle @click="Handlealter(props.row.contactId,props.row.diff)"></el-button>
           <el-button type="primary" icon="el-icon-printer" circle @click="handlePrinter(props.row.contactId,props.row.diff)"></el-button>
           <el-button type="danger" icon="el-icon-delete" circle @click="deleteStaff(props.row.contactId,props.row.diff)" ></el-button>
+          <el-button type="success" circle @click="copy(props.row.contactId,props.row.diff)">复制</el-button>
         </span>
         <span v-else>
           {{props.formattedRow[props.column.field]}}
@@ -142,7 +143,70 @@ export default {
       this.$refs.cratsmanshipcomponent.openCraftsmanshipDialog(this.selectedTreeNode) //触发子组件cratsmanshipcomponent的函数，下面类似
       
     },
-
+    //复制
+    copy(contactId,diff){
+      this.$confirm('将复制该记录, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        switch(diff){
+          case "welding":
+            axios.get(`${this.baseURL}/basicdata/document.php?flag=copyWelding&contactId=${contactId}`)
+            .then((response) => {
+              if(response.data.state == "success"){
+                this.GetListData(this.selectedTreeNode)
+                this.$message({
+                  type: 'success',
+                  message: '复制成功'
+                })
+              }else{
+                console.log(response.data.message)
+                this.GetListData(this.selectedTreeNode)
+                this.$message({
+                  type: 'error',
+                  message: '复制失败'
+                })
+              }
+            })
+            .catch(function(error){
+              console.log(error)
+            }) 
+            break;
+          case "craftsmanship":
+            axios.get(`${this.baseURL}/basicdata/document.php?flag=copyCraftsmanship&contactId=${contactId}`)
+            .then((response) => {
+              if(response.data.state == "success"){
+                this.GetListData(this.selectedTreeNode)
+                this.$message({
+                  type: 'success',
+                  message: '复制成功'
+                })
+              }else{
+                console.log(response.data.message)
+                this.GetListData(this.selectedTreeNode)
+                this.$message({
+                  type: 'error',
+                  message: '复制失败'
+                })
+              }
+            })
+            .catch(function(error){
+              console.log(error)
+            }) 
+            break;
+        }
+        this.$message({
+          type: 'success',
+          message: '已成功复制'
+        });   
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消复制'
+        });          
+      })
+    },
     // 删除列表中的信息
     deleteStaff(contactId,diff) {
       this.$confirm('将删除该记录, 是否继续?', '提示', {
@@ -205,7 +269,7 @@ export default {
           message: '已取消删除'
         });          
       })
-    },    
+    },   
     //查看及编辑焊接信息
     Handlealter(contactId,diff){
       switch(diff){

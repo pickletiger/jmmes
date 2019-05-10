@@ -315,7 +315,7 @@ export default {
         //打开新建焊接模态框
         openCraftsmanshipDialog(selectedTreeNode){
             this.selectedTreeNode = selectedTreeNode
-             
+             console.log(selectedTreeNode)
             this.dialogcraftsmanshipVisible = true
             if(this.craftsmanshipTableHeader.contactId){
                 this.resetInputCraftsmanship()
@@ -511,7 +511,6 @@ export default {
                     fd.append("craftsmanshipTableBodyResult",JSON.stringify(this.craftsmanshipTableBodyResult))//结论与不符合确认
                     fd.append("craftsmanshipTableFooter",JSON.stringify(this.craftsmanshipTableFooter))//尾部信息
                     fd.append('myfile',this.craftsmanshipTableBody_1.fileOne)//装载图片一
-                    
                     axios.post(`${this.baseURL}/basicdata/document.php`,fd)
                     .then((response) => {
                         this.$message({

@@ -12,10 +12,10 @@
           <div>
             <el-button 
               type="primary"
-              @click.native="check"
-              :name="props.row.number"
+              @click="check(props.row.figure_number)"
+              :name="props.row.figure_number"
             >
-              检验
+              填写工艺卡
             </el-button>
           </div>
         </span>
@@ -50,6 +50,11 @@
       </template>
     </vue-good-table>
     <examine-dialog :config="dialog"></examine-dialog>
+    <!-- 焊接信息 -->
+    <welding-dialog ref="weldcomponent" v-on:refreshTable="GetListData"></welding-dialog>
+
+    <!-- 制造工艺 -->
+    <craftsmanship-dialog ref="cratsmanshipcomponent" v-on:refreshTable="GetListData"></craftsmanship-dialog>
   </div>
 </template>
 
@@ -58,6 +63,8 @@ import { VueGoodTable } from "vue-good-table";
 import axios from "axios";
 import { Loading } from 'element-ui';
 import ExamineDialog from './Dialog';
+import WeldingDialog from "../../basicdata/components/WeldingDialog.vue"
+import CraftsmanshipDialog from "../../basicdata/components/CraftsmanshipDialog"
 
 export default {
   name: 'ExamineTable',
@@ -122,7 +129,7 @@ export default {
               filterable: true,
             },
             {
-              label: '检验部件',
+              label: '工艺卡',
               field: 'check',
               filterable: true,
             },{
@@ -197,6 +204,28 @@ export default {
     }
   },
   methods: {
+
+     //异步获取后台数据
+    GetListData (selectedTreeNode) {
+      this.selectedTreeNode = selectedTreeNode
+      axios.get(`${this.baseURL}/basicdata/document.php?flag=getTableListData&tableFlag=${this.selectedTreeNode.tableFlag}&relateId=${this.selectedTreeNode.relateId}`)
+      .then((response) => {
+        this.rows = response.data.data        
+        switch(this.selectedTreeNode.tableFlag){//显示那种表的新建按钮
+          case 1://焊接           
+            this.newButtonShow = [true,false]
+            break
+          case 2://制造
+             this.newButtonShow = [false,true]
+            break
+          default:
+             this.newButtonShow = [false,false]
+        }
+      })
+      .catch(function(error){
+        console.log(error)
+      })
+    },
     // 打印流转单
     print() {
       let routeData = this.$router.resolve({
@@ -218,9 +247,9 @@ export default {
 
     // 检验按钮
     check (e) {
-      this.dialog.centerDialogVisible = true;
-      this.dialog.number = e.currentTarget.getAttribute('name');// 部件编码
-      
+      // this.dialog.centerDialogVisible = true;
+      // this.dialog.number = e.currentTarget.getAttribute('name');// 部件编码
+      console.log(e)
       
     },
 

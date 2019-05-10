@@ -15,10 +15,24 @@
                         :visible.sync="dialogNewTreeVisible"
                         width="30%">
                         <el-form ref="form" :model="treeForm" label-width="120px">
-                            <el-form-item label="表类型">
+                            <el-form-item label="工艺类型">
                                 <el-select v-model="treeForm.tableFlag"  placeholder="请选择表类型">
-                                    <el-option label="焊接工艺及检验记录"  value="1"></el-option>
-                                    <el-option label="机械制造工艺及检验表" value="2"></el-option>
+                                    <el-option label="转马类"  value="0"></el-option>
+                                    <el-option label="滑行类" value="1"></el-option>
+                                    <el-option label="陀螺类" value="2"></el-option>
+                                    <el-option label="飞行塔类" value="3"></el-option>
+                                    <el-option label="赛车类" value="4"></el-option>
+                                    <el-option label="自控飞机类" value="5"></el-option>
+                                    <el-option label="观览车类" value="6"></el-option>
+                                    <el-option label="小火车类" value="7"></el-option>
+                                    <el-option label="架空游览车类" value="8"></el-option>
+                                    <el-option label="水上游乐设施" value="9"></el-option>
+                                    <el-option label="碰碰车类" value="10"></el-option>
+                                    <el-option label="电池车类" value="11"></el-option>
+                                    <el-option label="摇摆类" value="12"></el-option>
+                                    <el-option label="回旋类" value="13"></el-option>
+                                    <el-option label="其他类" value="14"></el-option>
+                                    <el-option label="科技娱乐类" value="15"></el-option>
                                 </el-select>
                             </el-form-item>
                             <el-form-item label="产品名称">
@@ -102,16 +116,33 @@ export default {
         },
         //选中树节点
         handleNodeClick(data) {
-            if(!data.children){                
+            if(data.tableFlag==1){
                 let selectedTreeNode = {
                     label : data.label,
                     tableFlag : data.tableFlag,
                     relateId : data.relateId
                 }
                 this.selectedTreeNode = selectedTreeNode
-                this.$refs.docList.GetListData(selectedTreeNode)
                 this.deltetButtonVisible = true
-            }           
+            }
+            if(!data.children){
+                let selectedTreeNode = {
+                    label : data.label,
+                    tableFlag : data.thereFlag,
+                    relateId : data.thereId
+                }
+                this.$refs.docList.GetListData(selectedTreeNode)
+            }
+            // if(!data.children){                
+                // let selectedTreeNode = {
+                //     label : data.label,
+                //     tableFlag : data.tableFlag,
+                //     relateId : data.relateId
+                // }
+                // this.selectedTreeNode = selectedTreeNode
+            //     this.$refs.docList.GetListData(selectedTreeNode)
+            //     this.deltetButtonVisible = true
+            // }           
         },
         //删除树节点
         deltetTreeNode(){
@@ -205,6 +236,7 @@ export default {
             
             axios.post(`${this.baseURL}/basicdata/document.php`,fd)
             .then((response) => {               
+                console.log(response)
                 if(response.data.state == "success"){
                     this.getTreeData()
                     this.$message({
