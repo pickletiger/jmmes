@@ -8,11 +8,24 @@
       :search-options="{enabled: true}"
     >
       <template slot="table-row" slot-scope="props">
-        <span v-if="props.column.field == 'check'">
+        <span v-if="props.column.field == 'mode'">
           <div>
             <el-button 
               type="primary"
-              @click="check(props.row.figure_number)"
+              v-if="props.row.show_btn"
+              @click="mode(props.row.contactId,props.row.selectedTreeNode)"
+              :name="props.row.figure_number"
+            >
+              填写工艺卡
+            </el-button>
+          </div>
+        </span>
+        <span v-if="props.column.field == 'check'">
+          <div>
+            <el-button 
+              type="primary" 
+              v-if="props.row.show_btn1"
+              @click="check(props.row.weldingcontactId)"
               :name="props.row.figure_number"
             >
               填写工艺卡
@@ -51,10 +64,10 @@
     </vue-good-table>
     <examine-dialog :config="dialog"></examine-dialog>
     <!-- 焊接信息 -->
-    <welding-dialog ref="weldcomponent" v-on:refreshTable="GetListData"></welding-dialog>
+    <welding-dialog ref="weldcomponent"></welding-dialog>
 
     <!-- 制造工艺 -->
-    <craftsmanship-dialog ref="cratsmanshipcomponent" v-on:refreshTable="GetListData"></craftsmanship-dialog>
+    <craftsmanship-dialog ref="cratsmanshipcomponent"></craftsmanship-dialog>
   </div>
 </template>
 
@@ -64,7 +77,7 @@ import axios from "axios";
 import { Loading } from 'element-ui';
 import ExamineDialog from './Dialog';
 import WeldingDialog from "../../basicdata/components/WeldingDialog.vue"
-import CraftsmanshipDialog from "../../basicdata/components/CraftsmanshipDialog"
+import CraftsmanshipDialog from "../../basicdata/components/CraftsmanshipDialog.vue"
 
 export default {
   name: 'ExamineTable',
@@ -73,7 +86,9 @@ export default {
   },
   components: {
     VueGoodTable,
-    ExamineDialog
+    ExamineDialog,
+    WeldingDialog,
+    CraftsmanshipDialog
   },
   data () {
     return {
@@ -82,13 +97,14 @@ export default {
         centerDialogVisible: false,
         number: ''
       },
+      show_btn:true,
+      show_btn1:true,
       loadingInstance: '',
     }
   },
   computed: {
     columns () {
-      let head = [];
-      
+      let head = []
       // 判断点击哪个标签页
       this.item == '未检验'
         ? (head = [
@@ -122,14 +138,12 @@ export default {
               label: '数量',
               field: 'count',
               filterable: true,
-            },
-            {
-              label: '工序名称',
-              field: 'processName',
+            },{
+              label: '制造工艺卡',
+              field: 'mode',
               filterable: true,
-            },
-            {
-              label: '工艺卡',
+            },{
+              label: '焊接工艺卡',
               field: 'check',
               filterable: true,
             },{
@@ -171,15 +185,17 @@ export default {
               filterable: true,
             },
             {
-              label: '工序名称',
-              field: 'processName',
-              filterable: true,
-            },
-            {
               label: '检验日期',
               field: 'checkDate',
-            },
-            {
+            },{
+              label: '制造工艺卡',
+              field: 'mode',
+              filterable: true,
+            },{
+              label: '焊接工艺卡',
+              field: 'check',
+              filterable: true,
+            },{
               label: '检验详情',
               field: 'result',
             },
@@ -204,28 +220,6 @@ export default {
     }
   },
   methods: {
-
-     //异步获取后台数据
-    GetListData (selectedTreeNode) {
-      this.selectedTreeNode = selectedTreeNode
-      axios.get(`${this.baseURL}/basicdata/document.php?flag=getTableListData&tableFlag=${this.selectedTreeNode.tableFlag}&relateId=${this.selectedTreeNode.relateId}`)
-      .then((response) => {
-        this.rows = response.data.data        
-        switch(this.selectedTreeNode.tableFlag){//显示那种表的新建按钮
-          case 1://焊接           
-            this.newButtonShow = [true,false]
-            break
-          case 2://制造
-             this.newButtonShow = [false,true]
-            break
-          default:
-             this.newButtonShow = [false,false]
-        }
-      })
-      .catch(function(error){
-        console.log(error)
-      })
-    },
     // 打印流转单
     print() {
       let routeData = this.$router.resolve({
@@ -242,14 +236,18 @@ export default {
       });
       window.open(routeData.href, '_blank');
     },
+    //制造工艺卡
+    mode (contactId,selectedTreeNode) {
+      this.dialog.CraftsmanshipDialog = true;
+      this.$refs.cratsmanshipcomponent.Handlealter(contactId,selectedTreeNode)
+    },
 
 
-
-    // 检验按钮
+    //焊接工艺卡按钮
     check (e) {
-      // this.dialog.centerDialogVisible = true;
+      this.dialog.WeldingDialog = true
+      this.$refs.weldcomponent.Handlealter(e)
       // this.dialog.number = e.currentTarget.getAttribute('name');// 部件编码
-      console.log(e)
       
     },
 
@@ -257,7 +255,8 @@ export default {
     success (ret) {
       this.$nextTick(() => { 
         this.loadingInstance.close();
-      });
+      })
+      console.log(ret.data.data)
       if(ret.data.success == 'success'){
         this.item == '未检验'?
         this.rows = ret.data.data : 
@@ -283,7 +282,6 @@ export default {
     item: function() {
 
       this.loadingInstance = Loading.service(this.options)
-      
       var state = this.item
       if(state == "未检验"){
         state = 1
