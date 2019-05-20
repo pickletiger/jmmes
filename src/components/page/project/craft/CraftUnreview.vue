@@ -13,8 +13,11 @@
           <el-container style="height: 600px;">
             <el-header>
               <el-row :gutter="20">
-                <el-col :span="2" :offset="20">
+                <el-col :span="2" :offset="18">
                   <el-button type="primary" icon="el-icon-upload" @click="dialogUpload = true">导入</el-button>
+                </el-col>
+                <el-col :span="2" :offset="20" style="margin-top:-33px">
+                  <el-button type="primary" icon="el-icon-upload" @click="dialogimportant = true">导入关键零部件</el-button>
                 </el-col>
               </el-row>
             </el-header>
@@ -87,6 +90,30 @@
           <el-button type="primary" @click="uploadFile">保存</el-button>
         </div>
         </el-dialog>
+        <!-- 导入关键零部件图号表格 -->
+        <el-dialog title="关键零部件导入" :visible.sync="dialogimportant">
+          <el-form >
+            <el-upload
+              class="upload-demo"
+              :before-upload="beforeupload"
+              ref="important"
+              drag
+              :limit="1"
+              :data="form"
+              :on-success="handleSuc"
+              :action="importanUrl"
+              :auto-upload="false"
+              style="margin-left:120px;">
+              <i class="el-icon-upload"></i>
+              <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+              <div class="el-upload__tip" slot="tip">只能上传xls文件</div>
+            </el-upload>
+          </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogUpload = false">取 消</el-button>
+          <el-button type="primary" @click="importantFile">保存</el-button>
+        </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -108,9 +135,11 @@ export default {
         lx:'',
         lxid:'',
         uploadUrl:`${this.baseURL}/craft/project_upload.php`,
+        importanUrl:`${this.baseURL}/craft/partImportant.php`,
         filterText: '',
         updateTree:true,
         dialogUpload:false,
+        dialogimportant:false,
         form:{},
         formLabelWidth: "120px",
         defaultProps: {
@@ -172,6 +201,9 @@ export default {
       // 上传文件
       uploadFile(){
         this.$refs.upload.submit()
+      },
+      importantFile(){
+        this.$refs.important.submit()
       },
       // Tree点击事件
       handleNodeClick(data,node,self) {
