@@ -31,6 +31,7 @@
       <el-button type="primary"  @click="dialogFormExport=true">导出</el-button>
       <el-button type="primary" v-if="show_2btn"  @click="dialogVisible = true">排产</el-button>
       <el-button type="primary" v-if="show_4btn"  @click="dialogFormBack = true">退产</el-button>
+      <el-button type="primary" v-if="show_5btn"  @click="dialogScrap = true">报废排产</el-button>
       <el-button type="primary" v-if="show_3btn" @click="print()"  >生产计划表</el-button>
       <el-button type="primary" v-if="show_3btn" @click="print2()"  >产品标志卡</el-button>
       <el-button type="primary" v-if="show_2btn" @click="print3()"  >零件质量记录表</el-button>
@@ -43,6 +44,7 @@
           ref="filterTable"
           :data="tableData.slice( (currentPage-1)*pageSize, currentPage*pageSize)"
           style="width: 100%"
+          :row-class-name="tableRowClassName"
           stripe
           @selection-change="handleSelectionChange"
           @filter-change="filterChange"
@@ -436,6 +438,124 @@
           </el-pagination>
         </div>
       </el-tab-pane>
+
+       <!-- 报废品选项卡 -->
+      <el-tab-pane label="报废品" name="four">
+        <!-- element table 
+            arrayObject.slice(start,end)方法使数据分页显示
+        -->
+        <el-table
+          ref="filterTable4"
+          :data="tableData4.slice( (currentPage2-1)*pageSize2, currentPage2*pageSize2)"
+          style="width: 100%"
+          stripe
+          @selection-change="handleSelectionChange"
+          @filter-change="filterChange"
+        >
+          <el-table-column
+            type="selection"
+            width="55"
+            reserve-selection
+          >
+          </el-table-column>
+          <el-table-column
+            prop="modid"
+            width="60"
+            label="modid"
+            v-if=false
+          >
+          </el-table-column>
+          <el-table-column
+            prop="Wid"
+            width="60"
+            label="Wid"
+          >
+          </el-table-column>
+          <el-table-column
+            prop="partid"
+            width="60"
+            label="partid"
+            v-if=false
+          >
+          </el-table-column>
+          <el-table-column
+            prop="fid"
+            width="60"
+            label="fid"
+            v-if=false
+          >
+          </el-table-column>
+          <el-table-column
+            prop="routeid"
+            width="60"
+            label="routeid"
+            v-if=false
+          >
+          </el-table-column>
+          <el-table-column
+            prop="product_name"
+            label="产品名称"
+            sortable
+          >
+          </el-table-column>
+          <el-table-column
+            prop="pNumber"
+            label="工单"
+            sortable
+          >
+          </el-table-column>
+          <el-table-column
+            prop="figure_number"
+            label="零件图号"
+            sortable
+          >
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="名称"
+            sortable
+          >
+          </el-table-column>
+          <el-table-column
+            prop="child_material"
+            label="规格"
+            width="180"
+          >
+          </el-table-column>
+          <el-table-column
+            prop="route"
+            label="加工工艺路线"
+            sortable
+          >
+          </el-table-column>
+          <el-table-column
+            prop="count"
+            label="数量"
+            sortable
+          >
+          </el-table-column>
+          <el-table-column
+            fixed="right"
+            label="操作"
+            width="100">
+            <template slot-scope="scope">
+              <el-button @click="handleClick(scope.row)" type="text" size="small">编辑</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <!-- 数据分页 -->
+        <div class="block">
+          <el-pagination
+            @size-change="handleSizeChange2"
+            @current-change="handleCurrentChange2"
+            :current-page="currentPage2"
+            :page-sizes="[10, 25, 50, 100]"
+            :page-size="pageSize2"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="tableData4.length">
+          </el-pagination>
+        </div>
+      </el-tab-pane>
     </el-tabs>
     <!-- form表单编辑 -->
     <el-dialog title="信息详情" :visible.sync="hasInfoDialog">
@@ -533,6 +653,38 @@
         <el-button type="primary" @click="handleSchedule">确 定</el-button>
       </span>
     </el-dialog>
+    <!-- 报废品排产 -->
+    <el-dialog
+      title="报废品排产"
+      :visible.sync="dialogScrap"
+      :before-close="handleClose">
+      <el-form>
+        <el-form-item label="排产日期" :label-width="formLabelWidth">
+         <el-date-picker
+            v-model="scheduleScrap"
+            type="date"
+            placeholder="选择日期"
+            format="yyyy 年 MM 月 dd 日"
+            value-format="yyyy-MM-dd"
+          >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="交付日期" :label-width="formLabelWidth">
+          <el-date-picker
+            v-model="overdataScrap"
+            type="date"
+            placeholder="选择日期"
+            format="yyyy 年 MM 月 dd 日"
+            value-format="yyyy-MM-dd"
+          >
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogScrap = false">取 消</el-button>
+        <el-button type="primary" @click="handleScrap">确 定</el-button>
+      </span>
+    </el-dialog>
      <!-- 导出Excel条件对话框 -->
     <el-dialog title="导出" :visible.sync="dialogFormExport">
       <el-form :model="form">
@@ -580,14 +732,18 @@ export default {
       form: {},
       formLabelWidth: "120px",
       dialogVisible: false,
+      dialogScrap:false,
       dialogFormExport: false,
       dialogFormBack: false,
       schedule: "",
       overdata:"",
+      scheduleScrap:'',
+      overdataScrap:'',
       checkList: ["切管"],
       tableData: [],
       tableData2: [],
       tableData3: [],
+      tableData4: [],
       pageSize: 10,
       pageSize2: 10,
       currentPage: 1,
@@ -599,11 +755,13 @@ export default {
       columnsKey: [],
       modid: [],
       routeid: [],
+      Wid:[],
       printVal: [],
       activeName: 'first',
       show_2btn: true,
       show_3btn: false,
       show_4btn:false,
+      show_5btn:false,
       searchOptions: [
         {
           value: 'product_name',
@@ -740,6 +898,10 @@ export default {
       if(res.rows3) {
         // 生产中
         this.tableData3 = res.rows3
+      }
+      if(res.rows4) {
+        // 生产中
+        this.tableData4 = res.rows4
       }
     },
     search(){
@@ -884,6 +1046,7 @@ export default {
     handleSelectionChange(e) {
       this.modid = []
       this.routeid = []
+      this.Wid = []
       // 存储勾选项所有信息
       this.printVal = e
       this.route_line = e
@@ -893,6 +1056,7 @@ export default {
         for (let i=0; i < selectLength; i++) {
           this.modid.push(e[i].modid)
           this.routeid.push(e[i].routeid)
+          this.Wid.push(e[i].Wid)
         }
       }
       // 清空缓存
@@ -911,6 +1075,7 @@ export default {
       this.$refs.filterTable.clearFilter();
       this.$refs.filterTable2.clearFilter();
       this.$refs.filterTable3.clearFilter();
+      this.$refs.filterTable4.clearFilter();
       this.pageSize = 10;
       this.pageSize2 = 10;
     },
@@ -945,6 +1110,35 @@ export default {
       }
       
     },
+    // 报废品排产
+  handleScrap(){
+    let that = this;
+      if(this.modid.length && this.checkList.length){
+        var fd = new FormData()
+        fd.append('flag',"Scrap")
+        fd.append('Wid',this.Wid)
+        fd.append('cuser',localStorage.getItem("ms_username"))
+        fd.append('checkList',this.checkList)
+        fd.append('scheduleScrap',this.scheduleScrap)
+        fd.append('overdataScrap',this.overdataScrap)
+        axios.post(`${this.baseURL}/productionplan/schedule.php`,fd)
+        .then(function(res){
+          // 成功回调
+          that.dialogVisible = false;
+          if(res.data=="1"){
+            alert("操作成功")
+            that.reload()
+          }else{
+            alert("含有不能排产的零件，请重新选择进行排产！")
+          }
+        })
+      }else {
+        // 操作失败
+        this.$alert('出错啦（未选择项目或信息填写不全）~', '提醒', {
+          confirmButtonText: '确定',
+        });
+      }
+  },
 
 
     //退产操作
@@ -973,18 +1167,38 @@ export default {
         this.show_2btn = false
         this.show_3btn = true
         this.show_4btn = true
+        this.show_5btn = false
         var flag = "Delivered"
             this.getData(flag)
       }else if(tab.name == 'third'){
+        this.show_4btn = false
         this.show_2btn = false
         this.show_3btn = false
+        this.show_5btn = false
         var flag = "Production"
             this.getData(flag)
+      }else if(tab.name == 'four'){
+        this.show_4btn = false
+        this.show_2btn = false
+        this.show_5btn = true
+        this.show_3btn = false
+        var flag = "Scrap"
+            this.getData(flag)
       }else {
+        this.show_5btn = false
+        this.show_4btn = false
         this.show_2btn = true
         this.show_3btn = false
       }
-    }
+    },
+
+    //改变指定行的颜色
+     tableRowClassName({row, rowIndex}) {
+        if (row.backMark == '是') {
+          return 'warning-row';
+        }
+        return '';
+      }
   }
 };
 </script>
@@ -992,5 +1206,9 @@ export default {
   .btn{
     background: 	#00DD00;
   }
-  
+</style>
+<style>
+  .warning-row td{
+    background: rgb(241, 245, 12) !important;
+  }
 </style>

@@ -22,8 +22,8 @@
             <el-input type="textarea" v-model="data.remark"></el-input>
           </el-form-item>
           <el-form-item label="项目进度">
-            <el-collapse accordion>
-                <el-collapse-item>
+            <el-collapse v-model="activeNames" accordion>
+                <el-collapse-item name="1">
                   <el-steps :space="100"  :align-center="true" >
                   <!-- element-ui 一些标签不能注册点击事件@click  需使用@click.native -->
                     <el-step v-if="data.finished" v-for="(finished,f,index) in data.finished" :key="index" status="success" @click.native="handleStep(finished.id)" :title="finished.route" ></el-step>
@@ -161,6 +161,7 @@ export default {
       data: {},
       review: {},
       addpart:{},
+      activeNames:'1',
       rdate:'',
       routeid:'',
       listid:'',

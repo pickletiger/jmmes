@@ -8,6 +8,8 @@
         <el-tabs v-model="tabName" @tab-click="handleClick">
           <el-tab-pane label="普通零部件" name="ordinary"></el-tab-pane>
           <el-tab-pane label="关键零部件" name="momentous"></el-tab-pane>
+          <el-tab-pane label="进行中" name="ongoing"></el-tab-pane>
+          <el-tab-pane label="已完成" name="completed"></el-tab-pane>
         </el-tabs>
         <div class="container">
           <el-container style="height: 600px;">
@@ -123,13 +125,23 @@ export default {
     mounted:function(){
       if(key=='1'){
         this.tabName = 'momentous'
+      }else if(key=='3'){
+        this.tabName = 'ongoing'
+      }else if(key=='4'){
+        this.tabName = 'completed'
       }
     },
     methods: {
-       //头部标签页切换，2普通部件，1关键部件
+       //头部标签页切换，2普通部件，1关键部件,3进行中，4已完成
       handleClick(tab,e){
         this.tabName=tab.name
         switch (tab.name){
+          case 'completed':
+          key = 4
+          break
+          case 'ongoing':
+          key = 3
+          break
           case 'ordinary':
           key = 2
           break
@@ -261,7 +273,7 @@ export default {
             fd.append('modid',this.filterText)
             fd.append('state',1)
             axios.post(`${this.baseURL}/tree.php`,fd).then((res)=>{
-              console.log(res.data.data)
+              // console.log(res.data.data)
               if(res.data.success == "success"){
                 return resolve(res.data.data)
               }else {
@@ -276,5 +288,7 @@ export default {
 };
 </script>
 <style scoped>
-  
+  .el-header{
+    height: 0px !important;
+  }
 </style>

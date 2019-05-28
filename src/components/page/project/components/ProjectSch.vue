@@ -2,11 +2,11 @@
 <div>
   <el-container>
     <el-main>
-      <el-collapse accordion>
+      <el-collapse v-model="activeNames">
         <!-- v-for(val,key,index) val是内容，key是键值名，index是索引 -->
-        <el-collapse-item v-if="data.item.length>0" v-for="(item,key,index) in data.item" :key="index"  :title="item.name">
+        <el-collapse-item v-if="data.item.length>0" v-for="(item,key,index) in data.item" :key="index"  :title="item.name" :name="key">
           <el-form>
-            <el-form-item label="工艺路线1"></el-form-item>
+            <el-form-item label=""></el-form-item>
               <el-steps :space="100"  :align-center="true" >
                 <!-- 使用插槽嵌套循环 -->
                 <!-- element-ui 一些标签不能注册点击事件@click  需使用@click.native -->
@@ -79,6 +79,7 @@ export default {
   data () {
     return {
       data:{},
+      activeNames:[],
       dialogTableVisible:false,
       dialogaddVisible:false,
       innerVisible:false,
@@ -114,10 +115,13 @@ export default {
    // 监听数据的变化
   watch: {
     proschdata : {
-      immediate: true,   //如果不加这个属性，父组件第一次传进来的值监听不到
+      immediate: false,   //如果不加这个属性，父组件第一次传进来的值监听不到
       handler(val) {
         this.data = {}
         this.data = val
+        for(var i=0;i<val.item.length;i++){
+          this.activeNames.push(i);
+        }
         // console.log(val.item.length)
       }  
     }
