@@ -4,6 +4,9 @@
       @on-selected-rows-change="selectionChanged"
       :columns="columns" 
       :rows="rows" 
+      :search-options="{
+        enabled: true
+      }"
       :select-options="{ 
         enabled: true,
         selectOnCheckboxOnly: true

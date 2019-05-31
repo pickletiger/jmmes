@@ -165,7 +165,7 @@ export default new Router({
                     // 系统设置模块/云平台交互
                     path: '/cloudinteraction',
                     component: resolve => require(['../components/page/system/CloudInteraction.vue'], resolve),
-                    meta: { title: '云平台交互' }
+                    meta: { title: '数据归档' }
                 }
             ]
         },

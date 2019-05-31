@@ -91,6 +91,7 @@ export default {
       // console.log(row.id)
       var fd = new FormData()
       this.checkrows = []
+      fd.append("flag","pdf")
       fd.append("ordernumber",row.orderName)
       axios.post(`${this.baseURL}/market/market_pdf.php`,fd)
       .then((res) => {

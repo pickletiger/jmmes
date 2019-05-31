@@ -29,7 +29,7 @@
       border
       style="width: 100%"
       :data="tableData"
-      height="500"
+      height="750"
       :highlight-current-row="true"
       :header-row-style="{color: '#000','font-size': '14px'}"
       >
