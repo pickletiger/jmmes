@@ -240,7 +240,6 @@ export default {
   methods: {
     // 过滤查询
     handleFifter() {
-      // console.log(this.filterText);
       var fd = new FormData();
       fd.append("flag", "Search");
       fd.append("modid", this.filterText);
@@ -249,7 +248,6 @@ export default {
       axios.post(`${this.baseURL}/tabs.php`, fd).then(unread => {
         //ES6写法
         unread = unread.data;
-        console.log(unread.data);
         if (unread.success && unread.data) {
           this.unread = [];
           this.unread = unread.data;
@@ -273,11 +271,14 @@ export default {
       return row.state === value;
     },
     filterRoute(value, row) {
-      //   return row.state === value;
-      if (row.route.indexOf(value) !== -1) {
-        return value;
-      }
+      return row.workshop === value;
     },
+    // filterRoute(value, row) {
+    //   //   return row.state === value;
+    //   if (row.route.indexOf(value) !== -1) {
+    //     return value;
+    //   }
+    // },
     filterHandler(value, row, column) {
       const property = column["property"];
       return row[property] === value;
@@ -285,16 +286,11 @@ export default {
 
     // 获取逾期消息
     getDataTime() {
-      console.log("time");
       var fd = new FormData();
       fd.append("flag", "Overdue");
-      // console.log("flag");
-      // var department = localStorage.getItem("ms_department");
-      // fd.append("department", department);
       axios.post(`${this.baseURL}/tabs.php`, fd).then(Overdue => {
         //ES6写法
         Overdue = Overdue.data;
-        // console.log(unread.data.length);
         if (Overdue.success && Overdue.data) {
           this.Overdue = [];
           this.Overdue = Overdue.data;
@@ -311,7 +307,6 @@ export default {
       axios.post(`${this.baseURL}/tabs.php`, fd).then(unread => {
         //ES6写法
         unread = unread.data;
-        // console.log(unread.data.length);
         if (unread.success && unread.data) {
           this.unread = [];
           this.unread = unread.data;
@@ -320,11 +315,9 @@ export default {
       });
     },
     getDataInfoSucc(res) {
-      console.log(res.data.rows);
       res = res.data;
       if (res.success && res.rows) {
         this.rows = res.rows;
-        console.log(this.rows);
       }
     },
     //获取已读
@@ -336,7 +329,6 @@ export default {
       axios.post(`${this.baseURL}/tabs.php`, fd).then(read => {
         //ES6写法
         read = read.data;
-        // console.log(read)
         if (read.success && read.data) {
           this.read = [];
           this.read = read.data;
@@ -350,7 +342,6 @@ export default {
       axios.post(`${this.baseURL}/tabs.php`, fd).then(recycle => {
         //ES6写法
         recycle = recycle.data;
-        // console.log(recycle)
         if (recycle.success && recycle.data) {
           this.recycle = [];
           this.recycle = recycle.data;
@@ -359,9 +350,7 @@ export default {
     },
     //进入已读
     handleRead(row) {
-      console.log(row.id);
       const item = this.unread.splice(row, 1);
-      // console.log(this.unread);
       this.read = item.concat(this.read);
       var fd = new FormData();
       fd.append("flag", "ReadIn");
@@ -374,7 +363,6 @@ export default {
     //全部进入已读
     allRead(row) {
       for (let i = 0; i < this.unread.length; i++) {
-        console.log(this.unread[i].id);
         var fd = new FormData();
         fd.append("flag", "allRead");
         fd.append("id", this.unread[i].id);
@@ -401,7 +389,6 @@ export default {
     //全部删除
     allDel(row) {
       for (let i = 0; i < this.read.length; i++) {
-        console.log(this.read[i].id);
         var fd = new FormData();
         fd.append("flag", "allDel");
         fd.append("id", this.read[i].id);
