@@ -27,7 +27,9 @@
       <div slot="table-actions">
         <el-button type="primary" v-if="newButtonShow[0]" @click="openWeldingDialog">新建焊接</el-button>        
         <el-button type="primary" v-if="newButtonShow[1]" @click="openCraftsmanshipDialog">新建制造</el-button>
-        <el-button type="primary" v-if="newButtonShow[0] || newButtonShow[1]" @click="handlePrinterAll">打印</el-button>
+        <el-button type="primary" v-if="newButtonShow[2]" @click="openHeattreatmentDialog">新建热处理</el-button>
+        <el-button type="primary" v-if="newButtonShow[3]" @click="openMachiningDialog">新建机加工</el-button>
+        <el-button type="primary" v-if="newButtonShow[0] || newButtonShow[1] || newButtonShow[2] || newButtonShow[3]" @click="handlePrinterAll">打印</el-button>
       </div>
     </vue-good-table>
 
@@ -36,6 +38,12 @@
 
     <!-- 制造工艺 -->
     <craftsmanship-dialog ref="cratsmanshipcomponent" v-on:refreshTable="GetListData"></craftsmanship-dialog>
+
+     <!-- 热处理 -->
+    <heattreatment-dialog ref="heattreatment" v-on:refreshTable="GetListData"></heattreatment-dialog>
+
+    <!-- 机加工 -->
+    <machining-dialog ref="machining" v-on:refreshTable="GetListData"></machining-dialog>
 
   </div>
   
@@ -46,6 +54,10 @@ import { VueGoodTable } from "vue-good-table"
 import axios from "axios"
 import WeldingDialog from "./WeldingDialog"
 import CraftsmanshipDialog from "./CraftsmanshipDialog"
+import HeattreatmentDialog from "./HeattreatmentDialog"
+import MachiningDialog from "./MachiningDialog"
+
+
 export default {
   name: "DocimentList",
   data() {
@@ -54,7 +66,7 @@ export default {
         tableFlag : "",
         relateId : ""
       },
-      newButtonShow :[false,false],                  
+      newButtonShow :[false,false,false,false],                  
       fileinfo:"",
       formLabelWidth: "120px",
       searchItem: "",
@@ -93,7 +105,9 @@ export default {
   components: {
     VueGoodTable,
     WeldingDialog,
-    CraftsmanshipDialog   
+    CraftsmanshipDialog,
+    HeattreatmentDialog,
+    MachiningDialog   
   },
   created () {
     
@@ -107,13 +121,19 @@ export default {
         this.rows = response.data.data        
         switch(this.selectedTreeNode.tableFlag){//显示那种表的新建按钮
           case 1://焊接           
-            this.newButtonShow = [true,false]
+            this.newButtonShow = [true,false,false,false]
             break
           case 2://制造
-             this.newButtonShow = [false,true]
+             this.newButtonShow = [false,true,false,false]
+            break
+          case 3://热处理
+             this.newButtonShow = [false,false,true,false]
+            break
+          case 4://机加工
+             this.newButtonShow = [false,false,false,true]
             break
           default:
-             this.newButtonShow = [false,false]
+             this.newButtonShow = [false,false,false,false]
         }
       })
       .catch(function(error){
@@ -142,6 +162,14 @@ export default {
     openCraftsmanshipDialog(){
       this.$refs.cratsmanshipcomponent.openCraftsmanshipDialog(this.selectedTreeNode) //触发子组件cratsmanshipcomponent的函数，下面类似
       
+    },
+    //打开新建热处理模态框
+    openHeattreatmentDialog(){
+      this.$refs.heattreatment.openHeattreatmentDialog(this.selectedTreeNode) //触发子组件cratsmanshipcomponent的函数，下面类似
+    },
+
+    openMachiningDialog(){
+       this.$refs.machining.openMachiningDialog(this.selectedTreeNode) //触发子组件cratsmanshipcomponent的函数，下面类似
     },
     //复制
     copy(contactId,diff){

@@ -469,6 +469,7 @@
             prop="Wid"
             width="60"
             label="Wid"
+            v-if=false
           >
           </el-table-column>
           <el-table-column
