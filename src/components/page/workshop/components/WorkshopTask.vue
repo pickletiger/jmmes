@@ -40,34 +40,34 @@ export default {
       ],
       rows: [{
         Serial:"K开料车间",
-        url:"http://112.74.34.150:888/jmlook/#/?workshop=K"
+        url:"http://47.106.161.130:8081/jmlook/#/?workshop=K"
       },{
         Serial:"TK开料车间",
-        url:"http://112.74.34.150:888/jmlook/#/?workshop=TK"
+        url:"http://47.106.161.130:8081/jmlook/#/?workshop=TK"
       },{
         Serial:"安装S",
-        url:"http://112.74.34.150:888/jmlook/#/?workshop=S"
+        url:"http://47.106.161.130:8081/jmlook/#/?workshop=S"
       },{
         Serial:"玻璃钢F",
-        url:"http://112.74.34.150:888/jmlook/#/?workshop=F"
+        url:"http://47.106.161.130:8081/jmlook/#/?workshop=F"
       },{
         Serial:"电气G",
-        url:"http://112.74.34.150:888/jmlook/#/?workshop=G"
+        url:"http://47.106.161.130:8081/jmlook/#/?workshop=G"
       },{
         Serial:"机加T",
-        url:"http://112.74.34.150:888/jmlook/#/?workshop=T"
+        url:"http://47.106.161.130:8081/jmlook/#/?workshop=T"
       },{
         Serial:"机械车间",
-        url:"http://112.74.34.150:888/jmlook/#/?workshop=I"
+        url:"http://47.106.161.130:8081/jmlook/#/?workshop=I"
       },{
         Serial:"结构L",
-        url:"http://112.74.34.150:888/jmlook/#/?workshop=L"
+        url:"http://47.106.161.130:8081/jmlook/#/?workshop=L"
       },{
         Serial:"探伤",
-        url:"http://112.74.34.150:888/jmlook/#/?workshop=J"
+        url:"http://47.106.161.130:8081/jmlook/#/?workshop=J"
       },{
         Serial:"外协W",
-        url:"http://112.74.34.150:888/jmlook/#/?workshop=W"
+        url:"http://47.106.161.130:8081/jmlook/#/?workshop=W"
       }]
     };
   },
