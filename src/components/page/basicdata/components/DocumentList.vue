@@ -223,6 +223,29 @@ export default {
               console.log(error)
             }) 
             break;
+          case "machining":
+            axios.get(`${this.baseURL}/basicdata/maching.php?flag=copyMachining&contactId=${contactId}`)
+            .then((response) => {              
+              if(response.data.state == "success"){
+                this.GetListData(this.selectedTreeNode)
+                this.$message({
+                  type: 'success',
+                  message: '复制成功'
+                })
+              }else{
+                console.log(response.data.message)
+                this.GetListData(this.selectedTreeNode)
+                this.$message({
+                  type: 'error',
+                  message: '复制失败'
+                })
+              }
+            })
+            .catch(function(error){
+              console.log(error)
+            }) 
+            break;
+
         }
         this.$message({
           type: 'success',
@@ -288,6 +311,28 @@ export default {
               console.log(error)
             }) 
             break;
+          case "machining":
+            axios.get(`${this.baseURL}/basicdata/maching.php?flag=deleteMachining&contactId=${contactId}`)
+            .then((response) => {              
+              if(response.data.state == "success"){
+                this.GetListData(this.selectedTreeNode)
+                this.$message({
+                  type: 'success',
+                  message: '删除成功'
+                })
+              }else{
+                console.log(response.data.message)
+                this.GetListData(this.selectedTreeNode)
+                this.$message({
+                  type: 'error',
+                  message: '删除失败'
+                })
+              }
+            })
+            .catch(function(error){
+              console.log(error)
+            }) 
+            break;
           default :
             console.log("无效")
         }
@@ -307,6 +352,9 @@ export default {
         case "craftsmanship":
           this.$refs.cratsmanshipcomponent.Handlealter(contactId,this.selectedTreeNode) 
           break;
+        case "machining":
+          this.$refs.machining.Handlealter(contactId,this.selectedTreeNode) 
+          break
         default :
           console.log("无效")
       }
@@ -323,7 +371,7 @@ export default {
           window.open(myUrl,'_blank')
           break
         default:
-          console.log("分类参数出错")
+          console.log("这个页面打印未完成，期待有缘人接手写出来^ _ ^")
       }
     },
     //焊接与制造信息打印全部（直接新开页面做打印操作）    
@@ -338,7 +386,7 @@ export default {
           window.open(myUrl,'_blank')
           break
         default:
-          console.log("分类参数出错："+this.selectedTreeNode.tableFlag)  
+          console.log("这个页面全部打印未完成，期待有缘人接手写出来^ _ ^："+this.selectedTreeNode.tableFlag)  
       }
     },
   }

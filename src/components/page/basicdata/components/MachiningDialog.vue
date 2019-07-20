@@ -2,37 +2,37 @@
     <div>
         <!-- 制造工艺 -->
         <el-dialog 
-            :visible.sync="dialogcraftsmanshipVisible"
+            :visible.sync="MachiningVisible"
             width="95%">
-            <table class="craftsmanshipTableHeader">
+            <table class="machiningTableHeader">
                 <tr>
                     <td colspan="8"><h1>产 品 机 械 加 工 工 艺 卡</h1></td>
                     <td>编号</td>
-                    <td colspan="4"><input type="text"></td>
+                    <td colspan="4"><input type="text" v-model="machiningTableHeader.hendNumber"></td>
                     <td></td>
                 </tr>
                 <tr>
                     <td>产品名称</td>
-                    <td><input v-model="craftsmanshipTableHeader.productName"/></td>
+                    <td><input v-model="machiningTableHeader.productName"/></td>
                     <td>所属部件名称</td>
-                    <td><input v-model="craftsmanshipTableHeader.ownPartName"/></td>
+                    <td><input v-model="machiningTableHeader.ownPartName"/></td>
                     <td colspan="4">零件名称</td>
-                    <td><input v-model="craftsmanshipTableHeader.partsName"/></td>
+                    <td><input v-model="machiningTableHeader.partsName"/></td>
                     <td colspan="4">材料</td>
-                    <td><input v-model="craftsmanshipTableHeader.workpieceNumber"/></td>
+                    <td><input v-model="machiningTableHeader.workpieceNumber"/></td>
                 </tr>
                 <tr>
                     <td>产品图号</td>
-                    <td><input v-model="craftsmanshipTableHeader.productDrawingNumber"/></td>
+                    <td><input v-model="machiningTableHeader.productDrawingNumber"/></td>
                     <td>所属部件图号</td>
-                    <td><input v-model="craftsmanshipTableHeader.ownPartDrawingNumber"/></td>
+                    <td><input v-model="machiningTableHeader.ownPartDrawingNumber"/></td>
                     <td colspan="4">零件图号</td>
-                    <td><input v-model="craftsmanshipTableHeader.partsDrawingNumber"/></td>
+                    <td><input v-model="machiningTableHeader.partsDrawingNumber"/></td>
                     <td colspan="4">数量</td>
-                    <td><input v-model="craftsmanshipTableHeader.quantity"/></td>
+                    <td><input v-model="machiningTableHeader.quantity"/></td>
                 </tr>
             </table>
-            <table class="craftsmanshipTableBody_2">
+            <table class="machiningTableBody">
                 <tr>
                 <td class="serialNumber">序号</td>
                 <td>工序</td>
@@ -41,16 +41,19 @@
                 <td>设备</td>
                 <td>工艺示意图</td>
                 </tr>
-                <tr  v-for="(item,index) in craftsmanshipTableBody_2.rowsData">
+                <tr  v-for="(item,index) in machiningTableBody.rowsData">
                 <td class="serialNumber"><input v-model="item.serialNumber" /></td>
                 <td><input v-model="item.processFlow" /></td>
-                <td><input v-model="item.inspectionContent" /></td>
+                <td><input v-model="item.workshop" /></td>
                 <td><input v-model="item.skillsRequirement" /></td>
-                <td><input v-model="item.selfTest" /></td>
+                <td><input v-model="item.equipment" /></td>
                 <td rowspan="20" v-if="index==0"></td>
                 </tr>  
+                <tr>
+                    <td colspan="5" class="machiningTableBody_1_img" @drop="drop($event,'1')" @dragover="allowDrop($event)" v-html="machiningTableBody.imgHtmlOne">&nbsp;</td>
+                </tr>
             </table>
-            <table class="craftsmanshipTableFooter">
+            <table class="machiningTableFooter">
                 <tr>
                 <td></td>
                 <td></td>
@@ -62,13 +65,13 @@
                 <td colspan="5" rowspan="3"><h1>中山市金马科技娱乐设备股份有限公司</h1></td>
                 </tr>
                 <tr>
-                <td style="color:#FFFFFF;">占位</td>
+                <td>&nbsp;</td>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
-                <td colspan="2" rowspan="2"><input v-model="craftsmanshipTableFooter.name1"/></td>
-                <td colspan="2" rowspan="2"><input v-model="craftsmanshipTableFooter.name2"/></td>
+                <td colspan="2" rowspan="2"><input v-model="machiningTableFooter.name1"/></td>
+                <td colspan="2" rowspan="2"><input v-model="machiningTableFooter.name2"/></td>
                 </tr>
                 <tr>
                 <td>标记</td>
@@ -79,8 +82,8 @@
                 </tr>
             </table>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogcraftsmanshipVisible = false">取 消</el-button>
-                <el-button type="primary" @click="craftsmanshipSaveData">确 定</el-button>
+                <el-button @click="MachiningVisible = false">取 消</el-button>
+                <el-button type="primary" @click="machiningSaveData">确 定</el-button>
             </div>
         </el-dialog>
     </div>
@@ -99,10 +102,10 @@ export default {
                 tableFlag : "",
                 relateId : ""
             },
-            dialogcraftsmanshipVisible: false,//制造工艺dialog
-            tablecraftsmanshipBodyVisible: [true,false,false],//模板显示选择
-            craftsmanshipTableHeader: {
+            MachiningVisible: false,//机加工dialog
+            machiningTableHeader: {
                 "contactId" : "",//保存记录后返回的id
+                "hendNumber": "",
                 "productName": "",
                 "ownPartName": "",
                 "partsName": "",
@@ -112,48 +115,32 @@ export default {
                 "partsDrawingNumber": "",
                 "quantity": ""
             },
-            craftsmanshipTableBody_2: {
+            machiningTableBody: {
                 rowsData:[
-                {"serialNumber":"","processFlow":"","inspectionContent":"","skillsRequirement":"","selfTest":"","signature":""},
-                {"serialNumber":"","processFlow":"","inspectionContent":"","skillsRequirement":"","selfTest":"","signature":""},
-                {"serialNumber":"","processFlow":"","inspectionContent":"","skillsRequirement":"","selfTest":"","signature":""},
-                {"serialNumber":"","processFlow":"","inspectionContent":"","skillsRequirement":"","selfTest":"","signature":""},
-                {"serialNumber":"","processFlow":"","inspectionContent":"","skillsRequirement":"","selfTest":"","signature":""},
-                {"serialNumber":"","processFlow":"","inspectionContent":"","skillsRequirement":"","selfTest":"","signature":""},
-                {"serialNumber":"","processFlow":"","inspectionContent":"","skillsRequirement":"","selfTest":"","signature":""},
-                {"serialNumber":"","processFlow":"","inspectionContent":"","skillsRequirement":"","selfTest":"","signature":""}
+                {"serialNumber":"","processFlow":"","workshop":"","skillsRequirement":"","equipment":""},
+                {"serialNumber":"","processFlow":"","workshop":"","skillsRequirement":"","equipment":""},
+                {"serialNumber":"","processFlow":"","workshop":"","skillsRequirement":"","equipment":""},
+                {"serialNumber":"","processFlow":"","workshop":"","skillsRequirement":"","equipment":""},
+                {"serialNumber":"","processFlow":"","workshop":"","skillsRequirement":"","equipment":""},
+                {"serialNumber":"","processFlow":"","workshop":"","skillsRequirement":"","equipment":""},
+                {"serialNumber":"","processFlow":"","workshop":"","skillsRequirement":"","equipment":""},
+                {"serialNumber":"","processFlow":"","workshop":"","skillsRequirement":"","equipment":""}
                 ],
                 fileOne:"",
-                fileTwo:"",
-                fileThree:"",
-                imgHtmlOne:"",
-                imgHtmlTwo:"",
-                imgHtmlTherr:"",
-            },
-            craftsmanshipTableBodyResult: { //模板一和二的“结论”与“不符合确认”
-                "conclusion": "",
-                "inconsistentConfirmation": ""
-            },      
-            craftsmanshipTableFooter: {
-                "finalConclusion": "",
-                "inspector": "",
-                "inspectionAudit": "",
-                "mark": "",
-                "numberOfPlaces": "",
-                "changeTheFileNumber": "",
-                "signature": "",
-                "date": "",
-                "establishment": "",
-                "review": ""
+                imgHtmlOne:""
+            },   
+            machiningTableFooter: {
+                "name1":"",
+                "name2":""
             }
         }
     },
     methods: {
         //重置焊接模态框的输入框
-        resetInputCraftsmanship() {            
-            this.tablecraftsmanshipBodyVisible = [true,false,false]
-            this.craftsmanshipTableHeader = {
+        resetInputMachining() {            
+            this.machiningTableHeader = {
                 "contactId" : "",//保存记录后返回的id
+                "hendNumber": "",
                 "productName": "",
                 "ownPartName": "",
                 "partsName": "",
@@ -161,50 +148,33 @@ export default {
                 "productDrawingNumber": "",
                 "ownPartDrawingNumber": "",
                 "partsDrawingNumber": "",
-                "quantity": ""
-            },
-            this.craftsmanshipTableBody_2 = {
+                "quantity": ""            },
+            this.machiningTableBody = {
                 rowsData:[
-                {"serialNumber":"","processFlow":"","inspectionContent":"","skillsRequirement":"","selfTest":"","signature":""},
-                {"serialNumber":"","processFlow":"","inspectionContent":"","skillsRequirement":"","selfTest":"","signature":""},
-                {"serialNumber":"","processFlow":"","inspectionContent":"","skillsRequirement":"","selfTest":"","signature":""},
-                {"serialNumber":"","processFlow":"","inspectionContent":"","skillsRequirement":"","selfTest":"","signature":""},
-                {"serialNumber":"","processFlow":"","inspectionContent":"","skillsRequirement":"","selfTest":"","signature":""},
-                {"serialNumber":"","processFlow":"","inspectionContent":"","skillsRequirement":"","selfTest":"","signature":""},
-                {"serialNumber":"","processFlow":"","inspectionContent":"","skillsRequirement":"","selfTest":"","signature":""},
-                {"serialNumber":"","processFlow":"","inspectionContent":"","skillsRequirement":"","selfTest":"","signature":""}
+                {"serialNumber":"","processFlow":"","workshop":"","skillsRequirement":"","equipment":""},
+                {"serialNumber":"","processFlow":"","workshop":"","skillsRequirement":"","equipment":""},
+                {"serialNumber":"","processFlow":"","workshop":"","skillsRequirement":"","equipment":""},
+                {"serialNumber":"","processFlow":"","workshop":"","skillsRequirement":"","equipment":""},
+                {"serialNumber":"","processFlow":"","workshop":"","skillsRequirement":"","equipment":""},
+                {"serialNumber":"","processFlow":"","workshop":"","skillsRequirement":"","equipment":""},
+                {"serialNumber":"","processFlow":"","workshop":"","skillsRequirement":"","equipment":""},
+                {"serialNumber":"","processFlow":"","workshop":"","skillsRequirement":"","equipment":""}
                 ],
                 fileOne:"",
-                fileTwo:"",
-                fileThree:"",
-                imgHtmlOne:"",
-                imgHtmlTwo:"",
-                imgHtmlTherr:""
-            },
-            this.craftsmanshipTableBodyResult = { //模板一和二的“结论”与“不符合确认”
-                "conclusion": "",
-                "inconsistentConfirmation": ""
-            },      
-            this.craftsmanshipTableFooter = {
-                "finalConclusion": "",
-                "inspector": "",
-                "inspectionAudit": "",
-                "mark": "",
-                "numberOfPlaces": "",
-                "changeTheFileNumber": "",
-                "signature": "",
-                "date": "",
-                "establishment": "",
-                "review": ""
+                imgHtmlOne:""
+            },    
+            this.machiningTableFooter = {
+                "name1":"",
+                "name2":""
             }
         },
         //打开新建焊接模态框
         openMachiningDialog(selectedTreeNode){
             this.selectedTreeNode = selectedTreeNode
              console.log(selectedTreeNode)
-            this.dialogcraftsmanshipVisible = true
-            if(this.craftsmanshipTableHeader.contactId){
-                this.resetInputCraftsmanship()
+            this.MachiningVisible = true
+            if(this.machiningTableHeader.contactId){
+                this.resetInputMachining()
             } 
         },
         //阻止默认行为
@@ -218,24 +188,9 @@ export default {
             if(files.length){
                 var file_img = files[0]
                 switch(imgflag){
-                case "0":
-                    this.weldngTableFour.weldNumberMap = file_img
-                    break;
                 case "1":
-                    this.craftsmanshipTableBody_2.fileOne = file_img
+                    this.machiningTableBody.fileOne = file_img
                     break;
-                case "2":
-                    this.craftsmanshipTableBody_2.fileTwo = file_img
-                    break;
-                case "3":
-                    this.craftsmanshipTableBody_2.fileThree = file_img
-                    break;
-                case "4":
-                    this.craftsmanshipTableBody_3.fileOne = file_img
-                    break;
-                case "5":
-                this.craftsmanshipTableBody_1.fileOne = file_img
-                break;
                 }
                 
                 var reader = new FileReader();
@@ -262,61 +217,18 @@ export default {
             }
         },
         //制造信息保存
-        craftsmanshipSaveData(){
+        machiningSaveData(){
             let fd = new FormData()
-            if(this.craftsmanshipTableHeader.contactId){//更新保存
-                //模板一保存-更新
-                if(this.tablecraftsmanshipBodyVisible[0]){
-                    fd.append("flag","craftsmanshipUpdateDataOne")
-                    fd.append("craftsmanshipTableHeader",JSON.stringify(this.craftsmanshipTableHeader))//头部信息
-                    fd.append("craftsmanshipTableBody_1",JSON.stringify(this.craftsmanshipTableBody_1.rowsData))//可遍历信息
-                    fd.append("craftsmanshipTableBodyResult",JSON.stringify(this.craftsmanshipTableBodyResult))//结论与不符合确认
-                    fd.append("craftsmanshipTableFooter",JSON.stringify(this.craftsmanshipTableFooter))//尾部信息
-                    if(typeof(this.craftsmanshipTableBody_1.fileOne) != 'string' && this.craftsmanshipTableBody_1.fileOne != ''){
-                        fd.append('myfile',this.craftsmanshipTableBody_1.fileOne)//装载图片
-                    }
-                    axios.post(`${this.baseURL}/basicdata/document.php`,fd)
-                    .then((response) => {        
-                        console.log(response)                
-                        if(response.data.state == "success"){
-                            this.$message({
-                                showClose: true,
-                                message: '更改成功',
-                                type: 'success'
-                            })                            
-                        }else{
-                            this.$message({
-                                showClose: true,
-                                message: '更改失败',
-                                type: 'error'
-                            })
-                        } 
-                        this.$emit("refreshTable",this.selectedTreeNode)
-                        this.dialogcraftsmanshipVisible = false                                           
-                    })
-                    .catch(function (error){
-                        console.log(error)
-                    })
-                    return
-                }
-                //模板二保存-更新
-                if(this.tablecraftsmanshipBodyVisible[1]){
-                    fd.append("flag","craftsmanshipUpdateDataOne")
-                    fd.append("craftsmanshipTableHeader",JSON.stringify(this.craftsmanshipTableHeader))//头部信息
-                    fd.append("craftsmanshipTableBody_2",JSON.stringify(this.craftsmanshipTableBody_2.rowsData))//可遍历信息
-                    fd.append("craftsmanshipTableBodyResult",JSON.stringify(this.craftsmanshipTableBodyResult))//结论与不符合确认
-                    fd.append("craftsmanshipTableFooter",JSON.stringify(this.craftsmanshipTableFooter))//尾部信息
-                    if(typeof(this.craftsmanshipTableBody_2.fileOne) != 'string' && this.craftsmanshipTableBody_2.fileOne != ''){
-                        fd.append('myfileone',this.craftsmanshipTableBody_2.fileOne)//装载图片一
-                    }
-                    if(typeof(this.craftsmanshipTableBody_2.fileTwo) != 'string' && this.craftsmanshipTableBody_2.fileTwo != ''){
-                        fd.append('myfiletwo',this.craftsmanshipTableBody_2.fileTwo)//装载图片二
-                    }
-                    if(typeof(this.craftsmanshipTableBody_2.fileThree) != 'string' && this.craftsmanshipTableBody_2.fileThree != ''){
-                        fd.append('myfilethree',this.craftsmanshipTableBody_2.fileThree)//装载图片三
+            if(this.machiningTableHeader.contactId){//更新保存
+                    fd.append("flag","machiningUpdateData")
+                    fd.append("machiningTableHeader",JSON.stringify(this.machiningTableHeader))//头部信息
+                    fd.append("machiningTableBody",JSON.stringify(this.machiningTableBody.rowsData))//可遍历信息
+                    fd.append("machiningTableFooter",JSON.stringify(this.machiningTableFooter))//尾部信息
+                    if(typeof(this.machiningTableBody.fileOne) != 'string' && this.machiningTableBody.fileOne != ''){
+                        fd.append('myfileone',this.machiningTableBody.fileOne)//装载图片一
                     }
                     
-                    axios.post(`${this.baseURL}/basicdata/document.php`,fd)
+                    axios.post(`${this.baseURL}/basicdata/maching.php`,fd)
                     .then((response) => {
                         if(response.data.state == "success"){
                             this.$message({
@@ -332,192 +244,64 @@ export default {
                             })
                         }
                         this.$emit("refreshTable",this.selectedTreeNode)
-                        this.dialogcraftsmanshipVisible = false          
+                        this.MachiningVisible = false          
                     })
                     .catch(function (error){
                         console.log(error)
                     })
                     return
-                }
-                //模板三保存-更新
-                if(this.tablecraftsmanshipBodyVisible[2]){                    
-                    fd.append("flag","craftsmanshipUpdateDataThree")
-                    fd.append("craftsmanshipTableHeader",JSON.stringify(this.craftsmanshipTableHeader))//头部信息
-                    fd.append("craftsmanshipTableFooter",JSON.stringify(this.craftsmanshipTableFooter))//尾部信息
-                    if(typeof(this.craftsmanshipTableBody_3.fileOne) != 'string' && this.craftsmanshipTableBody_3.fileOne != ''){
-                        fd.append('myfile',this.craftsmanshipTableBody_3.fileOne)//装载图片
-                    }
-                    
-                    axios.post(`${this.baseURL}/basicdata/document.php`,fd)
-                    .then((response) => {
-                        if(response.data.state == "success"){
-                            this.$message({
-                                showClose: true,
-                                message: '更改成功',
-                                type: 'success'
-                            })
-                        }else{                            
-                            this.$message({
-                                showClose: true,
-                                message: '更改失败',
-                                type: 'error'
-                            })
-                        }
-                        this.$emit("refreshTable",this.selectedTreeNode)
-                        this.dialogcraftsmanshipVisible = false         
-                    })
-                    .catch(function (error){
-                        console.log(error)
-                    })
-                    return
-                }
+                
             }else{//新建保存
-                //模板一保存-新建
-                if(this.tablecraftsmanshipBodyVisible[0]){                
-                    fd.append("flag","craftsmanshipInsertDataOne")
-                    fd.append("treeId",this.selectedTreeNode.relateId)//选中树的id
-                    fd.append("craftsmanshipTableHeader",JSON.stringify(this.craftsmanshipTableHeader))//头部信息
-                    fd.append("craftsmanshipTableBody_1",JSON.stringify(this.craftsmanshipTableBody_1.rowsData))//可遍历信息
-                    fd.append("craftsmanshipTableBodyResult",JSON.stringify(this.craftsmanshipTableBodyResult))//结论与不符合确认
-                    fd.append("craftsmanshipTableFooter",JSON.stringify(this.craftsmanshipTableFooter))//尾部信息
-                    fd.append('myfile',this.craftsmanshipTableBody_1.fileOne)//装载图片一
-                    axios.post(`${this.baseURL}/basicdata/document.php`,fd)
-                    .then((response) => {
+                fd.append("flag","machingInserData")
+                fd.append("treeId",this.selectedTreeNode.relateId)//选中树的id
+                fd.append("machiningTableHeader",JSON.stringify(this.machiningTableHeader))//头部信息
+                fd.append("machiningTableBody",JSON.stringify(this.machiningTableBody.rowsData))//可遍历信息
+                fd.append("machiningTableFooter",JSON.stringify(this.machiningTableFooter))//尾部信息
+                fd.append('myfileone',this.machiningTableBody.fileOne)//装载图片一
+                
+                axios.post(`${this.baseURL}/basicdata/maching.php`,fd)
+                .then((response) => {
+                    console.log(response)
+                    if(response.data.state == "success"){
                         this.$message({
                             showClose: true,
                             message: '新建成功',
                             type: 'success'
                         })
-                        this.$emit("refreshTable",this.selectedTreeNode)
-                        this.dialogcraftsmanshipVisible = false 
+                    }else{                            
+                        this.$message({
+                            showClose: true,
+                            message: '新建失败',
+                            type: 'error'
+                        })
+                    }
                     
-                    })
-                    .catch(function (error){
-                        console.log(error)
-                    })
-                    return
-                }
-                //模板二保存-新建
-                if(this.tablecraftsmanshipBodyVisible[1]){          
-                    fd.append("flag","craftsmanshipInsertDataTwo")
-                    fd.append("treeId",this.selectedTreeNode.relateId)//选中树的id
-                    fd.append("craftsmanshipTableHeader",JSON.stringify(this.craftsmanshipTableHeader))//头部信息
-                    fd.append("craftsmanshipTableBody_2",JSON.stringify(this.craftsmanshipTableBody_2.rowsData))//可遍历信息
-                    fd.append("craftsmanshipTableBodyResult",JSON.stringify(this.craftsmanshipTableBodyResult))//结论与不符合确认
-                    fd.append("craftsmanshipTableFooter",JSON.stringify(this.craftsmanshipTableFooter))//尾部信息
-                    fd.append('myfileone',this.craftsmanshipTableBody_2.fileOne)//装载图片一
-                    fd.append('myfiletwo',this.craftsmanshipTableBody_2.fileTwo)//装载图片二
-                    fd.append('myfilethree',this.craftsmanshipTableBody_2.fileThree)//装载图片三
-                    
-                    axios.post(`${this.baseURL}/basicdata/document.php`,fd)
-                    .then((response) => {
-                        if(response.data.state == "success"){
-                            this.$message({
-                                showClose: true,
-                                message: '新建成功',
-                                type: 'success'
-                            })
-                        }else{                            
-                            this.$message({
-                                showClose: true,
-                                message: '新建失败',
-                                type: 'error'
-                            })
-                        }
-                        
-                        this.$emit("refreshTable",this.selectedTreeNode)
-                        this.dialogcraftsmanshipVisible = false          
-                    })
-                    .catch(function (error){
-                        console.log(error)
-                    })
-                    return
-                }
-                //模板三保存-新建
-                if(this.tablecraftsmanshipBodyVisible[2]){
-                    fd.append("flag","craftsmanshipInsertDataThree")
-                    fd.append("treeId",this.selectedTreeNode.relateId)//选中树的id
-                    fd.append("craftsmanshipTableHeader",JSON.stringify(this.craftsmanshipTableHeader))//头部信息
-                    fd.append("craftsmanshipTableFooter",JSON.stringify(this.craftsmanshipTableFooter))//尾部信息
-                    fd.append('myfile',this.craftsmanshipTableBody_3.fileOne)//装载图片一
-                    axios.post(`${this.baseURL}/basicdata/document.php`,fd)
-                    .then((response) => {
-                        if(response.data.state == "success"){
-                            this.$message({
-                                showClose: true,
-                                message: '新建成功',
-                                type: 'success'
-                            })
-                        }else{                            
-                            this.$message({
-                                showClose: true,
-                                message: '新建失败',
-                                type: 'error'
-                            })
-                        }
-                        this.$emit("refreshTable",this.selectedTreeNode)
-                        this.dialogcraftsmanshipVisible = false           
-                    })
-                    .catch(function (error){
-                        console.log(error)
-                    })
-                    return
-                }
+                    this.$emit("refreshTable",this.selectedTreeNode)
+                    this.MachiningVisible = false          
+                })
+                .catch(function (error){
+                    console.log(error)
+                })
+                return
+                
             } 
         },
         //查看及编辑焊接信息
         Handlealter(contactId,selectedTreeNode){
             this.selectedTreeNode = selectedTreeNode
-            axios.get(`${this.baseURL}/basicdata/document.php?flag=getCraftsmanshipInfoData&contactID=${contactId}`)
+            axios.get(`${this.baseURL}/basicdata/maching.php?flag=getMachiningInfoData&contactID=${contactId}`)
             .then((response) => {     
                 if(response.data.state == "success"){
-                    this.craftsmanshipTableHeader = response.data.data.craftsmanshipTableHeader
-                    this.craftsmanshipTableFooter = response.data.data.craftsmanshipTableFooter              
-                    switch(response.data.data.model){
-                        case "1":                  
-                            this.craftsmanshipTableBody_1 = response.data.data.craftsmanshipTableBody_1
-                            this.craftsmanshipTableBodyResult = response.data.data.craftsmanshipTableBodyResult
-                            this.tablecraftsmanshipBodyVisible = [true,false,false]                  
-                            this.dialogcraftsmanshipVisible = true
-                            this.craftsmanshipTableBody_1 = response.data.data.craftsmanshipTableBody_1
-                            //显示图片
-                            if(this.craftsmanshipTableBody_1.fileOne){//图片一
-                                let imgsrc = `${this.baseURL}`+'/'+this.craftsmanshipTableBody_1.fileOne
-                                this.craftsmanshipTableBody_1.imgHtml = '<img src="'+imgsrc+'" style="max-width:100%;max-height:100%;pointer-events:none;">'
-                            } 
-                            break;
-                        case "2":
-                            this.dialogcraftsmanshipVisible = true
-                            this.tablecraftsmanshipBodyVisible = [false,true,false]
-                            this.craftsmanshipTableBody_2 = response.data.data.craftsmanshipTableBody_2
-                            this.craftsmanshipTableBodyResult = response.data.data.craftsmanshipTableBodyResult
-                            //图片显示
-                            if(this.craftsmanshipTableBody_2.fileOne){//图片一
-                                let imgsrc = `${this.baseURL}`+'/'+this.craftsmanshipTableBody_2.fileOne
-                                this.craftsmanshipTableBody_2.imgHtmlOne = '<img src="'+imgsrc+'" style="max-width:100%;max-height:100%;pointer-events:none;">'
-                            }
-                            if(this.craftsmanshipTableBody_2.fileTwo){//图片二
-                                let imgsrc = `${this.baseURL}`+'/'+this.craftsmanshipTableBody_2.fileTwo
-                                this.craftsmanshipTableBody_2.imgHtmlTwo = '<img src="'+imgsrc+'" style="max-width:100%;max-height:100%;pointer-events:none;">'
-                            }
-                            if(this.craftsmanshipTableBody_2.fileThree){//图片三
-                                let imgsrc = `${this.baseURL}`+'/'+this.craftsmanshipTableBody_2.fileThree
-                                this.craftsmanshipTableBody_2.imgHtmlTherr = '<img src="'+imgsrc+'" style="max-width:100%;max-height:100%;pointer-events:none;">'
-                            }                 
-                            break;
-                        case "3":
-                            this.dialogcraftsmanshipVisible = true
-                            this.tablecraftsmanshipBodyVisible = [false,false,true]
-                            this.craftsmanshipTableBody_3 = response.data.data.craftsmanshipTableBody_3
-                            //显示图片
-                            if(this.craftsmanshipTableBody_3.fileOne){//图片三
-                                let imgsrc = `${this.baseURL}`+'/'+this.craftsmanshipTableBody_3.fileOne
-                                this.craftsmanshipTableBody_3.imgHtml = '<img src="'+imgsrc+'" style="max-width:100%;max-height:100%;pointer-events:none;">'
-                            } 
-                            break;
-                        default:
-                            console.log("模型参数错误")
-                    }            
+                    this.MachiningVisible = true
+                    this.machiningTableHeader = response.data.data.machiningTableHeader
+                    this.machiningTableFooter = response.data.data.machiningTableFooter    
+                    this.machiningTableBody = response.data.data.machiningTableBody          
+                                            
+                    //显示图片
+                    if(this.machiningTableBody.fileOne){//图片一
+                        let imgsrc = `${this.baseURL}`+'/'+this.machiningTableBody.fileOne
+                        this.machiningTableBody.imgHtmlOne = '<img src="'+imgsrc+'" style="max-width:100%;max-height:100%;pointer-events:none;">'
+                    }          
                 }
             })
             .catch(function(error){
@@ -534,21 +318,21 @@ input {
     height: 30px;
     width: 100%;
 }
-  .tableOne,.tableTwo,.tableThree,.tableFour,.craftsmanshipTableHeader,.craftsmanshipTableBody_1,.craftsmanshipTableFooter{
+  .tableOne,.tableTwo,.tableThree,.tableFour,.machiningTableHeader,.craftsmanshipTableBody_1,.machiningTableFooter{
     border-collapse: collapse;
     text-align: center;
     width: 100%;
   }
-  .tableOne tr,td,th,.tableTwo tr,td,th,.tableThree tr,td,th,.tableFour tr,td,th,.craftsmanshipTableHeader tr,td,th,.craftsmanshipTableBody_1 tr,td,th,.craftsmanshipTableFooter tr,td,th{
+  .tableOne tr,td,th,.tableTwo tr,td,th,.tableThree tr,td,th,.tableFour tr,td,th,.machiningTableHeader tr,td,th,.craftsmanshipTableBody_1 tr,td,th,.machiningTableFooter tr,td,th{
     border: 1px solid black;
     padding: 2px;
   }
-  .craftsmanshipTableBody_2{
+  .machiningTableBody{
     width: 100%;
     border-collapse: collapse;
     text-align: center;
   }
-  .craftsmanshipTableBody_2 tr,td,th{
+  .machiningTableBody tr,td,th{
     border: 1px solid black;
     padding: 2px;
   }
@@ -558,7 +342,7 @@ input {
     text-align: center;
     height: 500px;
   }
-  .craftsmanshipTableBody_1_img{
+  .machiningTableBody_1_img{
     width: 100%;
     border-collapse: collapse;
     text-align: center;
@@ -572,7 +356,7 @@ input {
     width: 100%;
     height: 500px;
   }
-  .craftsmanshipTableBody_2_img{
+  .machiningTableBody_2_img{
     width: 33%;
     height: 500px;
   }

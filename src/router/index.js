@@ -111,7 +111,7 @@ export default new Router({
                     // 基础数据模块/文档管理
                     path: '/document',
                     component: resolve => require(['../components/page/basicdata/Document.vue'], resolve),
-                    meta: { title: '文档管理' }
+                    meta: { title: '工艺卡管理' }
                 },
                 // {
                 //     // 基础数据模块/原材料管理
