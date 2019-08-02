@@ -1,6 +1,7 @@
 <template>
   <div>   
-    <vue-good-table 
+    <vue-good-table
+      v-if="selectedTreeNode.tableFlag==1 || selectedTreeNode.tableFlag==2 || selectedTreeNode.tableFlag==4" 
       :columns="columns" 
       :rows="rows" 
       @on-column-filter="selectionChanged"
@@ -32,7 +33,40 @@
         <el-button type="primary" v-if="newButtonShow[0] || newButtonShow[1] || newButtonShow[2] || newButtonShow[3]" @click="handlePrinterAll">打印</el-button>
       </div>
     </vue-good-table>
-
+    <!-- 热处理施工单 -->
+    <vue-good-table
+      v-if="selectedTreeNode.tableFlag==3" 
+      :columns="columns1" 
+      :rows="rows" 
+      @on-column-filter="selectionChanged"
+      :search-options="{
+        enabled: true,
+        placeholder: '搜索此表格'
+      }"
+      :pagination-options="{
+        enabled: true,
+        mode: 'records'
+      }"
+    >
+      <template slot="table-row" slot-scope="props">
+        <span v-if="props.column.field == 'operate'">
+          <el-button type="primary" icon="el-icon-edit" circle @click="Handlealter(props.row.contactId,props.row.diff)"></el-button>
+          <el-button type="primary" icon="el-icon-printer" circle @click="handlePrinter(props.row.contactId,props.row.diff)"></el-button>
+          <el-button type="danger" icon="el-icon-delete" circle @click="deleteStaff(props.row.contactId,props.row.diff)" ></el-button>
+          <el-button type="success" circle @click="copy(props.row.contactId,props.row.diff)">复制</el-button>
+        </span>
+        <span v-else>
+          {{props.formattedRow[props.column.field]}}
+        </span>
+      </template>
+      <div slot="table-actions">
+        <el-button type="primary" v-if="newButtonShow[0]" @click="openWeldingDialog">新建焊接</el-button>        
+        <el-button type="primary" v-if="newButtonShow[1]" @click="openCraftsmanshipDialog">新建制造</el-button>
+        <el-button type="primary" v-if="newButtonShow[2]" @click="openHeattreatmentDialog">新建热处理</el-button>
+        <el-button type="primary" v-if="newButtonShow[3]" @click="openMachiningDialog">新建机加工</el-button>
+        <el-button type="primary" v-if="newButtonShow[0] || newButtonShow[1] || newButtonShow[2] || newButtonShow[3]" @click="handlePrinterAll">打印</el-button>
+      </div>
+    </vue-good-table>
     <!-- 焊接信息 -->
     <welding-dialog ref="weldcomponent" v-on:refreshTable="GetListData"></welding-dialog>
 
@@ -87,6 +121,33 @@ export default {
         {
           label: "部件名称",
           field: "partname"
+        },
+        {
+          label: "创建日期",
+          field: "ctime"
+        },
+        {
+          label: "操作",
+          field: "operate"
+        }
+      ],
+      columns1: [
+        
+        {
+          label: "炉号",
+          field: "partsDrawingNumber"
+        },
+        {
+          label: "零件图号",
+          field: "productDrawingNumber"
+        },
+        {
+          label: "产品型号名称",
+          field: "productName"
+        },
+        {
+          label: "零件名称",
+          field: "ownPartName"
         },
         {
           label: "创建日期",
@@ -223,6 +284,29 @@ export default {
               console.log(error)
             }) 
             break;
+          case "heattreatment":
+            axios.get(`${this.baseURL}/basicdata/heattreatment.php?flag=copyHeattreatment&contactId=${contactId}`)
+            .then((response) => {    
+            console.log(response)          
+              if(response.data.state == "success"){
+                this.GetListData(this.selectedTreeNode)
+                this.$message({
+                  type: 'success',
+                  message: '复制成功'
+                })
+              }else{
+                console.log(response.data.message)
+                this.GetListData(this.selectedTreeNode)
+                this.$message({
+                  type: 'error',
+                  message: '复制失败'
+                })
+              }
+            })
+            .catch(function(error){
+              console.log(error)
+            }) 
+            break;
           case "machining":
             axios.get(`${this.baseURL}/basicdata/maching.php?flag=copyMachining&contactId=${contactId}`)
             .then((response) => {              
@@ -311,6 +395,28 @@ export default {
               console.log(error)
             }) 
             break;
+          case "heattreatment":
+            axios.get(`${this.baseURL}/basicdata/heattreatment.php?flag=deleteHeattreatment&contactId=${contactId}`)
+            .then((response) => {              
+              if(response.data.state == "success"){
+                this.GetListData(this.selectedTreeNode)
+                this.$message({
+                  type: 'success',
+                  message: '删除成功'
+                })
+              }else{
+                console.log(response.data.message)
+                this.GetListData(this.selectedTreeNode)
+                this.$message({
+                  type: 'error',
+                  message: '删除失败'
+                })
+              }
+            })
+            .catch(function(error){
+              console.log(error)
+            }) 
+            break;
           case "machining":
             axios.get(`${this.baseURL}/basicdata/maching.php?flag=deleteMachining&contactId=${contactId}`)
             .then((response) => {              
@@ -352,6 +458,9 @@ export default {
         case "craftsmanship":
           this.$refs.cratsmanshipcomponent.Handlealter(contactId,this.selectedTreeNode) 
           break;
+        case "heattreatment":
+          this.$refs.heattreatment.Handlealter(contactId,this.selectedTreeNode)
+          break
         case "machining":
           this.$refs.machining.Handlealter(contactId,this.selectedTreeNode) 
           break

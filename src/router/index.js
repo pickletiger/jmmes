@@ -111,7 +111,7 @@ export default new Router({
                     // 基础数据模块/文档管理
                     path: '/document',
                     component: resolve => require(['../components/page/basicdata/Document.vue'], resolve),
-                    meta: { title: '工艺卡管理' }
+                    meta: { title: '文档管理' }
                 },
                 // {
                 //     // 基础数据模块/原材料管理
@@ -130,6 +130,12 @@ export default new Router({
                     path: '/productionplan',
                     component: resolve => require(['../components/page/workshop/ProductionPlan.vue'], resolve),
                     meta: { title: '车间计划' }
+                },
+                {
+                    // 车间模块/车间计划
+                    path: '/listout',
+                    component: resolve => require(['../components/page/workshop/listout.vue'], resolve),
+                    meta: { title: '装配出仓' }
                 },
                 {
                     // 检验模块
@@ -162,6 +168,7 @@ export default new Router({
                     meta: { title: '权限管理' }
                 },
                 {
+                    
                     // 系统设置模块/云平台交互
                     path: '/cloudinteraction',
                     component: resolve => require(['../components/page/system/CloudInteraction.vue'], resolve),
@@ -190,6 +197,12 @@ export default new Router({
             name: 'userQRcode',
             component: resolve => require(['../components/page/userQRcode.vue'], resolve),
             meta: { title: '用户二维码' }
+        },
+        {
+            path: '/listoutQRcode',
+            name: 'listoutQRcode',
+            component: resolve => require(['../components/page/listoutQRcode.vue'], resolve),
+            meta: { title: '清单二维码' }
         },
         {
             path: '/equipmentQRcode',

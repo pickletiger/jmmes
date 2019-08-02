@@ -788,6 +788,22 @@ export default {
                 this.resetInputCraftsmanship()
             } 
         },
+        //查看及编辑焊接信息
+        Handlealter(contactId,selectedTreeNode){
+            this.selectedTreeNode = selectedTreeNode
+            axios.get(`${this.baseURL}/basicdata/heattreatment.php?flag=getHeattreatmentInfoData&contactID=${contactId}`)
+            .then((response) => {   
+                this.dialogcraftsmanshipVisible = true
+                if(response.data.state == "success"){
+                    this.craftsmanshipTableHeader = response.data.data.craftsmanshipTableHeader
+                    this.value = response.data.data.value       
+                              
+                }
+            })
+            .catch(function(error){
+                console.log(error)
+            })          
+        },
         //保存表格信息
         craftsmanshipSaveData(){
             let fd = new FormData()
