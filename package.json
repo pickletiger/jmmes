@@ -16,7 +16,7 @@
     "babel-polyfill": "^6.23.0",
     "define-properties": "^1.1.3",
     "element-ui": "2.3.3",
-    "mavon-editor": "^2.5.4",
+    "mavon-editor": "^2.8.2",
     "object-keys": "^1.0.12",
     "resize-observer-polyfill": "^1.5.1",
     "vue": "^2.5.16",
